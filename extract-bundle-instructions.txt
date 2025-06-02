@@ -1,0 +1,22 @@
+VIM.io Offline Bundle Extraction Instructions
+============================================
+
+1. Transfer vim-io-offline-bundle-20250602.tar.gz to your offline environment via USB/secure transfer
+
+2. Extract the bundle:
+   tar -xzf vim-io-offline-bundle-20250602.tar.gz
+   cd vim-io-offline-bundle-20250602
+
+3. For quick deployment (recommended):
+   - Use the pre-built files in gitlab-public/
+   - Push to your GitLab instance
+   - Enable GitLab Pages
+
+4. To verify integrity:
+   sha256sum -c CHECKSUMS.txt
+
+5. Read OFFLINE_BUNDLE_README.md for detailed instructions
+
+Bundle created: Mon Jun  2 06:31:59 PM EDT 2025
+Size: 36M
+Files: 12355
