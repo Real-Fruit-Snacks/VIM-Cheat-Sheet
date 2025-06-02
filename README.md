@@ -14,7 +14,7 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIMora Live](#) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIMora Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
@@ -71,13 +71,13 @@ VIMora is designed with streamers, YouTubers, and educators in mind:
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIMora Live](#) and start using VIM immediately - no setup required!
+Visit [VIMora Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
 
 ### 💻 Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/VIMora.git
-cd VIMora
+git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
+cd VIM.io
 
 # Install dependencies
 npm install
@@ -208,8 +208,8 @@ We welcome contributions of all kinds! Whether you're:
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/VIMora.git
-cd VIMora
+git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
+cd VIM.io
 
 # Install dependencies
 npm install
@@ -282,7 +282,7 @@ VIMora is open source software licensed under the [MIT License](LICENSE).
 
 <br/>
 
-<a href="#">
+<a href="https://real-fruit-snacks.github.io/VIM.io/">
   <img src="https://img.shields.io/badge/🚀_Launch_VIMora-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIMora" />
 </a>
 
