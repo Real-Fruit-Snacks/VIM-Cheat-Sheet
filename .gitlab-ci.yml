@@ -1,0 +1,20 @@
+# Minimal CI configuration for pre-built GitLab Pages deployment
+# Designed for air-gapped environments with no internet access
+# No Docker images, no npm, no external dependencies required
+
+pages:
+  # Use the most basic image available on your GitLab instance
+  # This could be alpine, busybox, or whatever minimal image your air-gapped GitLab has
+  image: busybox:latest
+  stage: deploy
+  script:
+    # GitLab Pages expects files in a 'public' directory
+    # Simple copy operation - works on any Unix-like system
+    - cp -r gitlab-public public
+  artifacts:
+    paths:
+      - public
+  # Deploy from both main and gitlab branches
+  only:
+    - main
+    - gitlab
