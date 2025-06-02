@@ -48,6 +48,31 @@ Before deployment, ensure you have:
 
 For environments with **ZERO internet access**:
 
+### Option A: Using Pre-Created Bundles (Recommended)
+
+Download a pre-created bundle from GitHub releases:
+- **Minimal bundle (2.2MB):** `vim-io-offline-v1.0.0.tar.gz` - Contains only deployment files
+- **Full bundle (36MB):** `vim-io-offline-bundle-YYYYMMDD.tar.gz` - Includes source code and dependencies
+
+#### Using the Minimal Bundle:
+```bash
+# Extract the bundle
+tar -xzf vim-io-offline-v1.0.0.tar.gz
+cd vim-io-offline-v1.0.0
+
+# The gitlab-public folder contains all pre-built files
+# Deploy script is included for easy setup
+./deploy.sh
+```
+
+The minimal bundle includes:
+- Pre-built application files (`gitlab-public/`)
+- GitLab CI configuration files
+- Deployment and verification scripts
+- Essential documentation
+
+### Option B: Clone from GitHub
+
 ### Step 1: On Internet-Connected Machine
 ```bash
 # Clone the gitlab branch
@@ -59,11 +84,31 @@ cd VIM.io
 ```
 
 ### Step 2: Transfer via USB
-1. Copy the entire project folder to USB stick
+1. Copy the bundle file or project folder to USB stick
 2. Transfer to offline environment
 3. Copy to your offline workstation
 
 ### Step 3: On Internal GitLab
+
+#### If using the bundle:
+```bash
+# Extract if not already done
+tar -xzf vim-io-offline-v1.0.0.tar.gz
+cd vim-io-offline-v1.0.0
+
+# Initialize git repository
+git init
+git add .
+git commit -m "Initial VIM.io deployment"
+
+# Add internal GitLab remote
+git remote add origin http://your-internal-gitlab/username/VIM.io.git
+
+# Push to internal GitLab
+git push -u origin main
+```
+
+#### If using cloned repository:
 ```bash
 # Create new project on internal GitLab
 cd VIM.io
@@ -171,9 +216,31 @@ npm install
 npm run build
 ```
 
+## 📦 Bundle Comparison
+
+| Bundle Type | Size | Contents | Use Case |
+|------------|------|----------|----------|
+| **Minimal** | 2.2MB | Pre-built files only | Quick deployment |
+| **Full** | 36MB | Source + dependencies | Development/customization |
+
+### Minimal Bundle Contents:
+- `gitlab-public/` - Pre-built application (7.8MB)
+- `.gitlab-ci.yml` & `.gitlab-ci-minimal.yml` - CI configs
+- `deploy.sh` - Automated deployment script
+- Documentation files
+- Verification scripts
+
+### Full Bundle Contents:
+- Everything in minimal bundle
+- `src/` - Source code
+- `node_modules/` - All dependencies
+- Build configuration files
+- Development scripts
+
 ## 📚 Additional Notes
 
 - The `gitlab-public/` directory contains ~7-8MB of files
 - Each deployment is a complete replacement (no incremental updates)
 - Users can download and run the entire site offline
 - Perfect for training environments or restricted networks
+- Pre-created bundles available on GitHub releases page
