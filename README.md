@@ -2,7 +2,7 @@
 
 <img src="public/favicon-detailed.svg" alt="VIM.io Logo" width="120" height="120" />
   
-# 🚀 VIMora
+# 🚀 VIM.io
 
 ### Master VIM Without Leaving Your Browser
 *The Complete VIM Learning Experience - Now with Professional Streaming Tools*
@@ -14,17 +14,17 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIMora Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM.io. Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 🎯 Why VIMora?
+## 🎯 Why VIM.io?
 
-**VIMora** (VIM + Mora = "More VIM") is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIMora provides professional-grade tools in a zero-setup environment.
+**VIM.io is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
 
-### ✨ What Makes VIMora Special
+### ✨ What Makes VIM.io Special
 
 - **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
 - **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
