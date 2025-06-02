@@ -3,6 +3,12 @@
 # Create GitHub release for GitLab offline edition
 echo "🚀 Creating GitHub release for VIM.io GitLab Edition..."
 
+# Check if offline bundles exist
+if [ ! -f "vim-io-offline-v1.0.0.tar.gz" ] || [ ! -f "vim-io-offline-v1.0.0.zip" ]; then
+    echo "⚠️  Offline bundles not found. Creating them now..."
+    ./create-minimal-offline-bundle.sh
+fi
+
 # Check if gh CLI is installed
 if ! command -v gh &> /dev/null; then
     echo "❌ GitHub CLI (gh) is not installed."
@@ -11,7 +17,7 @@ if ! command -v gh &> /dev/null; then
     exit 1
 fi
 
-# Create the release
+# Create the release with bundles attached
 gh release create v1.0.0-gitlab \
   --target gitlab \
   --title "VIM.io v1.0.0 - GitLab Offline Edition" \
@@ -39,7 +45,25 @@ See \`GITLAB_DEPLOYMENT.md\` for detailed instructions.
 - Classified networks
 - Training environments
 - Offline deployments
-- Restricted corporate networks"
+- Restricted corporate networks
 
-echo "✅ Release created successfully!"
+### 📦 Download Options
+
+#### Quick Deploy Bundle (Recommended)
+Download one of these bundles for immediate deployment:
+- \`vim-io-offline-v1.0.0.tar.gz\` (2.2MB) - For Linux/Mac
+- \`vim-io-offline-v1.0.0.zip\` (2.2MB) - For Windows
+
+These bundles contain:
+- Pre-built application files
+- GitLab CI configuration
+- Deployment scripts
+- All documentation
+
+#### Full Source
+Use the source code download to access everything including build tools." \
+  vim-io-offline-v1.0.0.tar.gz \
+  vim-io-offline-v1.0.0.zip
+
+echo "✅ Release created successfully with offline bundles!"
 echo "   View at: https://github.com/Real-Fruit-Snacks/VIM.io/releases"
