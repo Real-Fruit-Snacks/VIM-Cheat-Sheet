@@ -22,7 +22,7 @@
 
 ## 🎯 Why VIM.io?
 
-**VIM.io is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
+- VIM.io is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
 
 ### ✨ What Makes VIM.io Special
 
