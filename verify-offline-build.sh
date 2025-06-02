@@ -55,7 +55,7 @@ if [ "$ALL_GOOD" = true ]; then
     echo
     echo "📤 Next steps:"
     echo "   1. Copy this entire folder to USB stick"
-    echo "   2. Transfer to air-gapped environment"
+    echo "   2. Transfer to offline environment"
     echo "   3. Push to internal GitLab"
 else
     echo "❌ Build verification FAILED!"
