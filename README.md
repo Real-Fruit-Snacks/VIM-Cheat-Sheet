@@ -2,7 +2,7 @@
 
 <img src="public/favicon-detailed.svg" alt="VIM.io Logo" width="120" height="120" />
   
-# 🚀 VIMora
+# 🚀 VIM.io
 
 ### Master VIM Without Leaving Your Browser
 *The Complete VIM Learning Experience - Now with Professional Streaming Tools*
@@ -14,17 +14,17 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIMora Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 🎯 Why VIMora?
+## 🎯 Why VIM.io?
 
-**VIMora** (VIM + Mora = "More VIM") is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIMora provides professional-grade tools in a zero-setup environment.
+**VIM.io** is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
 
-### ✨ What Makes VIMora Special
+### ✨ What Makes VIM.io Special
 
 - **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
 - **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
@@ -52,7 +52,7 @@
 
 ## 🎥 Perfect for Content Creators
 
-VIMora is designed with streamers, YouTubers, and educators in mind:
+VIM.io is designed with streamers, YouTubers, and educators in mind:
 
 ### **Professional Keystroke Visualizer**
 - ✨ **Real-time display** of every keystroke with smooth animations
@@ -71,7 +71,7 @@ VIMora is designed with streamers, YouTubers, and educators in mind:
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIMora Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
+Visit [VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
 
 ### 💻 Run Locally
 ```bash
@@ -163,7 +163,7 @@ Enable "Disable Cross-Origin Restrictions" in the Developer menu
 ## 🏗️ Architecture & Performance
 
 ### **Cross-Origin Isolation**
-VIMora implements proper COOP/COEP headers for SharedArrayBuffer support, ensuring:
+VIM.io implements proper COOP/COEP headers for SharedArrayBuffer support, ensuring:
 - ✅ Native WebAssembly performance
 - ✅ Full VIM feature compatibility
 - ✅ Secure cross-origin isolation
@@ -200,7 +200,7 @@ We welcome contributions of all kinds! Whether you're:
 
 - 🐛 **Reporting bugs** - Help us improve reliability
 - 💡 **Suggesting features** - Share your ideas for enhancements  
-- 📝 **Improving docs** - Help others understand and use VIMora
+- 📝 **Improving docs** - Help others understand and use VIM.io
 - 🔧 **Contributing code** - Join our development efforts
 - 🎨 **Designing assets** - Improve the visual experience
 
@@ -263,7 +263,7 @@ npm run preview
 
 ## 📄 License
 
-VIMora is open source software licensed under the [MIT License](LICENSE).
+VIM.io is open source software licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
@@ -278,12 +278,12 @@ VIMora is open source software licensed under the [MIT License](LICENSE).
 
 ### 🎯 Ready to Master VIM?
 
-*Whether you're learning, teaching, or creating content - VIMora has everything you need.*
+*Whether you're learning, teaching, or creating content - VIM.io has everything you need.*
 
 <br/>
 
 <a href="https://real-fruit-snacks.github.io/VIM.io/">
-  <img src="https://img.shields.io/badge/🚀_Launch_VIMora-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIMora" />
+  <img src="https://img.shields.io/badge/🚀_Launch_VIM.io-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIM.io" />
 </a>
 
 <br/>
@@ -297,6 +297,6 @@ Made with ❤️ and lots of ☕ for the VIM community
 
 <br/>
 
-<sub>VIMora - Where VIM Learning Meets Professional Content Creation!</sub>
+<sub>VIM.io - Where VIM Learning Meets Professional Content Creation!</sub>
 
 </div>
