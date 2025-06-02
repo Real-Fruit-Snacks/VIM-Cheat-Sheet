@@ -1,10 +1,10 @@
 # Minimal CI configuration for pre-built GitLab Pages deployment
-# Designed for air-gapped environments with no internet access
+# Designed for offline environments with no internet access
 # No Docker images, no npm, no external dependencies required
 
 pages:
   # Use the most basic image available on your GitLab instance
-  # This could be alpine, busybox, or whatever minimal image your air-gapped GitLab has
+  # This could be alpine, busybox, or whatever minimal image your GitLab has
   image: busybox:latest
   stage: deploy
   script:

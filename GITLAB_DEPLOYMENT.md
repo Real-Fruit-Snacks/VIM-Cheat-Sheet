@@ -10,7 +10,7 @@ This deployment method:
 - GitLab serves these files without any build process
 - Perfect for offline environments or restricted networks
 
-## 🔒 Air-Gapped Environment Support
+## 🔒 Offline Environment Support
 
 This setup is specifically designed for completely isolated environments:
 - **No internet access required** at any stage
@@ -44,7 +44,7 @@ Before deployment, ensure you have:
    - URL: `https://[your-username].gitlab.io/VIM.io/`
    - First deployment may take 30-60 minutes to activate
 
-## 🔐 Air-Gapped Deployment Workflow
+## 🔐 Offline Deployment Workflow
 
 For environments with **ZERO internet access**:
 
@@ -60,10 +60,10 @@ cd VIM.io
 
 ### Step 2: Transfer via USB
 1. Copy the entire project folder to USB stick
-2. Transfer to air-gapped environment
-3. Copy to your air-gapped workstation
+2. Transfer to offline environment
+3. Copy to your offline workstation
 
-### Step 3: On Air-Gapped GitLab
+### Step 3: On Internal GitLab
 ```bash
 # Create new project on internal GitLab
 cd VIM.io
@@ -76,7 +76,7 @@ git push internal gitlab:main
 ```
 
 ### Step 4: GitLab CI Configuration
-The `.gitlab-ci.yml` is designed for air-gapped environments:
+The `.gitlab-ci.yml` is designed for offline environments:
 - Uses only basic shell commands (`cp`)
 - No Docker images from internet required
 - Works with `busybox` or any minimal image
