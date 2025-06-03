@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "build:gitlab": "npm run build && rm -rf gitlab-public && cp -r dist gitlab-public && echo '✅ GitLab build ready in gitlab-public/'"
   },
   "dependencies": {
     "@types/node": "^22.15.29",

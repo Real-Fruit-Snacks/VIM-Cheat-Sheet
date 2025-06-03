@@ -14,7 +14,7 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIM.io. Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
@@ -22,7 +22,7 @@
 
 ## 🎯 Why VIM.io?
 
-- VIM.io is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
+**VIM.io** is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
 
 ### ✨ What Makes VIM.io Special
 
@@ -283,7 +283,7 @@ VIM.io is open source software licensed under the [MIT License](LICENSE).
 <br/>
 
 <a href="https://real-fruit-snacks.github.io/VIM.io/">
-  <img src="https://img.shields.io/badge/🚀_Launch_VIMora-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIM.io" />
+  <img src="https://img.shields.io/badge/🚀_Launch_VIM.io-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIM.io" />
 </a>
 
 <br/>
