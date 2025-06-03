@@ -246,21 +246,6 @@ npm run preview
 - **100% TypeScript** for type safety and developer experience
 - **Zero external dependencies** for VIM functionality (uses native vim.wasm)
 
-## 🚀 Roadmap
-
-### **Coming Soon**
-- 🎮 **Interactive VIM Tutorial** - Step-by-step guided learning
-- 🎯 **Custom Key Bindings** - Personalized shortcuts and mappings
-- 🌈 **Theme Customization** - Multiple color schemes and styles
-- 📁 **File Management** - Basic file operations and project structure
-- 🔄 **Session Persistence** - Save and restore editing sessions
-
-### **Future Possibilities**
-- 🤝 **Collaborative Editing** - Multi-user VIM sessions
-- 🧩 **Plugin System** - Extend functionality with custom plugins
-- 🎨 **Advanced Themes** - More sophisticated visual customization
-- 📱 **Mobile Optimization** - Enhanced touch interfaces for tablets/phones
-
 ## 📄 License
 
 VIM.io is open source software licensed under the [MIT License](LICENSE).
@@ -271,31 +256,6 @@ VIM.io is open source software licensed under the [MIT License](LICENSE).
 - **[vim.wasm](https://github.com/rhysd/vim.wasm)** - Making VIM possible in browsers everywhere
 - **[React Team](https://react.dev/)** - For the incredible development experience
 - **The VIM Community** - Decades of innovation, documentation, and passion
-
----
-
-<div align="center">
-
-### 🎯 Ready to Master VIM?
-
-*Whether you're learning, teaching, or creating content - VIM.io has everything you need.*
-
-<br/>
-
-<a href="https://real-fruit-snacks.github.io/VIM.io/">
-  <img src="https://img.shields.io/badge/🚀_Launch_VIM.io-00ff00?style=for-the-badge&labelColor=1a1a1a" alt="Launch VIM.io" />
-</a>
-
-<br/>
-<br/>
-
-**⭐ Star us on GitHub** | **🐛 Report Issues** | **💡 Request Features** | **🎥 Share Your Content**
-
-<br/>
-
-Made with ❤️ and lots of ☕ for the VIM community
-
-<br/>
 
 <sub>VIM.io - Where VIM Learning Meets Professional Content Creation!</sub>
 
