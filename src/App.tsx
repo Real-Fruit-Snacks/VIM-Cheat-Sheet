@@ -6,9 +6,9 @@ import VimrcButton from './components/VimrcButton'
 import VimrcEditorEnhanced from './components/VimrcEditorEnhanced'
 import { ToastContainer } from './components/Toast'
 import { useToast } from './hooks/useToast'
-import { useEnhancedKeystrokeVisualizer } from './hooks/useEnhancedKeystrokeVisualizer'
-import EnhancedKeystrokeOverlay from './components/EnhancedKeystrokeOverlay'
-import EnhancedKeystrokeVisualizerButton from './components/EnhancedKeystrokeVisualizerButton'
+import { useKeystrokeVisualizer } from './hooks/useKeystrokeVisualizer'
+import KeystrokeOverlay from './components/KeystrokeOverlay'
+import KeystrokeVisualizerButton from './components/KeystrokeVisualizerButton'
 import PracticeFilesButton from './components/PracticeFilesButton'
 import PracticeFilesModal from './components/PracticeFilesModal'
 
@@ -21,7 +21,7 @@ function App() {
   const [vimFullyReady, setVimFullyReady] = useState(false)
   const vimEditorRef = useRef<VimEditorRef>(null)
   const { toasts, removeToast, showSuccess, showError, showWarning } = useToast()
-  const enhancedVisualizer = useEnhancedKeystrokeVisualizer()
+  const keystrokeVisualizer = useKeystrokeVisualizer()
 
   /** Initialize vimrc content and which-key preference from localStorage */
   useEffect(() => {
@@ -139,13 +139,9 @@ function App() {
           {/* Editor action buttons */}
           {!showVimrcEditor && (
             <div className="flex items-center space-x-2">
-              <EnhancedKeystrokeVisualizerButton
-                config={enhancedVisualizer.config}
-                enhancedConfig={enhancedVisualizer.enhancedConfig}
-                onUpdateConfig={enhancedVisualizer.updateConfig}
-                onUpdateEnhancedConfig={enhancedVisualizer.updateEnhancedConfig}
-                onToggleEducationalOverlay={enhancedVisualizer.toggleEducationalOverlay}
-                onClearData={enhancedVisualizer.clearEnhancedData}
+              <KeystrokeVisualizerButton
+                config={keystrokeVisualizer.config}
+                onUpdateConfig={keystrokeVisualizer.updateConfig}
               />
               
               <PracticeFilesButton 
@@ -173,11 +169,7 @@ function App() {
             ref={vimEditorRef} 
             vimrcContent={vimrcContent}
             disableWhichKey={!whichKeyEnabled || showVimrcEditor}
-            onKeyPress={(event) => {
-              // Enhanced keystroke visualization
-              enhancedVisualizer.addEnhancedKeystroke(event)
-              
-            }}
+            onKeyPress={keystrokeVisualizer.addKeystroke}
             hasModalOpen={showCheatSheet || showVimrcEditor || showPracticeFiles}
           />
           
@@ -196,11 +188,9 @@ function App() {
             onSelectFile={handleSelectPracticeFile}
           />
           
-          
-          <EnhancedKeystrokeOverlay
-            config={enhancedVisualizer.enhancedConfig}
-            state={enhancedVisualizer.enhancedState}
-            onInsightSeen={enhancedVisualizer.markInsightSeen}
+          <KeystrokeOverlay
+            config={keystrokeVisualizer.config}
+            keystrokes={keystrokeVisualizer.keystrokes}
           />
         </div>
       </div>
