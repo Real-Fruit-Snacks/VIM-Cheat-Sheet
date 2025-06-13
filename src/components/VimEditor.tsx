@@ -95,27 +95,27 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           await vimRef.current.cmdline(`file ${filename}`)
         }
         
-        // Use VIM's register to load content safely
-        // First, put the content into register 'a'
-        await vimRef.current.cmdline('let @a = ""')
-        
-        // Split content into lines
+        // For vim.wasm, we'll use a different approach to avoid command length issues
+        // Split content into lines and insert each line directly
         const lines = content.split('\n')
         
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i]
-          // Use JSON.stringify to safely escape the string for VIM
-          const safeString = JSON.stringify(line)
-          await vimRef.current.cmdline(`let @a = @a . ${safeString}`)
-          if (i < lines.length - 1) {
-            await vimRef.current.cmdline('let @a = @a . "\\n"')
-          }
+        // Insert first line
+        if (lines.length > 0) {
+          // Escape for VIM command line
+          const escapedFirstLine = lines[0]
+            .replace(/\\/g, '\\\\')
+            .replace(/"/g, '\\"')
+          await vimRef.current.cmdline(`call setline(1, "${escapedFirstLine}")`)
         }
         
-        // Clear current content and put from register
-        await vimRef.current.cmdline('normal! ggdG')
-        await vimRef.current.cmdline('put a')
-        await vimRef.current.cmdline('normal! ggdd')
+        // Append remaining lines
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i]
+          const escapedLine = line
+            .replace(/\\/g, '\\\\')
+            .replace(/"/g, '\\"')
+          await vimRef.current.cmdline(`call append(${i}, "${escapedLine}")`)
+        }
         
         // Move cursor to beginning
         await vimRef.current.cmdline('normal! gg')
