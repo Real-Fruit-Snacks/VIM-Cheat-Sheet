@@ -2,34 +2,34 @@
 
 <img src="public/favicon-detailed.svg" alt="VIM Logo" width="120" height="120" />
   
-# 🚀 VIM
+# 🚀 VIMora
 
 ### Master VIM Without Leaving Your Browser
-*The Complete VIM Learning Experience - Now with Professional Streaming Tools*
+*A Lightweight VIM Experience with Real-Time Keystroke Visualization*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19.1-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![Vim](https://img.shields.io/badge/Vim-Wasm-brightgreen.svg)](https://github.com/rhysd/vim.wasm)
 
-**Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
+**Experience VIM directly in your browser with a clean, focused interface and real-time keystroke visualization.**
 
-[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIMora Live](https://real-fruit-snacks.github.io/VIMora/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 🎯 Why VIM?
+## 🎯 Why VIMora?
 
-**VIM** is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM provides professional-grade tools in a zero-setup environment.
+**VIMora** is a streamlined browser-based VIM experience focused on the essentials. Perfect for learning VIM basics and showcasing your keystrokes while coding.
 
-### ✨ What Makes VIM Special
+### ✨ What Makes VIMora Special
 
 - **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
 - **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
-- **🎥 Pro Streaming Tools** - Built-in keystroke visualizer perfect for tutorials and live coding
-- **🎯 Smart Learning** - Which-Key system shows available commands as you type
+- **🎥 Keystroke Visualizer** - Real-time display of your keystrokes for teaching and streaming
+- **🎯 Which-Key Helper** - Shows available commands as you type (when supported)
 - **💾 Persistent Everything** - All your settings, configurations, and preferences saved locally
 - **📱 Universal Access** - Works on any device with a modern browser
 - **🎨 Beautiful Interface** - Terminal-style UI optimized for long coding sessions
@@ -41,19 +41,18 @@
 | Feature | Description | Perfect For |
 |---------|-------------|-------------|
 | 🎹 **Native VIM** | Full VIM experience via WebAssembly | Everyone |
-| 📁 **Practice Files** | Pre-loaded sample files for real-world scenarios | Learning & Practice |
 | 🎥 **Keystroke Visualizer** | Real-time keystroke display with animations | Streamers & Teachers |
-| 🎯 **Which-Key Helper** | Interactive command hints and discovery | Beginners & Learning |
+| 🎯 **Which-Key Helper** | Interactive command hints (when supported) | Beginners & Learning |
 | 📝 **Live Vimrc Editor** | Real-time configuration with instant preview | Customization & Setup |
-| 📚 **Comprehensive Cheat Sheet** | Searchable command reference with examples | Quick Reference |
+| 📚 **Cheat Sheet** | Command reference with examples | Quick Reference |
 | 💾 **Smart Persistence** | All settings auto-saved locally | Consistent Experience |
-| 🎨 **Modern UI** | Clean, distraction-free terminal interface | Professional Use |
+| 🎨 **Clean UI** | Distraction-free terminal interface | Focused Work |
 
 </div>
 
 ## 🎥 Perfect for Content Creators
 
-VIM is designed with streamers, YouTubers, and educators in mind:
+VIMora includes a professional keystroke visualizer perfect for streamers, YouTubers, and educators:
 
 ### **Professional Keystroke Visualizer**
 - ✨ **Real-time display** of every keystroke with smooth animations
@@ -72,15 +71,15 @@ VIM is designed with streamers, YouTubers, and educators in mind:
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
+Visit [VIMora Live](https://real-fruit-snacks.github.io/VIMora/) and start using VIM immediately - no setup required!
 
-**Browser Compatibility:** VIM now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
+**Browser Compatibility:** VIMora works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
 
 ### 💻 Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
+git clone https://github.com/Real-Fruit-Snacks/VIMora.git
+cd VIMora
 
 # Install dependencies
 npm install
@@ -89,34 +88,15 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 and experience VIM like never before!
+Open http://localhost:5173/VIM/ and start using VIMora!
 
 ## ⚡ Features Deep Dive
 
-### 📁 Practice Files System
-Learn VIM with real-world scenarios! Our practice files feature includes:
-- **6 diverse practice scenarios** - Code editing, prose writing, config files, and data manipulation
-- **Multiple categories** - JavaScript, Python, prose editing, config management, CSV data, and log analysis
-- **Difficulty levels** - Beginner, intermediate, and advanced challenges
-- **Task-based learning** - Each file comes with specific editing tasks to practice
-- **Instant loading** - Click and start practicing immediately
-- **Syntax highlighting** - Proper language detection and highlighting
-
-**Practice scenarios include:**
-- 🔧 **Code Refactoring** - Clean up JavaScript functions with VIM efficiency
-- 🐍 **Python Editing** - Work with classes, functions, and imports
-- ✍️ **Prose Writing** - Format text, fix grammar, and structure paragraphs  
-- ⚙️ **Config Management** - Edit NGINX configurations and system files
-- 📊 **Data Processing** - Manipulate CSV data and extract information
-- 📝 **Log Analysis** - Parse and analyze server logs efficiently
-
-### 🎯 Smart Which-Key System
-Never get stuck learning VIM! Our intelligent helper shows you:
+### 🎯 Which-Key Helper
+When supported by your browser, the Which-Key system shows you:
 - **Available commands** for any key sequence
-- **Grouped by functionality** for easy discovery
 - **Mode-aware suggestions** - different options for normal/visual/insert modes
-- **Visual navigation** with arrow keys or vim-style (j/k)
-- **Instant execution** - click or press keys to run commands
+- **Visual navigation** for easy discovery
 
 ### 🎥 Professional Keystroke Visualizer
 Transform your content creation with our advanced visualizer:
@@ -146,12 +126,10 @@ Professional VIM configuration made easy:
 - **Error recovery** - detailed feedback when commands fail
 - **Auto-save** - your configuration persists across sessions
 
-### 📚 Comprehensive Cheat Sheet
-Our reorganized command reference includes:
-- **20+ categories** logically organized by workflow
-- **Instant search** - find commands quickly
+### 📚 Cheat Sheet
+Quick command reference includes:
+- **Essential VIM commands** organized by category
 - **Mode indicators** - know when each command applies
-- **Usage examples** - see commands in context
 - **Keyboard shortcut** - press `?` anytime to open
 
 ## 🛠️ Technology Stack
@@ -220,17 +198,17 @@ We welcome contributions of all kinds! Whether you're:
 
 - 🐛 **Reporting bugs** - Help us improve reliability
 - 💡 **Suggesting features** - Share your ideas for enhancements  
-- 📝 **Improving docs** - Help others understand and use VIM.io
+- 📝 **Improving docs** - Help others understand and use VIMora
 - 🔧 **Contributing code** - Join our development efforts
 - 🎨 **Designing assets** - Improve the visual experience
-- 🌐 **Testing browser compatibility** - Ensure VIM works everywhere
+- 🌐 **Testing browser compatibility** - Ensure VIMora works everywhere
 
 ### Development Setup
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
+git clone https://github.com/Real-Fruit-Snacks/VIMora.git
+cd VIMora
 
 # Install dependencies
 npm install
@@ -260,18 +238,16 @@ npm run preview
 
 ## 📊 Project Stats
 
-- **6 practice file scenarios** with real-world editing challenges
-- **20+ VIM command categories** with comprehensive coverage
-- **500+ VIM commands** documented and searchable
+- **Real VIM** via WebAssembly (vim.wasm)
 - **6 positioning options** for keystroke visualization
 - **5 font sizes** for different use cases
 - **100% TypeScript** for type safety and developer experience
-- **Zero external dependencies** for VIM functionality (uses native vim.wasm)
+- **Zero external dependencies** for VIM functionality
 - **Universal browser compatibility** with automatic fallback mode
 
 ## 📄 License
 
-VIM is open source software licensed under the [MIT License](LICENSE).
+VIMora is open source software licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
@@ -280,6 +256,6 @@ VIM is open source software licensed under the [MIT License](LICENSE).
 - **[React Team](https://react.dev/)** - For the incredible development experience
 - **The VIM Community** - Decades of innovation, documentation, and passion
 
-<sub>VIM - Where VIM Learning Meets Professional Content Creation!</sub>
+<sub>VIMora - A Clean, Focused VIM Experience in Your Browser!</sub>
 
 </div>
