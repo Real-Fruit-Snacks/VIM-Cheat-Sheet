@@ -73,6 +73,8 @@ VIM.io is designed with streamers, YouTubers, and educators in mind:
 ### 🌐 Use Online (Recommended)
 Visit [VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
 
+**New:** VIM.io now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support.
+
 ### 💻 Run Locally
 ```bash
 # Clone the repository

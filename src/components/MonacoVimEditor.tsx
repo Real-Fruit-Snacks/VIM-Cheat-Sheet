@@ -3,6 +3,8 @@ import * as monaco from 'monaco-editor';
 import { initVimMode } from 'monaco-vim';
 import type { VimrcApplyResult } from '../utils/vimrc-manager';
 import type { VimEditorRef } from './VimEditor';
+import WhichKey from './WhichKey';
+import { useWhichKey } from '../hooks/useWhichKey';
 
 interface MonacoVimEditorProps {
   vimrcContent?: string;
@@ -16,12 +18,21 @@ interface MonacoVimEditorProps {
  * Monaco-based VIM editor component - fallback when SharedArrayBuffer is not available
  */
 const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
-  ({ vimrcContent, onKeyPress, hasModalOpen, onModeChange }, ref) => {
+  ({ vimrcContent, onKeyPress, hasModalOpen, onModeChange, disableWhichKey = false }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const vimModeRef = useRef<ReturnType<typeof initVimMode> | null>(null);
     const statusNodeRef = useRef<HTMLDivElement>(null);
     const [isReady, setIsReady] = useState(false);
+    const [currentMode, setCurrentMode] = useState('normal');
+    const keyEventHandledRef = useRef(false);
+    
+    // Initialize which-key system
+    const whichKey = useWhichKey({
+      timeout: 200,
+      enabled: !disableWhichKey && currentMode === 'normal',
+      mode: currentMode
+    });
     
     useImperativeHandle(ref, () => ({
       applyVimrc: async (content: string): Promise<VimrcApplyResult> => {
@@ -149,28 +160,142 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       
       // Track mode changes
       const checkMode = () => {
-        const mode = vimMode.mode || 'normal';
-        onModeChange?.(mode);
+        const statusText = statusNode.textContent || '';
+        let detectedMode = 'normal';
+        
+        // Detect mode from status bar text
+        if (statusText.includes('-- INSERT --') || statusText.includes('-- (insert) --')) {
+          detectedMode = 'insert';
+        } else if (statusText.includes('-- VISUAL --') || statusText.includes('-- (visual) --')) {
+          detectedMode = 'visual';
+        } else if (statusText.includes('-- VISUAL LINE --')) {
+          detectedMode = 'visual';
+        } else if (statusText.includes('-- VISUAL BLOCK --')) {
+          detectedMode = 'visual-block';
+        } else if (statusText.includes('-- REPLACE --')) {
+          detectedMode = 'replace';
+        } else if (statusText.startsWith(':')) {
+          detectedMode = 'command';
+        }
+        
+        if (detectedMode !== currentMode) {
+          setCurrentMode(detectedMode);
+          onModeChange?.(detectedMode);
+        }
+        
+        return detectedMode;
       };
       
-      // Set up event listeners for keypress tracking
+      // Set up event listeners for keypress tracking and which-key
       const handleKeyDown = (e: monaco.IKeyboardEvent) => {
+        const browserEvent = e.browserEvent;
+        
+        // Forward to keystroke visualizer
         if (onKeyPress) {
           const event = new KeyboardEvent('keydown', {
-            key: e.browserEvent.key,
-            code: e.browserEvent.code,
-            shiftKey: e.browserEvent.shiftKey,
-            ctrlKey: e.browserEvent.ctrlKey,
-            altKey: e.browserEvent.altKey,
-            metaKey: e.browserEvent.metaKey
+            key: browserEvent.key,
+            code: browserEvent.code,
+            shiftKey: browserEvent.shiftKey,
+            ctrlKey: browserEvent.ctrlKey,
+            altKey: browserEvent.altKey,
+            metaKey: browserEvent.metaKey
           });
           onKeyPress(event);
         }
-        checkMode();
+        
+        // Check current mode
+        const mode = checkMode();
+        
+        // Only process which-key in normal mode
+        if (mode !== 'normal' || disableWhichKey) {
+          keyEventHandledRef.current = false;
+          return;
+        }
+        
+        // Handle which-key sequences
+        let handled = false;
+        
+        // Handle Ctrl-w window management prefix
+        if (browserEvent.ctrlKey && browserEvent.key === 'w') {
+          handled = whichKey.handleKeyPress('Ctrl-w');
+          if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          keyEventHandledRef.current = handled;
+          return;
+        }
+        
+        // Skip other modifier combinations
+        if (browserEvent.ctrlKey || browserEvent.altKey || browserEvent.metaKey) {
+          keyEventHandledRef.current = false;
+          return;
+        }
+        
+        // Space as leader key
+        if (browserEvent.key === ' ') {
+          handled = whichKey.handleKeyPress(' ');
+          if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          keyEventHandledRef.current = handled;
+          return;
+        }
+        
+        // Tab key in sequences
+        if (browserEvent.key === 'Tab') {
+          handled = whichKey.handleKeyPress('Tab');
+          if (handled && whichKey.keySequence) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          keyEventHandledRef.current = handled;
+          return;
+        }
+        
+        // VIM prefix keys
+        const prefixKeys = ['g', 'z', '[', ']', 'c', 'd', 'y', 'v', '"', "'", 'm', 'r', 't', 'T', 'f', 'F', '@', 'q', '`', '>', '<', '='];
+        if (prefixKeys.includes(browserEvent.key)) {
+          handled = whichKey.handleKeyPress(browserEvent.key);
+          keyEventHandledRef.current = handled;
+          return;
+        }
+        
+        // Numeric prefixes
+        if (/^[0-9]$/.test(browserEvent.key)) {
+          handled = whichKey.handleKeyPress(browserEvent.key);
+          if (handled && whichKey.keySequence) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          keyEventHandledRef.current = handled;
+          return;
+        }
+        
+        // Other keys when in a sequence
+        if (whichKey.keySequence) {
+          handled = whichKey.handleKeyPress(browserEvent.key);
+          keyEventHandledRef.current = handled;
+        }
       };
       
       editor.onKeyDown(handleKeyDown);
       editor.onDidChangeCursorPosition(checkMode);
+      
+      // Monitor status bar for mode changes
+      const observer = new MutationObserver(() => {
+        checkMode();
+      });
+      
+      observer.observe(statusNode, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+      
+      // Initial mode check
+      setTimeout(checkMode, 100);
       
       setIsReady(true);
       
@@ -181,6 +306,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
       
       return () => {
+        observer.disconnect();
         vimModeRef.current?.dispose();
         editor.dispose();
       };
@@ -196,6 +322,13 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
     }, [hasModalOpen]);
     
+    // Reset which-key when mode changes
+    useEffect(() => {
+      if (currentMode !== 'normal') {
+        whichKey.reset();
+      }
+    }, [currentMode, whichKey]);
+    
     return (
       <div className="relative w-full h-full flex flex-col">
         <div 
@@ -206,6 +339,16 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         <div className="absolute top-2 right-2 bg-yellow-900/80 text-yellow-200 px-2 py-1 rounded text-xs">
           Monaco VIM Mode (Fallback)
         </div>
+        
+        {!disableWhichKey && (
+          <WhichKey
+            isVisible={whichKey.isVisible}
+            keySequence={whichKey.keySequence}
+            availableKeys={whichKey.availableKeys}
+            onKeySelect={whichKey.handleKeySelect}
+            onClose={whichKey.close}
+          />
+        )}
       </div>
     );
   }

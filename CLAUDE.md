@@ -44,8 +44,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **MonacoVimEditor** (`src/components/MonacoVimEditor.tsx`)
 - Fallback VIM editor using Monaco Editor + monaco-vim
 - Works in all browsers without special configuration
-- Limited VIM feature set compared to vim.wasm
-- Supports basic vimrc commands
+- Full Which-Key support with mode detection
+- Supports basic vimrc commands (line numbers, word wrap, tab size)
+- Mode detection via status bar monitoring
+- Slightly reduced VIM feature set compared to vim.wasm
 
 **Which-Key System** (`src/components/WhichKey.tsx`, `src/hooks/useWhichKey.ts`)
 - Interactive command hint overlay
