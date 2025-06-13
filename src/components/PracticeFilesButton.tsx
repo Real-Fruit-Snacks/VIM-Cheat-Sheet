@@ -8,10 +8,11 @@ export default function PracticeFilesButton({ onClick }: PracticeFilesButtonProp
   return (
     <button
       onClick={onClick}
-      className="p-2 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-gray-100 transition-colors"
+      className="w-8 h-8 rounded bg-gray-700 hover:bg-green-600 text-gray-300 hover:text-white transition-all duration-200 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-500/50"
       title="Practice Files"
+      aria-label="Open practice files"
     >
-      <FileText className="w-5 h-5" />
+      <FileText className="w-4 h-4" />
     </button>
   );
 }
