@@ -1,0 +1,13 @@
+# Ultra-minimal GitLab CI for offline environments
+# If your GitLab runner doesn't have ANY docker images, use this version
+
+pages:
+  stage: deploy
+  script:
+    - cp -r gitlab-public public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+    - gitlab

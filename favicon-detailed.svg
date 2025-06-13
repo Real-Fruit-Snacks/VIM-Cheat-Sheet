@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Gradient for depth -->
+    <linearGradient id="terminalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer frame with rounded corners -->
+  <rect width="64" height="64" rx="12" fill="url(#terminalGrad)" stroke="#374151" stroke-width="1"/>
+  
+  <!-- Terminal window -->
+  <rect x="4" y="4" width="56" height="56" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="0.5"/>
+  
+  <!-- Terminal title bar -->
+  <rect x="4" y="4" width="56" height="12" rx="8" rx-bottom="0" fill="#21262d"/>
+  
+  <!-- Traffic light buttons -->
+  <circle cx="12" cy="10" r="2.5" fill="#ff5f56"/>
+  <circle cx="20" cy="10" r="2.5" fill="#ffbd2e"/>
+  <circle cx="28" cy="10" r="2.5" fill="#27ca3f"/>
+  
+  <!-- Terminal content area -->
+  <rect x="6" y="18" width="52" height="40" fill="#000000" rx="2"/>
+  
+  <!-- VIM branding -->
+  <text x="8" y="32" font-family="monospace" font-size="12" fill="#10b981" font-weight="bold" filter="url(#glow)">VIM</text>
+  
+  <!-- Blinking cursor -->
+  <rect x="38" y="22" width="3" height="12" fill="#10b981" opacity="0.9">
+    <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.5s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Command line prompt -->
+  <text x="8" y="44" font-family="monospace" font-size="6" fill="#6b7280">:</text>
+  <rect x="12" y="39" width="20" height="2" fill="#10b981" opacity="0.7"/>
+  
+  <!-- Status line -->
+  <rect x="8" y="48" width="48" height="3" fill="#1f2937" stroke="#10b981" stroke-width="0.5"/>
+  <text x="10" y="51" font-family="monospace" font-size="3" fill="#10b981">NORMAL</text>
+  
+  <!-- VIM-style decorative arrows -->
+  <path d="M44 26 L50 32 L44 38" stroke="#10b981" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M52 24 L56 28 L52 32" stroke="#10b981" stroke-width="1" fill="none" opacity="0.4"/>
+  
+  <!-- Code-like elements -->
+  <rect x="8" y="36" width="15" height="1.5" fill="#6b7280" opacity="0.5"/>
+  <rect x="8" y="40" width="12" height="1.5" fill="#6b7280" opacity="0.3"/>
+</svg>

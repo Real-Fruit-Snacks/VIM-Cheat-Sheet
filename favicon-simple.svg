@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Dark background with subtle gradient -->
+  <rect width="32" height="32" rx="7" fill="#111827"/>
+  
+  <!-- Terminal-style border -->
+  <rect x="1" y="1" width="30" height="30" rx="6" fill="none" stroke="#10b981" stroke-width="1" opacity="0.8"/>
+  
+  <!-- VIM text with enhanced visibility -->
+  <text x="16" y="22" font-family="monospace" font-size="11" fill="#10b981" font-weight="bold" text-anchor="middle">VIM</text>
+  
+  <!-- Cursor block -->
+  <rect x="14" y="8" width="4" height="6" fill="#10b981"/>
+  
+  <!-- Command prompt -->
+  <circle cx="8" cy="11" r="1" fill="#10b981" opacity="0.7"/>
+  <circle cx="24" cy="11" r="1" fill="#10b981" opacity="0.7"/>
+  
+  <!-- Subtle grid pattern for terminal feel -->
+  <defs>
+    <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
+      <path d="M 4 0 L 0 0 0 4" fill="none" stroke="#10b981" stroke-width="0.2" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect x="2" y="2" width="28" height="28" fill="url(#grid)"/>
+</svg>
