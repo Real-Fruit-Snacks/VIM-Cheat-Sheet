@@ -17,6 +17,7 @@ dist-ssr
 
 # GitLab Pages deployment (pre-built files)
 gitlab-public
+gitlab-pages
 
 # Editor directories and files
 .vscode/*
