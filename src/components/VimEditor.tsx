@@ -77,31 +77,46 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
              vimRef.current.isRunning && 
              vimRef.current.isRunning() &&
              vimRef.current.input &&
-             vimRef.current.cmdline &&
-             typeof vimRef.current.input === 'function' &&
-             typeof vimRef.current.cmdline === 'function'
+             vimRef.current.cmdline
     },
     loadFile: async (content: string, filename?: string) => {
       // Wait for VIM to be fully ready with proper retry logic
       const waitForVimReady = async (maxAttempts = 30, delayMs = 200) => {
         for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          // Log what we're checking
+          if (attempt === 0 || attempt % 5 === 0) {
+            console.log(`🔍 Checking VIM ready (attempt ${attempt + 1}/${maxAttempts}):`, {
+              hasVimRef: !!vimRef.current,
+              hasIsRunning: vimRef.current ? !!vimRef.current.isRunning : false,
+              isRunning: vimRef.current && vimRef.current.isRunning ? vimRef.current.isRunning() : false,
+              hasInput: vimRef.current ? !!vimRef.current.input : false,
+              hasCmdline: vimRef.current ? !!vimRef.current.cmdline : false,
+              inputType: vimRef.current && vimRef.current.input ? typeof vimRef.current.input : 'none',
+              cmdlineType: vimRef.current && vimRef.current.cmdline ? typeof vimRef.current.cmdline : 'none'
+            })
+          }
+          
           if (vimRef.current && 
               vimRef.current.isRunning && 
-              vimRef.current.isRunning() &&
-              vimRef.current.input &&
-              vimRef.current.cmdline &&
-              typeof vimRef.current.input === 'function' &&
-              typeof vimRef.current.cmdline === 'function') {
-            
-            // VIM methods exist and are functions, consider it ready
-            console.log(`✅ VIM ready after ${attempt + 1} attempts`)
-            return true
+              vimRef.current.isRunning()) {
+            // Check if methods exist
+            if (vimRef.current.input && vimRef.current.cmdline) {
+              // VIM methods exist and are functions, consider it ready
+              console.log(`✅ VIM ready after ${attempt + 1} attempts`)
+              return true
+            }
           }
           
           if (attempt < maxAttempts - 1) {
             await new Promise(resolve => setTimeout(resolve, delayMs))
           }
         }
+        
+        // Log final state before giving up
+        console.error('❌ VIM failed to become ready. Final state:', {
+          hasVimRef: !!vimRef.current,
+          vimRef: vimRef.current
+        })
         return false
       }
 
@@ -520,6 +535,9 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         })
 
         vimRef.current = vim
+        
+        // Wait a bit for VIM to fully initialize after start
+        await new Promise(resolve => setTimeout(resolve, 500))
         
         // Set initial focus to VIM input
         setTimeout(() => {
