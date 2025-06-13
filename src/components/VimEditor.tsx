@@ -95,12 +95,15 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         // Insert all lines
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i]
+          // Properly escape for VIM: escape single quotes and backslashes
+          const escapedLine = line.replace(/\\/g, '\\\\').replace(/'/g, "''")
+          
           if (i === 0) {
             // Replace first line
-            await vimRef.current.cmdline(`call setline(1, '${line.replace(/'/g, "''")}')`)
+            await vimRef.current.cmdline(`call setline(1, '${escapedLine}')`)
           } else {
             // Append subsequent lines
-            await vimRef.current.cmdline(`call append(${i}, '${line.replace(/'/g, "''")}')`)
+            await vimRef.current.cmdline(`call append(${i}, '${escapedLine}')`)
           }
         }
         
