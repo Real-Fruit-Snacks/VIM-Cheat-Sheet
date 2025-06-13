@@ -74,7 +74,7 @@ function App() {
           </div>
           
           <div className="flex-1 text-center">
-            <span className="text-sm text-gray-400 font-mono">vim — VIM</span>
+            <span className="text-sm text-gray-400 font-mono">Interactive VIM Learning Platform</span>
           </div>
           
           {/* Editor action buttons */}
