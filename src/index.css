@@ -59,7 +59,22 @@
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.2s ease-out;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.animate-slide-out-right {
+  animation: slideOutRight 0.3s ease-in forwards;
 }
 
 @keyframes keystroke-fade-in {

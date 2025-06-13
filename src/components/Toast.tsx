@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { CheckCircle, XCircle, AlertCircle, X } from 'lucide-react'
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
@@ -10,11 +10,28 @@ interface ToastProps {
   duration?: number
 }
 
-export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
+export function Toast({ message, type, onClose, duration = 4000 }: ToastProps) {
+  const [isExiting, setIsExiting] = useState(false)
+
   useEffect(() => {
-    const timer = setTimeout(onClose, duration)
-    return () => clearTimeout(timer)
+    // Start fade-out animation 300ms before removal
+    const fadeTimer = setTimeout(() => {
+      setIsExiting(true)
+    }, duration - 300)
+
+    // Remove toast after fade-out completes
+    const removeTimer = setTimeout(onClose, duration)
+
+    return () => {
+      clearTimeout(fadeTimer)
+      clearTimeout(removeTimer)
+    }
   }, [duration, onClose])
+
+  const handleClose = () => {
+    setIsExiting(true)
+    setTimeout(onClose, 300) // Wait for animation to complete
+  }
 
   const getIcon = () => {
     switch (type) {
@@ -43,11 +60,13 @@ export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
   }
 
   return (
-    <div className={`flex items-center space-x-3 px-4 py-3 rounded-lg border shadow-lg ${getStyles()} animate-slide-in-right`}>
+    <div className={`flex items-center space-x-3 px-4 py-3 rounded-lg border shadow-lg ${getStyles()} ${
+      isExiting ? 'animate-slide-out-right' : 'animate-slide-in-right'
+    }`}>
       {getIcon()}
       <p className="flex-1 text-sm text-gray-100">{message}</p>
       <button
-        onClick={onClose}
+        onClick={handleClose}
         className="text-gray-400 hover:text-gray-200 transition-colors"
       >
         <X className="w-4 h-4" />
