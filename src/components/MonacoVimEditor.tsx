@@ -120,7 +120,85 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         });
       },
       
-      isVimReady: () => isReady
+      isVimReady: () => isReady,
+      
+      loadFile: async (content: string, filename?: string) => {
+        if (!editorRef.current) {
+          throw new Error('Monaco editor is not ready');
+        }
+        
+        try {
+          // Set the content
+          editorRef.current.setValue(content);
+          
+          // Move cursor to beginning
+          editorRef.current.setPosition({ lineNumber: 1, column: 1 });
+          
+          // Clear selection
+          editorRef.current.setSelection({
+            startLineNumber: 1,
+            startColumn: 1,
+            endLineNumber: 1,
+            endColumn: 1
+          });
+          
+          // Update the model's URI if filename is provided
+          if (filename) {
+            const model = editorRef.current.getModel();
+            if (model) {
+              // Determine language from file extension
+              const ext = filename.split('.').pop()?.toLowerCase();
+              let language = 'plaintext';
+              
+              const languageMap: Record<string, string> = {
+                'js': 'javascript',
+                'jsx': 'javascript',
+                'ts': 'typescript', 
+                'tsx': 'typescript',
+                'py': 'python',
+                'rb': 'ruby',
+                'go': 'go',
+                'rs': 'rust',
+                'cpp': 'cpp',
+                'c': 'c',
+                'h': 'c',
+                'hpp': 'cpp',
+                'java': 'java',
+                'cs': 'csharp',
+                'php': 'php',
+                'html': 'html',
+                'css': 'css',
+                'scss': 'scss',
+                'sass': 'sass',
+                'less': 'less',
+                'json': 'json',
+                'xml': 'xml',
+                'yaml': 'yaml',
+                'yml': 'yaml',
+                'md': 'markdown',
+                'sh': 'shell',
+                'bash': 'shell',
+                'zsh': 'shell',
+                'conf': 'ini',
+                'ini': 'ini',
+                'toml': 'toml',
+                'sql': 'sql',
+                'csv': 'plaintext',
+                'txt': 'plaintext'
+              };
+              
+              if (ext && languageMap[ext]) {
+                language = languageMap[ext];
+              }
+              
+              monaco.editor.setModelLanguage(model, language);
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load file:', error);
+          throw new Error(`Failed to load file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
     }));
     
     // Initialize Monaco Editor

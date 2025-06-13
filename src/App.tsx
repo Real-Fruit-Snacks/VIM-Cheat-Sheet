@@ -9,10 +9,13 @@ import { useToast } from './hooks/useToast'
 import { useKeystrokeVisualizer } from './hooks/useKeystrokeVisualizer'
 import KeystrokeOverlay from './components/KeystrokeOverlay'
 import KeystrokeVisualizerButton from './components/KeystrokeVisualizerButton'
+import PracticeFilesButton from './components/PracticeFilesButton'
+import PracticeFilesModal from './components/PracticeFilesModal'
 
 function App() {
   const [showCheatSheet, setShowCheatSheet] = useState(false)
   const [showVimrcEditor, setShowVimrcEditor] = useState(false)
+  const [showPracticeFiles, setShowPracticeFiles] = useState(false)
   const [vimrcContent, setVimrcContent] = useState<string>('')
   const [whichKeyEnabled, setWhichKeyEnabled] = useState(true)
   const vimEditorRef = useRef<VimEditorRef>(null)
@@ -61,6 +64,21 @@ function App() {
     showSuccess(`Which-Key helper ${enabled ? 'enabled' : 'disabled'}`)
   }
 
+  const handleSelectPracticeFile = async (content: string, filename?: string) => {
+    if (!vimEditorRef.current?.isVimReady()) {
+      showError('Vim is not ready yet. Please wait a moment.')
+      return
+    }
+    
+    try {
+      await vimEditorRef.current.loadFile(content, filename)
+      showSuccess(`Loaded practice file: ${filename || 'Untitled'}`)
+      setShowPracticeFiles(false)
+    } catch (error) {
+      showError(`Failed to load practice file: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+  }
+
   return (
     <div className="h-screen bg-gray-950 text-gray-100 overflow-hidden p-2 flex items-center justify-center">
       <div className="w-full h-full max-w-none max-h-[calc(100vh-1rem)] bg-gray-900 rounded-lg shadow-2xl overflow-hidden flex flex-col">
@@ -85,6 +103,10 @@ function App() {
                 onUpdateConfig={updateConfig}
               />
               
+              <PracticeFilesButton 
+                onClick={() => setShowPracticeFiles(true)}
+              />
+              
               <VimrcButton 
                 onClick={() => setShowVimrcEditor(true)}
               />
@@ -106,7 +128,7 @@ function App() {
             vimrcContent={vimrcContent}
             disableWhichKey={!whichKeyEnabled || showVimrcEditor}
             onKeyPress={addKeystroke}
-            hasModalOpen={showCheatSheet || showVimrcEditor}
+            hasModalOpen={showCheatSheet || showVimrcEditor || showPracticeFiles}
           />
           
           <VimrcEditorEnhanced
@@ -117,6 +139,12 @@ function App() {
           />
           
           <ToastContainer toasts={toasts} onClose={removeToast} />
+          
+          <PracticeFilesModal
+            isOpen={showPracticeFiles}
+            onClose={() => setShowPracticeFiles(false)}
+            onSelectFile={handleSelectPracticeFile}
+          />
           
           <KeystrokeOverlay
             keystrokes={keystrokes}

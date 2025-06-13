@@ -41,6 +41,7 @@
 | Feature | Description | Perfect For |
 |---------|-------------|-------------|
 | 🎹 **Native VIM** | Full VIM experience via WebAssembly | Everyone |
+| 📁 **Practice Files** | Pre-loaded sample files for real-world scenarios | Learning & Practice |
 | 🎥 **Keystroke Visualizer** | Real-time keystroke display with animations | Streamers & Teachers |
 | 🎯 **Which-Key Helper** | Interactive command hints and discovery | Beginners & Learning |
 | 📝 **Live Vimrc Editor** | Real-time configuration with instant preview | Customization & Setup |
@@ -91,6 +92,23 @@ npm run dev
 Open http://localhost:5173 and experience VIM like never before!
 
 ## ⚡ Features Deep Dive
+
+### 📁 Practice Files System
+Learn VIM with real-world scenarios! Our practice files feature includes:
+- **6 diverse practice scenarios** - Code editing, prose writing, config files, and data manipulation
+- **Multiple categories** - JavaScript, Python, prose editing, config management, CSV data, and log analysis
+- **Difficulty levels** - Beginner, intermediate, and advanced challenges
+- **Task-based learning** - Each file comes with specific editing tasks to practice
+- **Instant loading** - Click and start practicing immediately
+- **Syntax highlighting** - Proper language detection and highlighting
+
+**Practice scenarios include:**
+- 🔧 **Code Refactoring** - Clean up JavaScript functions with VIM efficiency
+- 🐍 **Python Editing** - Work with classes, functions, and imports
+- ✍️ **Prose Writing** - Format text, fix grammar, and structure paragraphs  
+- ⚙️ **Config Management** - Edit NGINX configurations and system files
+- 📊 **Data Processing** - Manipulate CSV data and extract information
+- 📝 **Log Analysis** - Parse and analyze server logs efficiently
 
 ### 🎯 Smart Which-Key System
 Never get stuck learning VIM! Our intelligent helper shows you:
@@ -242,12 +260,14 @@ npm run preview
 
 ## 📊 Project Stats
 
+- **6 practice file scenarios** with real-world editing challenges
 - **20+ VIM command categories** with comprehensive coverage
 - **500+ VIM commands** documented and searchable
 - **6 positioning options** for keystroke visualization
 - **5 font sizes** for different use cases
 - **100% TypeScript** for type safety and developer experience
 - **Zero external dependencies** for VIM functionality (uses native vim.wasm)
+- **Universal browser compatibility** with automatic fallback mode
 
 ## 📄 License
 

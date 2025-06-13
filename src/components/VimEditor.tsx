@@ -31,6 +31,8 @@ export interface VimEditorRef {
   revertVimrc: () => Promise<void>
   /** Check if VIM instance is ready for commands */
   isVimReady: () => boolean
+  /** Load content into VIM editor */
+  loadFile: (content: string, filename?: string) => Promise<void>
 }
 
 const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disableWhichKey = false, onKeyPress, hasModalOpen = false }, ref) => {
@@ -72,6 +74,45 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
     },
     isVimReady: () => {
       return vimRef.current && vimRef.current.isRunning && vimRef.current.isRunning()
+    },
+    loadFile: async (content: string, filename?: string) => {
+      if (!vimRef.current || !vimRef.current.isRunning()) {
+        throw new Error('VIM is not ready')
+      }
+      
+      try {
+        // Clear current buffer
+        await vimRef.current.cmdline('enew!')
+        
+        // Set filename if provided
+        if (filename) {
+          await vimRef.current.cmdline(`file ${filename}`)
+        }
+        
+        // Split content into lines and insert
+        const lines = content.split('\n')
+        
+        // Insert all lines
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i]
+          if (i === 0) {
+            // Replace first line
+            await vimRef.current.cmdline(`call setline(1, '${line.replace(/'/g, "''")}')`)
+          } else {
+            // Append subsequent lines
+            await vimRef.current.cmdline(`call append(${i}, '${line.replace(/'/g, "''")}')`)
+          }
+        }
+        
+        // Move cursor to beginning
+        await vimRef.current.cmdline('normal! gg')
+        
+        // Clear modified flag
+        await vimRef.current.cmdline('set nomodified')
+      } catch (error) {
+        console.error('Failed to load file:', error)
+        throw new Error(`Failed to load file: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      }
     }
   }))
 
