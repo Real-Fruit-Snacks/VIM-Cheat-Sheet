@@ -6,21 +6,29 @@ import VimrcButton from './components/VimrcButton'
 import VimrcEditorEnhanced from './components/VimrcEditorEnhanced'
 import { ToastContainer } from './components/Toast'
 import { useToast } from './hooks/useToast'
-import { useKeystrokeVisualizer } from './hooks/useKeystrokeVisualizer'
-import KeystrokeOverlay from './components/KeystrokeOverlay'
-import KeystrokeVisualizerButton from './components/KeystrokeVisualizerButton'
+import { useEnhancedKeystrokeVisualizer } from './hooks/useEnhancedKeystrokeVisualizer'
+import EnhancedKeystrokeOverlay from './components/EnhancedKeystrokeOverlay'
+import EnhancedKeystrokeVisualizerButton from './components/EnhancedKeystrokeVisualizerButton'
 import PracticeFilesButton from './components/PracticeFilesButton'
 import PracticeFilesModal from './components/PracticeFilesModal'
+import VimGolfButton from './components/VimGolfButton'
+import VimGolfModal from './components/VimGolfModal'
+import VimGolfOverlay from './components/VimGolfOverlay'
+import { vimGolfEngine } from './utils/vim-golf-engine'
+import type { VimGolfChallenge, ChallengeSession, ChallengeAttempt } from './types/vim-golf-types'
 
 function App() {
   const [showCheatSheet, setShowCheatSheet] = useState(false)
   const [showVimrcEditor, setShowVimrcEditor] = useState(false)
   const [showPracticeFiles, setShowPracticeFiles] = useState(false)
+  const [showVimGolf, setShowVimGolf] = useState(false)
+  const [currentGolfSession, setCurrentGolfSession] = useState<ChallengeSession | null>(null)
+  const [golfCompletionResult, setGolfCompletionResult] = useState<ChallengeAttempt | null>(null)
   const [vimrcContent, setVimrcContent] = useState<string>('')
   const [whichKeyEnabled, setWhichKeyEnabled] = useState(true)
   const vimEditorRef = useRef<VimEditorRef>(null)
   const { toasts, removeToast, showSuccess, showError, showWarning } = useToast()
-  const { keystrokes, config, addKeystroke, updateConfig } = useKeystrokeVisualizer()
+  const enhancedVisualizer = useEnhancedKeystrokeVisualizer()
 
   /** Initialize vimrc content and which-key preference from localStorage */
   useEffect(() => {
@@ -79,6 +87,59 @@ function App() {
     }
   }
 
+  const handleStartGolfChallenge = async (challenge: VimGolfChallenge) => {
+    if (!vimEditorRef.current?.isVimReady()) {
+      showError('Vim is not ready yet. Please wait a moment.')
+      return
+    }
+
+    try {
+      // Load the challenge content
+      await vimEditorRef.current.loadFile(challenge.startingText, `golf-${challenge.id}`)
+      
+      // Start the golf session
+      const session = vimGolfEngine.startChallenge(challenge.id)
+      setCurrentGolfSession(session)
+      setGolfCompletionResult(null)
+      
+      showSuccess(`Started challenge: ${challenge.title}`)
+    } catch (error) {
+      showError(`Failed to start challenge: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+  }
+
+  const handleCompleteGolfChallenge = () => {
+    if (!currentGolfSession) return
+
+    const result = vimGolfEngine.completeChallenge()
+    if (result) {
+      setGolfCompletionResult(result)
+      if (result.completed) {
+        showSuccess(`Challenge completed! Score: ${result.score} (${result.efficiency})`)
+      } else {
+        showWarning('Challenge validation failed. Check the requirements and try again.')
+      }
+    }
+  }
+
+  const handleExitGolfChallenge = () => {
+    setCurrentGolfSession(null)
+    setGolfCompletionResult(null)
+    showSuccess('Exited golf challenge')
+  }
+
+  const handleShowGolfHint = () => {
+    if (!currentGolfSession) return
+    
+    if (currentGolfSession.hintsShown < currentGolfSession.challenge.hints.length) {
+      currentGolfSession.hintsShown++
+      setCurrentGolfSession({ ...currentGolfSession })
+      showSuccess('Hint revealed!')
+    } else {
+      showWarning('No more hints available')
+    }
+  }
+
   return (
     <div className="h-screen bg-gray-950 text-gray-100 overflow-hidden p-2 flex items-center justify-center">
       <div className="w-full h-full max-w-none max-h-[calc(100vh-1rem)] bg-gray-900 rounded-lg shadow-2xl overflow-hidden flex flex-col">
@@ -98,13 +159,21 @@ function App() {
           {/* Editor action buttons */}
           {!showVimrcEditor && (
             <div className="flex items-center space-x-2">
-              <KeystrokeVisualizerButton
-                config={config}
-                onUpdateConfig={updateConfig}
+              <EnhancedKeystrokeVisualizerButton
+                config={enhancedVisualizer.config}
+                enhancedConfig={enhancedVisualizer.enhancedConfig}
+                onUpdateConfig={enhancedVisualizer.updateConfig}
+                onUpdateEnhancedConfig={enhancedVisualizer.updateEnhancedConfig}
+                onToggleEducationalOverlay={enhancedVisualizer.toggleEducationalOverlay}
+                onClearData={enhancedVisualizer.clearEnhancedData}
               />
               
               <PracticeFilesButton 
                 onClick={() => setShowPracticeFiles(true)}
+              />
+
+              <VimGolfButton 
+                onClick={() => setShowVimGolf(true)}
               />
               
               <VimrcButton 
@@ -127,8 +196,22 @@ function App() {
             ref={vimEditorRef} 
             vimrcContent={vimrcContent}
             disableWhichKey={!whichKeyEnabled || showVimrcEditor}
-            onKeyPress={addKeystroke}
-            hasModalOpen={showCheatSheet || showVimrcEditor || showPracticeFiles}
+            onKeyPress={(event) => {
+              // Enhanced keystroke visualization
+              enhancedVisualizer.addEnhancedKeystroke(event)
+              
+              // Vim Golf tracking (if challenge active)
+              if (currentGolfSession?.isActive) {
+                const modifiers: string[] = []
+                if (event.ctrlKey) modifiers.push('Ctrl')
+                if (event.altKey) modifiers.push('Alt')
+                if (event.shiftKey && event.key.length > 1) modifiers.push('Shift')
+                if (event.metaKey) modifiers.push('Cmd')
+                
+                vimGolfEngine.addKeystroke(event.key, modifiers)
+              }
+            }}
+            hasModalOpen={showCheatSheet || showVimrcEditor || showPracticeFiles || showVimGolf || !!currentGolfSession}
           />
           
           <VimrcEditorEnhanced
@@ -146,9 +229,24 @@ function App() {
             onSelectFile={handleSelectPracticeFile}
           />
           
-          <KeystrokeOverlay
-            keystrokes={keystrokes}
-            config={config}
+          <VimGolfModal
+            isOpen={showVimGolf}
+            onClose={() => setShowVimGolf(false)}
+            onStartChallenge={handleStartGolfChallenge}
+          />
+
+          <VimGolfOverlay
+            session={currentGolfSession}
+            onCompleteChallenge={handleCompleteGolfChallenge}
+            onExitChallenge={handleExitGolfChallenge}
+            onShowHint={handleShowGolfHint}
+            completionResult={golfCompletionResult}
+          />
+          
+          <EnhancedKeystrokeOverlay
+            config={enhancedVisualizer.enhancedConfig}
+            state={enhancedVisualizer.enhancedState}
+            onInsightSeen={enhancedVisualizer.markInsightSeen}
           />
         </div>
       </div>
