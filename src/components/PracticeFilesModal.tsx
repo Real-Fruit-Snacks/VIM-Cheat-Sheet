@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, FileText, Code, Settings, Database, ChevronRight, Info, Target, Lightbulb } from 'lucide-react';
-import { practiceFiles, PracticeFile } from '../data/practice-files';
+import { practiceFiles, type PracticeFile } from '../data/practice-files';
 
 interface PracticeFilesModalProps {
   isOpen: boolean;
