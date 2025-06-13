@@ -93,14 +93,9 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
               typeof vimRef.current.input === 'function' &&
               typeof vimRef.current.cmdline === 'function') {
             
-            // Try a test command to ensure VIM is actually responsive
-            try {
-              await vimRef.current.cmdline('echo "ready"')
-              console.log(`✅ VIM ready after ${attempt + 1} attempts`)
-              return true
-            } catch (e) {
-              console.log(`🔄 VIM not responsive yet, attempt ${attempt + 1}/${maxAttempts}`)
-            }
+            // VIM methods exist and are functions, consider it ready
+            console.log(`✅ VIM ready after ${attempt + 1} attempts`)
+            return true
           }
           
           if (attempt < maxAttempts - 1) {
