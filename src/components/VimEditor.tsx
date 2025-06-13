@@ -89,23 +89,30 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           await vimRef.current.cmdline(`file ${filename}`)
         }
         
-        // Split content into lines and insert
+        // Use a more robust approach with register-based insertion
+        // This avoids quote escaping issues entirely
+        
+        // Split content into lines
         const lines = content.split('\n')
         
-        // Insert all lines
+        // Use VIM's register to load content safely
+        // First, put the content into register 'a'
+        await vimRef.current.cmdline('let @a = ""')
+        
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i]
-          // Properly escape for VIM: escape single quotes and backslashes
-          const escapedLine = line.replace(/\\/g, '\\\\').replace(/'/g, "''")
-          
-          if (i === 0) {
-            // Replace first line
-            await vimRef.current.cmdline(`call setline(1, '${escapedLine}')`)
-          } else {
-            // Append subsequent lines
-            await vimRef.current.cmdline(`call append(${i}, '${escapedLine}')`)
+          // Use JSON.stringify to safely escape the string for VIM
+          const safeString = JSON.stringify(line)
+          await vimRef.current.cmdline(`let @a = @a . ${safeString}`)
+          if (i < lines.length - 1) {
+            await vimRef.current.cmdline('let @a = @a . "\\n"')
           }
         }
+        
+        // Clear current content and put from register
+        await vimRef.current.cmdline('normal! ggdG')
+        await vimRef.current.cmdline('put a')
+        await vimRef.current.cmdline('normal! ggdd')
         
         // Move cursor to beginning
         await vimRef.current.cmdline('normal! gg')
