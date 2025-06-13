@@ -89,30 +89,30 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           await vimRef.current.cmdline(`file ${filename}`)
         }
         
-        // Use a more robust approach with register-based insertion
-        // This avoids quote escaping issues entirely
+        // Use a much simpler approach - directly set the content
+        // Clear the buffer first
+        await vimRef.current.cmdline('normal! ggdG')
         
-        // Split content into lines
+        // Split content into lines and use a simpler insertion method
         const lines = content.split('\n')
         
-        // Use VIM's register to load content safely
-        // First, put the content into register 'a'
-        await vimRef.current.cmdline('let @a = ""')
-        
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i]
-          // Use JSON.stringify to safely escape the string for VIM
-          const safeString = JSON.stringify(line)
-          await vimRef.current.cmdline(`let @a = @a . ${safeString}`)
-          if (i < lines.length - 1) {
-            await vimRef.current.cmdline('let @a = @a . "\\n"')
+        // Insert the first line
+        if (lines.length > 0) {
+          await vimRef.current.cmdline('normal! i')
+          for (const char of lines[0]) {
+            await vimRef.current.input(char)
           }
+          await vimRef.current.input('<Esc>')
         }
         
-        // Clear current content and put from register
-        await vimRef.current.cmdline('normal! ggdG')
-        await vimRef.current.cmdline('put a')
-        await vimRef.current.cmdline('normal! ggdd')
+        // Insert remaining lines
+        for (let i = 1; i < lines.length; i++) {
+          await vimRef.current.cmdline('normal! o')
+          for (const char of lines[i]) {
+            await vimRef.current.input(char)
+          }
+          await vimRef.current.input('<Esc>')
+        }
         
         // Move cursor to beginning
         await vimRef.current.cmdline('normal! gg')
