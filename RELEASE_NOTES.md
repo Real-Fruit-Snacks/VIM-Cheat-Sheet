@@ -1,14 +1,14 @@
-# VIMora v0.1.0 - GitLab Offline Deployment Release
+# VIM v0.1.0 - GitLab Offline Deployment Release
 
 ## 🎉 What's New
 
-This release provides a complete, pre-built package for deploying VIMora on GitLab Pages with full offline capability.
+This release provides a complete, pre-built package for deploying VIM on GitLab Pages with full offline capability.
 
 ## 📦 Download
 
-**File**: `vimora-gitlab-offline-v0.1.0-20250613_165240.tar.gz`  
+**File**: `vim-gitlab-offline-v0.1.0-20250613_165602.tar.gz`  
 **Size**: 3.2 MB  
-**SHA256**: `648ba530833e0fb585cd044ecf9a114fe02fc23d8f1a3828317a0ab0b3065aea`
+**SHA256**: `cbd5e089b2d98ad74b81b30550160d7e417556c9389ec8c8fef771cfdf9fae48`
 
 ## ✨ Features
 
@@ -24,7 +24,7 @@ This release provides a complete, pre-built package for deploying VIMora on GitL
 - Comprehensive deployment guide included
 - No technical knowledge required
 
-### Full VIMora Features
+### Full VIM Features
 - 🎹 Real VIM experience via WebAssembly
 - 🎥 Keystroke visualizer for teaching/streaming
 - 🎯 Which-Key command helper
@@ -52,7 +52,7 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 
 ## 📝 Changes from Previous Release
 
-- Simplified branding to VIMora
+- Streamlined application focus
 - Enhanced Toast component with better animations
 - Removed GitLab-specific files from main repository
 - Created dedicated offline deployment package
@@ -60,8 +60,8 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 
 ## 🤝 Contributing
 
-VIMora is open source! Contributions welcome at:
-https://github.com/Real-Fruit-Snacks/VIMora
+VIM is open source! Contributions welcome at:
+https://github.com/Real-Fruit-Snacks/VIM
 
 ## 📄 License
 

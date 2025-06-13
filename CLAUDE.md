@@ -16,7 +16,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Deployment
 - `npm run deploy` - Deploy to GitHub Pages (builds first)
-- `npm run build:gitlab` - Build for GitLab Pages deployment
 
 ## Architecture
 
@@ -64,6 +63,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Live configuration editor with instant preview
 - Line-by-line validation and error reporting
 - Managed by `src/utils/vimrc-manager.ts`
+
+**Practice Files System** (`src/components/PracticeFilesModal.tsx`, `src/data/practice-files.ts`)
+- Pre-loaded code examples for VIM practice
+- Multiple file types: JavaScript, Python, prose, config files, CSV, logs
+- Each file includes specific editing challenges
+- Instant loading into the editor
 
 ### State Management
 - Local state with React hooks

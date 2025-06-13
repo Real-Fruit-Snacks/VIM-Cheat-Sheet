@@ -1,0 +1,22 @@
+# GitLab CI/CD configuration for VIM
+# Automatic deployment to GitLab Pages
+
+image: alpine:latest
+
+pages:
+  stage: deploy
+  script:
+    - echo "Deploying VIM to GitLab Pages..."
+    - echo "All files are pre-built and ready for deployment"
+    - ls -la public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+    - master
+
+# Optional: Add caching for faster subsequent deployments
+cache:
+  paths:
+    - public/
