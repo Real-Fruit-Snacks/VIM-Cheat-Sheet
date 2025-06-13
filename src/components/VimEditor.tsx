@@ -77,24 +77,45 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
              vimRef.current.isRunning && 
              vimRef.current.isRunning() &&
              vimRef.current.input &&
-             vimRef.current.cmdline
+             vimRef.current.cmdline &&
+             typeof vimRef.current.input === 'function' &&
+             typeof vimRef.current.cmdline === 'function'
     },
     loadFile: async (content: string, filename?: string) => {
-      if (!vimRef.current || 
-          !vimRef.current.isRunning() || 
-          !vimRef.current.input || 
-          !vimRef.current.cmdline) {
-        throw new Error('VIM is not ready - missing required methods')
+      // Wait for VIM to be fully ready with proper retry logic
+      const waitForVimReady = async (maxAttempts = 30, delayMs = 200) => {
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          if (vimRef.current && 
+              vimRef.current.isRunning && 
+              vimRef.current.isRunning() &&
+              vimRef.current.input &&
+              vimRef.current.cmdline &&
+              typeof vimRef.current.input === 'function' &&
+              typeof vimRef.current.cmdline === 'function') {
+            
+            // Try a test command to ensure VIM is actually responsive
+            try {
+              await vimRef.current.cmdline('echo "ready"')
+              console.log(`✅ VIM ready after ${attempt + 1} attempts`)
+              return true
+            } catch (e) {
+              console.log(`🔄 VIM not responsive yet, attempt ${attempt + 1}/${maxAttempts}`)
+            }
+          }
+          
+          if (attempt < maxAttempts - 1) {
+            await new Promise(resolve => setTimeout(resolve, delayMs))
+          }
+        }
+        return false
+      }
+
+      const isReady = await waitForVimReady()
+      if (!isReady) {
+        throw new Error('VIM failed to become ready after waiting. Please refresh the page and try again.')
       }
       
       try {
-        // Wait a bit more to ensure VIM is fully ready
-        await new Promise(resolve => setTimeout(resolve, 100))
-        
-        // Double-check VIM is still ready
-        if (!vimRef.current.input || !vimRef.current.cmdline) {
-          throw new Error('VIM methods unavailable after wait')
-        }
         
         // Clear current buffer
         await vimRef.current.cmdline('enew!')

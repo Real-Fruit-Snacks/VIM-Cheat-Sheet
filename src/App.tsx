@@ -26,6 +26,7 @@ function App() {
   const [golfCompletionResult, setGolfCompletionResult] = useState<ChallengeAttempt | null>(null)
   const [vimrcContent, setVimrcContent] = useState<string>('')
   const [whichKeyEnabled, setWhichKeyEnabled] = useState(true)
+  const [vimFullyReady, setVimFullyReady] = useState(false)
   const vimEditorRef = useRef<VimEditorRef>(null)
   const { toasts, removeToast, showSuccess, showError, showWarning } = useToast()
   const enhancedVisualizer = useEnhancedKeystrokeVisualizer()
@@ -43,6 +44,25 @@ function App() {
       setWhichKeyEnabled(savedWhichKeyEnabled === 'true')
     }
   }, [])
+
+  /** Check VIM readiness periodically and update state */
+  useEffect(() => {
+    const checkVimReadiness = () => {
+      const isReady = vimEditorRef.current?.isVimReady() || false
+      if (isReady !== vimFullyReady) {
+        setVimFullyReady(isReady)
+        if (isReady) {
+          console.log('🎉 VIM is now fully ready for file operations!')
+        }
+      }
+    }
+
+    // Check immediately and then every second
+    checkVimReadiness()
+    const interval = setInterval(checkVimReadiness, 1000)
+    
+    return () => clearInterval(interval)
+  }, [vimFullyReady])
 
   const handleSaveVimrc = async (content: string) => {
     /** Ensure vim-wasm is ready before applying configuration */
@@ -73,21 +93,21 @@ function App() {
   }
 
   const handleSelectPracticeFile = async (content: string, filename?: string) => {
-    if (!vimEditorRef.current?.isVimReady()) {
-      showError('Vim is not ready yet. Please wait a moment and try again.')
-      return
-    }
-    
     try {
-      await vimEditorRef.current.loadFile(content, filename)
+      // Show loading state
+      showSuccess('Loading file... Please wait while VIM initializes.')
+      
+      await vimEditorRef.current?.loadFile(content, filename)
       showSuccess(`Loaded practice file: ${filename || 'Untitled'}`)
       setShowPracticeFiles(false)
     } catch (error) {
       console.error('Practice file loading error:', error)
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       
-      if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
-        showError('VIM is still initializing. Please wait a few seconds and try again.')
+      if (errorMessage.includes('failed to become ready') || errorMessage.includes('refresh the page')) {
+        showError('VIM initialization timed out. Please refresh the page and try again.')
+      } else if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
+        showError('VIM is still initializing. Please wait a few more seconds and try again.')
       } else {
         showError(`Failed to load practice file: ${errorMessage}`)
       }
@@ -95,14 +115,12 @@ function App() {
   }
 
   const handleStartGolfChallenge = async (challenge: VimGolfChallenge) => {
-    if (!vimEditorRef.current?.isVimReady()) {
-      showError('Vim is not ready yet. Please wait a moment and try again.')
-      return
-    }
-
     try {
+      // Show loading state
+      showSuccess(`Starting challenge "${challenge.title}"... Please wait while VIM initializes.`)
+      
       // Load the challenge content
-      await vimEditorRef.current.loadFile(challenge.startingText, `golf-${challenge.id}`)
+      await vimEditorRef.current?.loadFile(challenge.startingText, `golf-${challenge.id}`)
       
       // Start the golf session
       const session = vimGolfEngine.startChallenge(challenge.id)
@@ -114,8 +132,10 @@ function App() {
       console.error('Golf challenge loading error:', error)
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       
-      if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
-        showError('VIM is still initializing. Please wait a few seconds and try again.')
+      if (errorMessage.includes('failed to become ready') || errorMessage.includes('refresh the page')) {
+        showError('VIM initialization timed out. Please refresh the page and try again.')
+      } else if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
+        showError('VIM is still initializing. Please wait a few more seconds and try again.')
       } else {
         showError(`Failed to start challenge: ${errorMessage}`)
       }
@@ -167,7 +187,20 @@ function App() {
           </div>
           
           <div className="flex-1 text-center">
-            <span className="text-sm text-gray-400 font-mono">Interactive VIM Learning Platform</span>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-sm text-gray-400 font-mono">Interactive VIM Learning Platform</span>
+              {vimFullyReady ? (
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded">
+                  <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                  VIM Ready
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-yellow-500/20 text-yellow-400 rounded">
+                  <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                  Initializing...
+                </span>
+              )}
+            </div>
           </div>
           
           {/* Editor action buttons */}
