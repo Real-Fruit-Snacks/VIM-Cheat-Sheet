@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // For GitLab Pages, use the project name as base path
-  base: '/VIM/',
+  // For GitHub/GitLab Pages, use the project name as base path
+  base: '/VIM.io/',
   server: {
     headers: {
       'Cross-Origin-Embedder-Policy': 'require-corp',
