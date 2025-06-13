@@ -1,5 +1,5 @@
 import { useEffect, useState, forwardRef } from 'react';
-import { getBrowserCapabilities } from '../utils/browser-capabilities';
+import { getBrowserCapabilities, getBrowserInstructions } from '../utils/browser-capabilities';
 import VimEditor from './VimEditor';
 import MonacoVimEditor from './MonacoVimEditor';
 import type { VimEditorRef } from './VimEditor';
@@ -24,15 +24,27 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
     const caps = getBrowserCapabilities();
     setCapabilities(caps);
     
+    // Log browser capabilities to console
+    console.log('🔍 VIM Editor - Browser Capabilities:', {
+      hasSharedArrayBuffer: caps.hasSharedArrayBuffer,
+      hasWebAssembly: caps.hasWebAssembly,
+      browser: caps.browserName,
+      requiresWorkaround: caps.requiresWorkaround
+    });
+    
     // Determine which editor to use
     if (caps.hasSharedArrayBuffer && caps.hasWebAssembly) {
+      console.log('✅ Using vim.wasm (full VIM experience)');
       setEditorType('vim-wasm');
     } else if (caps.hasWebAssembly && !caps.hasSharedArrayBuffer) {
       // Browser supports WebAssembly but not SharedArrayBuffer
       // This means the user could enable it
+      console.log('⚠️ Using Monaco-vim fallback (SharedArrayBuffer not available)');
+      console.log('💡 Tip:', getBrowserInstructions(caps.browserName));
       setEditorType('monaco');
     } else {
       // No WebAssembly support at all
+      console.log('⚠️ Using Monaco-vim fallback (WebAssembly not supported)');
       setEditorType('monaco');
     }
   }, []);
