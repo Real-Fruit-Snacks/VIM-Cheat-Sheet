@@ -14,7 +14,7 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
@@ -71,15 +71,15 @@ VIM is designed with streamers, YouTubers, and educators in mind:
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
 
-**New:** VIM now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support.
+**Browser Compatibility:** VIM now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
 
 ### 💻 Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
+git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
+cd VIM.io
 
 # Install dependencies
 npm install
@@ -88,7 +88,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/VIM/ and experience VIM like never before!
+Open http://localhost:5173 and experience VIM like never before!
 
 ## ⚡ Features Deep Dive
 
@@ -205,13 +205,14 @@ We welcome contributions of all kinds! Whether you're:
 - 📝 **Improving docs** - Help others understand and use VIM.io
 - 🔧 **Contributing code** - Join our development efforts
 - 🎨 **Designing assets** - Improve the visual experience
+- 🌐 **Testing browser compatibility** - Ensure VIM works everywhere
 
 ### Development Setup
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
+git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
+cd VIM.io
 
 # Install dependencies
 npm install
