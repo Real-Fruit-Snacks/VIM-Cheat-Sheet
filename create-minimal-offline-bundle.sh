@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a minimal offline bundle with just pre-built files for deployment
-echo "📦 Creating minimal offline bundle for VIM.io..."
+echo "📦 Creating minimal offline bundle for VIM..."
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -11,7 +11,7 @@ NC='\033[0m' # No Color
 
 # Create bundle name with version
 VERSION="1.0.0"
-BUNDLE_NAME="vim-io-offline-v${VERSION}"
+BUNDLE_NAME="vim-offline-v${VERSION}"
 TEMP_DIR="/tmp/$BUNDLE_NAME"
 
 echo -e "${YELLOW}Creating minimal bundle: $BUNDLE_NAME${NC}"

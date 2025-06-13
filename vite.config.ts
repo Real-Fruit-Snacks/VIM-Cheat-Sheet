@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // For GitLab Pages, use the project name as base path
-  base: '/VIM.io/',
+  base: '/VIM/',
   server: {
     headers: {
       'Cross-Origin-Embedder-Policy': 'require-corp',

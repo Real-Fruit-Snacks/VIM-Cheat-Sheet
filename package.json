@@ -1,9 +1,9 @@
 {
-  "name": "vim-io",
+  "name": "vim",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https://Real-Fruit-Snacks.github.io/VIM.io",
+  "homepage": "https://Real-Fruit-Snacks.github.io/VIM",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

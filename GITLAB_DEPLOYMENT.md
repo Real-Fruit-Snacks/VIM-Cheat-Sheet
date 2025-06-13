@@ -1,6 +1,6 @@
 # GitLab Pages Deployment Guide
 
-This guide explains how to deploy VIM.io to GitLab Pages with a fully self-contained build that requires NO internet access for users.
+This guide explains how to deploy VIM to GitLab Pages with a fully self-contained build that requires NO internet access for users.
 
 ## 🎯 Overview
 

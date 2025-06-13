@@ -1,10 +1,10 @@
 # Security & Integrity Guide
 
-This document helps security-conscious users verify and audit VIM.io before deployment.
+This document helps security-conscious users verify and audit VIM before deployment.
 
 ## 🔒 Security Overview
 
-VIM.io is designed with security in mind:
+VIM is designed with security in mind:
 - **No external dependencies** at runtime
 - **No data collection** or analytics
 - **No network requests** after initial load

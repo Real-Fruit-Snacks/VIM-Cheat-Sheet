@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create a complete offline bundle for transfer to isolated environments
-echo "📦 Creating complete offline bundle for VIM.io..."
+echo "📦 Creating complete offline bundle for VIM..."
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -10,7 +10,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Create temporary directory
-BUNDLE_NAME="vim-io-offline-bundle-$(date +%Y%m%d)"
+BUNDLE_NAME="vim-offline-bundle-$(date +%Y%m%d)"
 TEMP_DIR="/tmp/$BUNDLE_NAME"
 
 echo -e "${YELLOW}Creating bundle: $BUNDLE_NAME${NC}"

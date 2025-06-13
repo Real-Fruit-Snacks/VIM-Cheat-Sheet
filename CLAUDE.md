@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Development
 - `npm install` - Install dependencies
-- `npm run dev` - Start development server at http://localhost:5173/VIM.io/
+- `npm run dev` - Start development server at http://localhost:5173/VIM/
 - `npm run build` - Build for production (TypeScript compile + Vite build)
 - `npm run preview` - Preview production build
 
@@ -74,5 +74,5 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Build Configuration
 - Cross-origin isolation headers configured in `vite.config.ts` and `public/_headers`
-- Base path set to `/VIM.io/` for GitHub Pages
+- Base path set to `/VIM/` for GitHub Pages
 - Service worker (`coi-serviceworker.js`) for SharedArrayBuffer support

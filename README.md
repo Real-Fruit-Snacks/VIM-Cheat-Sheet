@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="public/favicon-detailed.svg" alt="VIM.io Logo" width="120" height="120" />
+<img src="public/favicon-detailed.svg" alt="VIM Logo" width="120" height="120" />
   
-# 🚀 VIM.io
+# 🚀 VIM
 
 ### Master VIM Without Leaving Your Browser
 *The Complete VIM Learning Experience - Now with Professional Streaming Tools*
@@ -14,17 +14,17 @@
 
 **Experience the full power of VIM directly in your browser. Perfect for learning, teaching, and professional content creation.**
 
-[🎮 Try VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 🎯 Why VIM.io?
+## 🎯 Why VIM?
 
-**VIM.io** is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM.io provides professional-grade tools in a zero-setup environment.
+**VIM** is the most comprehensive browser-based VIM experience available. Whether you're a beginner learning VIM or a content creator teaching others, VIM provides professional-grade tools in a zero-setup environment.
 
-### ✨ What Makes VIM.io Special
+### ✨ What Makes VIM Special
 
 - **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
 - **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
@@ -52,7 +52,7 @@
 
 ## 🎥 Perfect for Content Creators
 
-VIM.io is designed with streamers, YouTubers, and educators in mind:
+VIM is designed with streamers, YouTubers, and educators in mind:
 
 ### **Professional Keystroke Visualizer**
 - ✨ **Real-time display** of every keystroke with smooth animations
@@ -71,15 +71,15 @@ VIM.io is designed with streamers, YouTubers, and educators in mind:
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIM.io Live](https://real-fruit-snacks.github.io/VIM.io/) and start using VIM immediately - no setup required!
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
 
-**New:** VIM.io now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support.
+**New:** VIM now works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support.
 
 ### 💻 Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
-cd VIM.io
+git clone https://github.com/Real-Fruit-Snacks/VIM.git
+cd VIM
 
 # Install dependencies
 npm install
@@ -88,7 +88,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/VIM.io/ and experience VIM like never before!
+Open http://localhost:5173/VIM/ and experience VIM like never before!
 
 ## ⚡ Features Deep Dive
 
@@ -165,7 +165,7 @@ Enable "Disable Cross-Origin Restrictions" in the Developer menu
 ## 🏗️ Architecture & Performance
 
 ### **Cross-Origin Isolation**
-VIM.io implements proper COOP/COEP headers for SharedArrayBuffer support, ensuring:
+VIM implements proper COOP/COEP headers for SharedArrayBuffer support, ensuring:
 - ✅ Native WebAssembly performance
 - ✅ Full VIM feature compatibility
 - ✅ Secure cross-origin isolation
@@ -210,8 +210,8 @@ We welcome contributions of all kinds! Whether you're:
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.io.git
-cd VIM.io
+git clone https://github.com/Real-Fruit-Snacks/VIM.git
+cd VIM
 
 # Install dependencies
 npm install
@@ -250,7 +250,7 @@ npm run preview
 
 ## 📄 License
 
-VIM.io is open source software licensed under the [MIT License](LICENSE).
+VIM is open source software licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
@@ -259,6 +259,6 @@ VIM.io is open source software licensed under the [MIT License](LICENSE).
 - **[React Team](https://react.dev/)** - For the incredible development experience
 - **The VIM Community** - Decades of innovation, documentation, and passion
 
-<sub>VIM.io - Where VIM Learning Meets Professional Content Creation!</sub>
+<sub>VIM - Where VIM Learning Meets Professional Content Creation!</sub>
 
 </div>

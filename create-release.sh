@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Create GitHub release for GitLab offline edition
-echo "🚀 Creating GitHub release for VIM.io GitLab Edition..."
+echo "🚀 Creating GitHub release for VIM GitLab Edition..."
 
 # Check if offline bundles exist
-if [ ! -f "vim-io-offline-v1.0.0.tar.gz" ] || [ ! -f "vim-io-offline-v1.0.0.zip" ]; then
+if [ ! -f "vim-offline-v1.0.0.tar.gz" ] || [ ! -f "vim-offline-v1.0.0.zip" ]; then
     echo "⚠️  Offline bundles not found. Creating them now..."
     ./create-minimal-offline-bundle.sh
 fi

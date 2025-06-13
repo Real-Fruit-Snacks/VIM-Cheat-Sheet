@@ -145,7 +145,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       
       // Create editor instance
       const editor = monaco.editor.create(containerRef.current, {
-        value: '# Welcome to VIM.io (Monaco Mode)\n# SharedArrayBuffer is not available, using Monaco-vim fallback\n# Most VIM commands work, but some advanced features may be limited\n\n',
+        value: '# Welcome to VIM (Monaco Mode)\n# SharedArrayBuffer is not available, using Monaco-vim fallback\n# Most VIM commands work, but some advanced features may be limited\n\n',
         language: 'markdown',
         theme: 'vim-dark',
         fontSize: 14,

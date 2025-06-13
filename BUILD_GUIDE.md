@@ -1,6 +1,6 @@
 # Build & Development Guide
 
-Complete guide for building VIM.io from source and customizing deployments.
+Complete guide for building VIM from source and customizing deployments.
 
 ## 📋 Prerequisites
 
