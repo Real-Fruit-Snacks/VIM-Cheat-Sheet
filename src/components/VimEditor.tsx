@@ -75,57 +75,17 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
     isVimReady: () => {
       return vimRef.current && 
              vimRef.current.isRunning && 
-             vimRef.current.isRunning() &&
-             vimRef.current.input &&
-             vimRef.current.cmdline
+             vimRef.current.isRunning()
     },
     loadFile: async (content: string, filename?: string) => {
-      // Wait for VIM to be fully ready with proper retry logic
-      const waitForVimReady = async (maxAttempts = 30, delayMs = 200) => {
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          // Log what we're checking
-          if (attempt === 0 || attempt % 5 === 0) {
-            console.log(`🔍 Checking VIM ready (attempt ${attempt + 1}/${maxAttempts}):`, {
-              hasVimRef: !!vimRef.current,
-              hasIsRunning: vimRef.current ? !!vimRef.current.isRunning : false,
-              isRunning: vimRef.current && vimRef.current.isRunning ? vimRef.current.isRunning() : false,
-              hasInput: vimRef.current ? !!vimRef.current.input : false,
-              hasCmdline: vimRef.current ? !!vimRef.current.cmdline : false,
-              inputType: vimRef.current && vimRef.current.input ? typeof vimRef.current.input : 'none',
-              cmdlineType: vimRef.current && vimRef.current.cmdline ? typeof vimRef.current.cmdline : 'none'
-            })
-          }
-          
-          if (vimRef.current && 
-              vimRef.current.isRunning && 
-              vimRef.current.isRunning()) {
-            // Check if methods exist
-            if (vimRef.current.input && vimRef.current.cmdline) {
-              // VIM methods exist and are functions, consider it ready
-              console.log(`✅ VIM ready after ${attempt + 1} attempts`)
-              return true
-            }
-          }
-          
-          if (attempt < maxAttempts - 1) {
-            await new Promise(resolve => setTimeout(resolve, delayMs))
-          }
-        }
-        
-        // Log final state before giving up
-        console.error('❌ VIM failed to become ready. Final state:', {
-          hasVimRef: !!vimRef.current,
-          vimRef: vimRef.current
-        })
-        return false
-      }
-
-      const isReady = await waitForVimReady()
-      if (!isReady) {
-        throw new Error('VIM failed to become ready after waiting. Please refresh the page and try again.')
+      // Just check if VIM exists
+      if (!vimRef.current) {
+        throw new Error('VIM is not initialized yet.')
       }
       
       try {
+        // Add a small delay to ensure VIM is ready to accept commands
+        await new Promise(resolve => setTimeout(resolve, 100))
         
         // Clear current buffer
         await vimRef.current.cmdline('enew!')
@@ -135,35 +95,27 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           await vimRef.current.cmdline(`file ${filename}`)
         }
         
-        // Clear the buffer completely
-        await vimRef.current.cmdline('normal! ggdG')
+        // Use VIM's register to load content safely
+        // First, put the content into register 'a'
+        await vimRef.current.cmdline('let @a = ""')
         
         // Split content into lines
         const lines = content.split('\n')
         
-        if (lines.length === 0) {
-          return // Empty content, nothing to insert
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i]
+          // Use JSON.stringify to safely escape the string for VIM
+          const safeString = JSON.stringify(line)
+          await vimRef.current.cmdline(`let @a = @a . ${safeString}`)
+          if (i < lines.length - 1) {
+            await vimRef.current.cmdline('let @a = @a . "\\n"')
+          }
         }
         
-        // Insert the first line
-        if (lines[0]) {
-          await vimRef.current.cmdline('normal! i')
-          // Insert character by character to avoid escaping issues
-          for (const char of lines[0]) {
-            await vimRef.current.input(char)
-          }
-          await vimRef.current.input('<Esc>')
-        }
-        
-        // Insert remaining lines
-        for (let i = 1; i < lines.length; i++) {
-          await vimRef.current.cmdline('normal! o')
-          // Insert character by character for each line
-          for (const char of lines[i]) {
-            await vimRef.current.input(char)
-          }
-          await vimRef.current.input('<Esc>')
-        }
+        // Clear current content and put from register
+        await vimRef.current.cmdline('normal! ggdG')
+        await vimRef.current.cmdline('put a')
+        await vimRef.current.cmdline('normal! ggdd')
         
         // Move cursor to beginning
         await vimRef.current.cmdline('normal! gg')
@@ -175,16 +127,6 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         
       } catch (error) {
         console.error('❌ Failed to load file:', error)
-        
-        // Provide more specific error information
-        if (error instanceof Error) {
-          if (error.message.includes('input is not a function')) {
-            throw new Error('VIM input method unavailable - please wait for VIM to fully initialize')
-          } else if (error.message.includes('cmdline')) {
-            throw new Error('VIM command interface unavailable - please restart the editor')
-          }
-        }
-        
         throw new Error(`Failed to load file: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
