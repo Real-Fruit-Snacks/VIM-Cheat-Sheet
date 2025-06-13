@@ -18,11 +18,15 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'editor': ['vim-wasm'],
+          'vim-wasm': ['vim-wasm'],
+          'monaco': ['monaco-editor', 'monaco-vim'],
         },
       },
     },
     // Copy headers file to dist
     assetsInlineLimit: 0, // Don't inline any assets
+  },
+  optimizeDeps: {
+    include: ['monaco-editor', 'monaco-vim'],
   },
 })

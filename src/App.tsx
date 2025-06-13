@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import VimEditor from './components/VimEditor'
+import VimEditorHybrid from './components/VimEditorHybrid'
 import type { VimEditorRef } from './components/VimEditor'
 import CheatSheetButton from './components/CheatSheetButton'
 import VimrcButton from './components/VimrcButton'
@@ -101,7 +101,7 @@ function App() {
         
         {/* Main editor content area */}
         <div className="flex-1 relative overflow-hidden min-h-0">
-          <VimEditor 
+          <VimEditorHybrid 
             ref={vimEditorRef} 
             vimrcContent={vimrcContent}
             disableWhichKey={!whichKeyEnabled || showVimrcEditor}
