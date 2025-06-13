@@ -37,43 +37,62 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     useImperativeHandle(ref, () => ({
       applyVimrc: async (content: string): Promise<VimrcApplyResult> => {
         // Monaco-vim doesn't support full vimrc, but we can apply some basic settings
-        const lines = content.split('\n').filter(line => line.trim() && !line.trim().startsWith('"'));
+        const allLines = content.split('\n');
         const result: VimrcApplyResult = {
           results: [],
+          totalLines: allLines.length,
           successCount: 0,
-          failedCount: 0
+          failedCount: 0,
+          skippedCount: 0
         };
         
-        for (const line of lines) {
+        allLines.forEach((line, index) => {
+          const lineNumber = index + 1;
+          const trimmedLine = line.trim();
+          
+          // Skip empty lines and comments
+          if (!trimmedLine || trimmedLine.startsWith('"')) {
+            result.skippedCount++;
+            return;
+          }
           try {
             // Extract common vimrc commands and apply what we can
-            if (line.includes('set number')) {
+            if (trimmedLine.includes('set number')) {
               editorRef.current?.updateOptions({ lineNumbers: 'on' });
-              result.results.push({ line, success: true });
+              result.results.push({ line: trimmedLine, lineNumber, success: true });
               result.successCount++;
-            } else if (line.includes('set nonumber')) {
+            } else if (trimmedLine.includes('set nonumber')) {
               editorRef.current?.updateOptions({ lineNumbers: 'off' });
-              result.results.push({ line, success: true });
+              result.results.push({ line: trimmedLine, lineNumber, success: true });
               result.successCount++;
-            } else if (line.includes('set wrap')) {
+            } else if (trimmedLine.includes('set wrap')) {
               editorRef.current?.updateOptions({ wordWrap: 'on' });
-              result.results.push({ line, success: true });
+              result.results.push({ line: trimmedLine, lineNumber, success: true });
               result.successCount++;
-            } else if (line.includes('set nowrap')) {
+            } else if (trimmedLine.includes('set nowrap')) {
               editorRef.current?.updateOptions({ wordWrap: 'off' });
-              result.results.push({ line, success: true });
+              result.results.push({ line: trimmedLine, lineNumber, success: true });
               result.successCount++;
-            } else if (line.includes('set tabstop=')) {
-              const match = line.match(/set tabstop=(\d+)/);
+            } else if (trimmedLine.includes('set tabstop=')) {
+              const match = trimmedLine.match(/set tabstop=(\d+)/);
               if (match) {
                 editorRef.current?.getModel()?.updateOptions({ tabSize: parseInt(match[1]) });
-                result.results.push({ line, success: true });
+                result.results.push({ line: trimmedLine, lineNumber, success: true });
                 result.successCount++;
+              } else {
+                result.results.push({ 
+                  line: trimmedLine, 
+                  lineNumber,
+                  success: false, 
+                  error: 'Invalid tabstop value' 
+                });
+                result.failedCount++;
               }
             } else {
               // Command not supported in Monaco-vim
               result.results.push({ 
-                line, 
+                line: trimmedLine, 
+                lineNumber,
                 success: false, 
                 error: 'Command not supported in Monaco VIM mode' 
               });
@@ -81,13 +100,14 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
             }
           } catch (error) {
             result.results.push({ 
-              line, 
+              line: trimmedLine, 
+              lineNumber,
               success: false, 
               error: error instanceof Error ? error.message : 'Unknown error' 
             });
             result.failedCount++;
           }
-        }
+        });
         
         return result;
       },
