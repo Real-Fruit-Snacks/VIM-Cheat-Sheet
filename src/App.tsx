@@ -74,7 +74,7 @@ function App() {
 
   const handleSelectPracticeFile = async (content: string, filename?: string) => {
     if (!vimEditorRef.current?.isVimReady()) {
-      showError('Vim is not ready yet. Please wait a moment.')
+      showError('Vim is not ready yet. Please wait a moment and try again.')
       return
     }
     
@@ -83,13 +83,20 @@ function App() {
       showSuccess(`Loaded practice file: ${filename || 'Untitled'}`)
       setShowPracticeFiles(false)
     } catch (error) {
-      showError(`Failed to load practice file: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      console.error('Practice file loading error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      
+      if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
+        showError('VIM is still initializing. Please wait a few seconds and try again.')
+      } else {
+        showError(`Failed to load practice file: ${errorMessage}`)
+      }
     }
   }
 
   const handleStartGolfChallenge = async (challenge: VimGolfChallenge) => {
     if (!vimEditorRef.current?.isVimReady()) {
-      showError('Vim is not ready yet. Please wait a moment.')
+      showError('Vim is not ready yet. Please wait a moment and try again.')
       return
     }
 
@@ -104,7 +111,14 @@ function App() {
       
       showSuccess(`Started challenge: ${challenge.title}`)
     } catch (error) {
-      showError(`Failed to start challenge: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      console.error('Golf challenge loading error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      
+      if (errorMessage.includes('VIM is not ready') || errorMessage.includes('input method unavailable')) {
+        showError('VIM is still initializing. Please wait a few seconds and try again.')
+      } else {
+        showError(`Failed to start challenge: ${errorMessage}`)
+      }
     }
   }
 

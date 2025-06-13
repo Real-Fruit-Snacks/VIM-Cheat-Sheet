@@ -73,14 +73,29 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
       return await vimrcManagerRef.current.revertSettings()
     },
     isVimReady: () => {
-      return vimRef.current && vimRef.current.isRunning && vimRef.current.isRunning()
+      return vimRef.current && 
+             vimRef.current.isRunning && 
+             vimRef.current.isRunning() &&
+             vimRef.current.input &&
+             vimRef.current.cmdline
     },
     loadFile: async (content: string, filename?: string) => {
-      if (!vimRef.current || !vimRef.current.isRunning()) {
-        throw new Error('VIM is not ready')
+      if (!vimRef.current || 
+          !vimRef.current.isRunning() || 
+          !vimRef.current.input || 
+          !vimRef.current.cmdline) {
+        throw new Error('VIM is not ready - missing required methods')
       }
       
       try {
+        // Wait a bit more to ensure VIM is fully ready
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Double-check VIM is still ready
+        if (!vimRef.current.input || !vimRef.current.cmdline) {
+          throw new Error('VIM methods unavailable after wait')
+        }
+        
         // Clear current buffer
         await vimRef.current.cmdline('enew!')
         
@@ -89,16 +104,20 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           await vimRef.current.cmdline(`file ${filename}`)
         }
         
-        // Use a much simpler approach - directly set the content
-        // Clear the buffer first
+        // Clear the buffer completely
         await vimRef.current.cmdline('normal! ggdG')
         
-        // Split content into lines and use a simpler insertion method
+        // Split content into lines
         const lines = content.split('\n')
         
+        if (lines.length === 0) {
+          return // Empty content, nothing to insert
+        }
+        
         // Insert the first line
-        if (lines.length > 0) {
+        if (lines[0]) {
           await vimRef.current.cmdline('normal! i')
+          // Insert character by character to avoid escaping issues
           for (const char of lines[0]) {
             await vimRef.current.input(char)
           }
@@ -108,6 +127,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         // Insert remaining lines
         for (let i = 1; i < lines.length; i++) {
           await vimRef.current.cmdline('normal! o')
+          // Insert character by character for each line
           for (const char of lines[i]) {
             await vimRef.current.input(char)
           }
@@ -119,8 +139,21 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         
         // Clear modified flag
         await vimRef.current.cmdline('set nomodified')
+        
+        console.log('✅ File loaded successfully:', filename || 'Untitled')
+        
       } catch (error) {
-        console.error('Failed to load file:', error)
+        console.error('❌ Failed to load file:', error)
+        
+        // Provide more specific error information
+        if (error instanceof Error) {
+          if (error.message.includes('input is not a function')) {
+            throw new Error('VIM input method unavailable - please wait for VIM to fully initialize')
+          } else if (error.message.includes('cmdline')) {
+            throw new Error('VIM command interface unavailable - please restart the editor')
+          }
+        }
+        
         throw new Error(`Failed to load file: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
