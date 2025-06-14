@@ -1,12 +1,19 @@
-# VIM v0.1.0 - GitLab Offline Deployment Release
+# VIM v0.1.1 - Enhanced User Experience
 
 ## 🎉 What's New
 
-This release provides a complete, pre-built package for deploying VIM on GitLab Pages with full offline capability.
+This release improves the user experience with a dismissible Limited Mode banner and maintains full offline deployment capability for GitLab Pages.
+
+## ✨ New Features
+
+### Dismissible Limited Mode Banner
+- **Added dismiss button** - Users can now close the Limited Mode warning banner
+- **Improved UI** - Better styling with hover effects and smooth transitions
+- **Session-based** - Banner reappears on page refresh for awareness
 
 ## 📦 Download
 
-**File**: `vim-gitlab-offline-v0.1.0-*.tar.gz`  
+**File**: `vim-gitlab-offline-v0.1.1-*.tar.gz`  
 **Size**: ~3.2 MB  
 
 ## ✨ Features
@@ -33,7 +40,11 @@ This release provides a complete, pre-built package for deploying VIM on GitLab 
 
 ## 🚀 Quick Start
 
-1. Download the `.tar.gz` file
+### Online Usage
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) to try it immediately!
+
+### Offline Deployment
+1. Download the `.tar.gz` file from this release
 2. Extract the contents
 3. Upload all files to your GitLab repository
 4. Push to main branch
@@ -49,13 +60,20 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 - Cross-origin isolation configured
 - Compatible with all modern browsers
 
-## 📝 Changes from Previous Release
+## 📝 Changes from v0.1.0
 
-- Streamlined application focus
-- Enhanced Toast component with better animations
-- Removed GitLab-specific files from main repository
-- Created dedicated offline deployment package
-- Improved deployment documentation
+### User Experience
+- Added dismiss button to Limited Mode banner
+- Improved banner styling and hover effects
+- Made warning less intrusive for users who understand the limitation
+
+### Bug Fixes
+- Updated all "VIMora" references to "VIM" for consistent branding
+- Fixed localStorage key naming consistency
+
+### Development
+- Improved TypeScript type safety
+- Better component organization
 
 ## 🤝 Contributing
 
