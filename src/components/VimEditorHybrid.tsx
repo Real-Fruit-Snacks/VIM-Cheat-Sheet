@@ -18,6 +18,7 @@ interface VimEditorHybridProps {
 const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, ref) => {
   const [editorType, setEditorType] = useState<'loading' | 'vim-wasm' | 'monaco'>('loading');
   const [capabilities, setCapabilities] = useState<ReturnType<typeof getBrowserCapabilities> | null>(null);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   useEffect(() => {
     // Detect browser capabilities
@@ -79,14 +80,15 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
   return (
     <div className="h-full bg-gray-950 overflow-hidden">
       <div className="h-full relative overflow-hidden">
-        {capabilities?.requiresWorkaround && (
+        {capabilities?.requiresWorkaround && !bannerDismissed && (
           <div className="absolute top-0 left-0 right-0 z-10 bg-yellow-900/90 text-yellow-100 px-4 py-2 text-sm">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <strong>Limited Mode:</strong> Using Monaco VIM emulation. 
                 For the full VIM experience, enable SharedArrayBuffer in your browser.
               </div>
-              <button 
+              <div className="flex items-center gap-2">
+                <button 
                 className="ml-4 text-yellow-200 hover:text-white underline text-xs"
                 onClick={() => {
                   const instruction = capabilities ? 
@@ -101,6 +103,15 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
               >
                 How to enable?
               </button>
+              <button
+                className="ml-3 px-2 py-1 text-yellow-200 hover:text-white hover:bg-yellow-800/50 rounded transition-colors text-xl leading-none"
+                onClick={() => setBannerDismissed(true)}
+                aria-label="Dismiss banner"
+                title="Dismiss"
+              >
+                ×
+              </button>
+              </div>
             </div>
           </div>
         )}
