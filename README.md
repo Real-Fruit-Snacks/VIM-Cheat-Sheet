@@ -11,6 +11,7 @@
 [![React](https://img.shields.io/badge/React-19.1-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
 [![Vim](https://img.shields.io/badge/Vim-Wasm-brightgreen.svg)](https://github.com/rhysd/vim.wasm)
+[![Version](https://img.shields.io/badge/Version-0.1.3-orange.svg)](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
 
 **Experience VIM directly in your browser with a clean, focused interface and real-time keystroke visualization.**
 
@@ -68,12 +69,25 @@ VIM includes a professional keystroke visualizer perfect for streamers, YouTuber
 - 📚 **Built-in reference** - comprehensive cheat sheet always available
 - 🎨 **Clean interface** - focus stays on the content, not the tools
 
+## 🆕 What's New in v0.1.3
+
+- 🐛 **Fixed Keystroke Visualizer** - Now works perfectly in Monaco VIM fallback mode
+- 🎯 **Fixed Status Bar Layout** - No more content jumping or overlapping
+- 🔧 **Improved Limited Mode Banner** - Dismissible with clear visual hierarchy
+- ⚡ **Better Defaults** - Keystroke visualizer enabled by default
+- 📦 **GitLab Offline Package** - Complete deployment package for air-gapped environments
+
+[View Full Release Notes](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
+
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
 Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
 
-**Browser Compatibility:** VIM works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
+**Browser Compatibility:** VIM works in ALL browsers! 
+- ✅ **Full VIM (vim.wasm)** - When SharedArrayBuffer is available
+- ✅ **Monaco VIM Fallback** - Automatic fallback with full Which-Key and keystroke visualizer support
+- ✅ **Smart Detection** - Automatically chooses the best implementation for your browser
 
 ### 💻 Run Locally
 ```bash
@@ -92,23 +106,28 @@ Open http://localhost:5173/VIM/ and start using VIM!
 
 ### 🏢 Deploy to GitLab (Offline/Internal Networks)
 ```bash
-# Generate offline deployment package
+# Download the latest release package
+# Available at: https://github.com/Real-Fruit-Snacks/VIM/releases/latest
+
+# Or generate your own offline deployment package
 ./create-gitlab-release.sh
 
-# This creates a tarball with:
-# - Complete production build
-# - GitLab CI/CD configuration
-# - Deployment documentation
-# - All assets for offline use
+# Package includes:
+# ✅ Complete pre-built application (3.2 MB)
+# ✅ vim.wasm binaries for offline operation
+# ✅ GitLab CI/CD configuration
+# ✅ Comprehensive deployment guide
+# ✅ Zero external dependencies
 ```
 
 ## ⚡ Features Deep Dive
 
 ### 🎯 Which-Key Helper
-When supported by your browser, the Which-Key system shows you:
+The Which-Key system works in BOTH vim.wasm and Monaco fallback modes:
 - **Available commands** for any key sequence
 - **Mode-aware suggestions** - different options for normal/visual/insert modes
 - **Visual navigation** for easy discovery
+- **Full support** in both implementation modes
 
 ### 🎥 Professional Keystroke Visualizer
 Transform your content creation with our advanced visualizer:
@@ -159,9 +178,10 @@ Built with cutting-edge web technologies for optimal performance:
 
 | Browser | Status | Notes |
 |---------|--------|-------|
-| ✅ **Chrome/Edge** | **Recommended** | Full support, optimal performance |
-| ⚠️ **Firefox** | Supported | Requires SharedArrayBuffer configuration |
-| 🔧 **Safari** | Supported | Enable cross-origin restrictions in dev menu |
+| ✅ **Chrome/Edge** | **Full Support** | Native vim.wasm with optimal performance |
+| ✅ **Firefox** | **Full Support** | Automatic Monaco fallback or enable SharedArrayBuffer |
+| ✅ **Safari** | **Full Support** | Automatic Monaco fallback or enable developer settings |
+| ✅ **Mobile Browsers** | **Supported** | Monaco VIM mode with touch-friendly interface |
 | ❌ **Internet Explorer** | Not Supported | Requires modern browser features |
 
 ### Firefox Setup
@@ -172,11 +192,19 @@ Enable "Disable Cross-Origin Restrictions" in the Developer menu
 
 ## 🏗️ Architecture & Performance
 
-### **Cross-Origin Isolation**
-VIM implements proper COOP/COEP headers for SharedArrayBuffer support, ensuring:
-- ✅ Native WebAssembly performance
-- ✅ Full VIM feature compatibility
-- ✅ Secure cross-origin isolation
+### **Dual Implementation Architecture**
+VIM provides two implementation modes for maximum compatibility:
+
+**Native vim.wasm Mode:**
+- ✅ Full VIM functionality via WebAssembly
+- ✅ Requires SharedArrayBuffer support
+- ✅ Optimal performance and features
+
+**Monaco VIM Fallback:**
+- ✅ Automatic activation when SharedArrayBuffer unavailable
+- ✅ Full Which-Key support with mode detection
+- ✅ Complete keystroke visualizer functionality
+- ✅ Basic vimrc command support
 
 ### **Intelligent Focus Management**
 Advanced focus handling ensures:
@@ -250,12 +278,13 @@ npm run preview
 
 ## 📊 Project Stats
 
-- **Real VIM** via WebAssembly (vim.wasm)
+- **2 implementation modes** - vim.wasm and Monaco VIM for universal compatibility
 - **6 positioning options** for keystroke visualization
 - **5 font sizes** for different use cases
 - **100% TypeScript** for type safety and developer experience
 - **Zero external dependencies** for VIM functionality
-- **Universal browser compatibility** with automatic fallback mode
+- **Universal browser compatibility** with automatic mode selection
+- **3.2 MB** offline deployment package size
 
 ## 📄 License
 
