@@ -449,9 +449,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           className="flex-1 w-full relative"
           style={{ minHeight: 0, paddingBottom: '28px' }}
         />
-        <div className="absolute top-2 right-2 bg-yellow-900/80 text-yellow-200 px-2 py-1 rounded text-xs z-10">
-          Monaco VIM Mode (Fallback)
-        </div>
         
         {!disableWhichKey && (
           <WhichKey

@@ -81,36 +81,36 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
     <div className="h-full bg-gray-950 overflow-hidden">
       <div className="h-full relative overflow-hidden">
         {capabilities?.requiresWorkaround && !bannerDismissed && (
-          <div className="absolute top-0 left-0 right-0 z-10 bg-yellow-900/90 text-yellow-100 px-4 py-2 text-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <strong>Limited Mode:</strong> Using Monaco VIM emulation. 
-                For the full VIM experience, enable SharedArrayBuffer in your browser.
+          <div className="absolute top-0 left-0 right-0 z-20 bg-yellow-900 text-yellow-100 px-4 py-2 text-sm shadow-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <span className="font-semibold">⚠️ Limited Mode:</span>{' '}
+                Using Monaco VIM emulation. For the full VIM experience, enable SharedArrayBuffer in your browser.
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <button 
-                className="ml-4 text-yellow-200 hover:text-white underline text-xs"
-                onClick={() => {
-                  const instruction = capabilities ? 
-                    `${capabilities.browserName === 'firefox' ? 
-                      'In Firefox: Go to about:config and set dom.postMessage.sharedArrayBuffer.bypassCOOP_COEP.insecure.enabled to true' :
-                      capabilities.browserName === 'safari' ?
-                      'In Safari: Enable the Develop menu, then go to Develop > Disable Cross-Origin Restrictions' :
-                      'Your browser should support SharedArrayBuffer. Try refreshing the page.'
-                    }` : '';
-                  alert(instruction);
-                }}
-              >
-                How to enable?
-              </button>
-              <button
-                className="ml-3 px-3 py-1 bg-yellow-800 text-yellow-100 hover:bg-yellow-700 hover:text-white border border-yellow-600 rounded transition-colors text-lg leading-none font-bold shadow-sm"
-                onClick={() => setBannerDismissed(true)}
-                aria-label="Dismiss banner"
-                title="Dismiss"
-              >
-                ✕
-              </button>
+                  className="text-yellow-200 hover:text-white underline text-xs whitespace-nowrap"
+                  onClick={() => {
+                    const instruction = capabilities ? 
+                      `${capabilities.browserName === 'firefox' ? 
+                        'In Firefox: Go to about:config and set dom.postMessage.sharedArrayBuffer.bypassCOOP_COEP.insecure.enabled to true' :
+                        capabilities.browserName === 'safari' ?
+                        'In Safari: Enable the Develop menu, then go to Develop > Disable Cross-Origin Restrictions' :
+                        'Your browser should support SharedArrayBuffer. Try refreshing the page.'
+                      }` : '';
+                    alert(instruction);
+                  }}
+                >
+                  How to enable?
+                </button>
+                <button
+                  className="px-3 py-1 bg-yellow-800 text-white hover:bg-yellow-700 border border-yellow-600 rounded transition-all text-base leading-none font-bold shadow-sm hover:shadow-md"
+                  onClick={() => setBannerDismissed(true)}
+                  aria-label="Dismiss banner"
+                  title="Dismiss this message"
+                >
+                  ✕
+                </button>
               </div>
             </div>
           </div>
