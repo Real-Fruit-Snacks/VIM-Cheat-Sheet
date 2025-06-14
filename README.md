@@ -1,302 +1,233 @@
 <div align="center">
-
-<img src="public/favicon-detailed.svg" alt="VIM Logo" width="120" height="120" />
+  <a href="https://real-fruit-snacks.github.io/VIM/">
+    <img src="public/favicon-detailed.svg" alt="VIMora Logo" width="100" />
+  </a>
   
-# 🚀 VIM
+  <h1>VIMora</h1>
+  
+  <p align="center">
+    <strong>Professional VIM Experience in Your Browser</strong>
+  </p>
+  
+  <p align="center">
+    Real VIM. Zero Setup. Built for Developers & Educators.
+  </p>
+  
+  <p align="center">
+    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>Try VIMora Now →</strong></a>
+    ·
+    <a href="#features">Features</a>
+    ·
+    <a href="#quick-start">Quick Start</a>
+    ·
+    <a href="#documentation">Docs</a>
+  </p>
+  
+  <p align="center">
+    <a href="https://opensource.org/licenses/MIT">
+      <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
+    </a>
+    <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
+      <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version" />
+    </a>
+    <a href="https://reactjs.org/">
+      <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
+    </a>
+    <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6.svg?logo=typescript" alt="TypeScript" />
+    </a>
+    <a href="https://github.com/rhysd/vim.wasm">
+      <img src="https://img.shields.io/badge/Powered%20by-vim.wasm-019733.svg?logo=vim" alt="vim.wasm" />
+    </a>
+  </p>
+</div>
 
-### Master VIM Without Leaving Your Browser
-*A Lightweight VIM Experience with Real-Time Keystroke Visualization*
+<br />
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-19.1-blue.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
-[![Vim](https://img.shields.io/badge/Vim-Wasm-brightgreen.svg)](https://github.com/rhysd/vim.wasm)
-[![Version](https://img.shields.io/badge/Version-0.1.3-orange.svg)](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-
-**Experience VIM directly in your browser with a clean, focused interface and real-time keystroke visualization.**
-
-[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
-
+<div align="center">
+  <p><em>Full VIM experience with real-time keystroke visualization and interactive command hints</em></p>
 </div>
 
 ---
 
-## 🎯 Why VIM?
+## Why VIMora?
 
-**VIM** is a streamlined browser-based VIM experience focused on the essentials. Perfect for learning VIM basics and showcasing your keystrokes while coding.
+VIMora brings the complete VIM experience to your browser with **zero installation required**. Whether you're learning VIM, teaching others, or need a quick editor on any device, VIMora delivers professional-grade functionality with an intuitive interface.
 
-### ✨ What Makes VIM Special
+### Key Benefits
 
-- **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
-- **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
-- **🎥 Keystroke Visualizer** - Real-time display of your keystrokes for teaching and streaming
-- **🎯 Which-Key Helper** - Shows available commands as you type (when supported)
-- **💾 Persistent Everything** - All your settings, configurations, and preferences saved locally
-- **📱 Universal Access** - Works on any device with a modern browser
-- **🎨 Beautiful Interface** - Terminal-style UI optimized for long coding sessions
+<table>
+  <tr>
+    <td width="50%">
+      <h4>🚀 Instant Access</h4>
+      <p>No downloads, no configuration. Click and start editing with full VIM capabilities in seconds.</p>
+    </td>
+    <td width="50%">
+      <h4>🎯 Real VIM Engine</h4>
+      <p>Powered by vim.wasm - authentic VIM compiled to WebAssembly, not a simulation.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>🎓 Built for Learning</h4>
+      <p>Interactive command hints and keystroke visualization make VIM accessible to beginners.</p>
+    </td>
+    <td width="50%">
+      <h4>📱 Universal Compatibility</h4>
+      <p>Works on any modern browser with intelligent fallback for maximum compatibility.</p>
+    </td>
+  </tr>
+</table>
 
-## 🖼️ Feature Overview
+## Features
 
-<div align="center">
+### Core Capabilities
 
-| Feature | Description | Perfect For |
-|---------|-------------|-------------|
-| 🎹 **Native VIM** | Full VIM experience via WebAssembly | Everyone |
-| 🎥 **Keystroke Visualizer** | Real-time keystroke display with animations | Streamers & Teachers |
-| 🎯 **Which-Key Helper** | Interactive command hints (when supported) | Beginners & Learning |
-| 📝 **Live Vimrc Editor** | Real-time configuration with instant preview | Customization & Setup |
-| 📚 **Cheat Sheet** | Command reference with examples | Quick Reference |
-| 💾 **Smart Persistence** | All settings auto-saved locally | Consistent Experience |
-| 🎨 **Clean UI** | Distraction-free terminal interface | Focused Work |
+- **Native VIM Experience** - Full VIM functionality via WebAssembly
+- **Dual Implementation** - Automatic fallback ensures it works everywhere
+- **Live Configuration** - Real-time vimrc editing with instant preview
+- **Persistent Settings** - All preferences saved locally across sessions
+- **Practice Files** - Built-in examples for learning VIM techniques
 
-</div>
+### For Educators & Content Creators
 
-## 🎥 Perfect for Content Creators
+#### Professional Keystroke Visualizer
+- Real-time display with smooth animations
+- 6 position presets for any recording setup
+- Adjustable size and display duration
+- Perfect for tutorials and live streaming
 
-VIM includes a professional keystroke visualizer perfect for streamers, YouTubers, and educators:
+#### Interactive Learning Tools
+- **Which-Key System** - Shows available commands as you type
+- **Mode Indicators** - Clear visual feedback for current VIM mode
+- **Command Reference** - Built-in cheat sheet (press `?`)
 
-### **Professional Keystroke Visualizer**
-- ✨ **Real-time display** of every keystroke with smooth animations
-- 🎯 **6 positioning options** - corner placements or center overlay
-- 🎨 **5 font sizes** from compact to presentation-friendly
-- ⏱️ **Configurable duration** - control how long keystrokes stay visible
-- 🎬 **Fade animations** for professional, polished appearance
-- 💾 **Persistent settings** - your preferences saved across sessions
+## Quick Start
 
-### **Educational Features**
-- 📖 **Which-Key integration** - viewers can see available commands
-- 🎯 **Command discovery** - perfect for teaching VIM concepts
-- 📚 **Built-in reference** - comprehensive cheat sheet always available
-- 🎨 **Clean interface** - focus stays on the content, not the tools
+### Online (Recommended)
 
-## 🆕 What's New in v0.1.3
+Visit [vimora.app](https://real-fruit-snacks.github.io/VIM/) to start using VIMora immediately.
 
-- 🐛 **Fixed Keystroke Visualizer** - Now works perfectly in Monaco VIM fallback mode
-- 🎯 **Fixed Status Bar Layout** - No more content jumping or overlapping
-- 🔧 **Improved Limited Mode Banner** - Dismissible with clear visual hierarchy
-- ⚡ **Better Defaults** - Keystroke visualizer enabled by default
-- 📦 **GitLab Offline Package** - Complete deployment package for air-gapped environments
+### Local Development
 
-[View Full Release Notes](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-
-## 🚀 Quick Start
-
-### 🌐 Use Online (Recommended)
-Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
-
-**Browser Compatibility:** VIM works in ALL browsers! 
-- ✅ **Full VIM (vim.wasm)** - When SharedArrayBuffer is available
-- ✅ **Monaco VIM Fallback** - Automatic fallback with full Which-Key and keystroke visualizer support
-- ✅ **Smart Detection** - Automatically chooses the best implementation for your browser
-
-### 💻 Run Locally
 ```bash
-# Clone the repository
+# Clone and setup
 git clone https://github.com/Real-Fruit-Snacks/VIM.git
 cd VIM
-
-# Install dependencies
 npm install
 
 # Start development server
 npm run dev
+
+# Open http://localhost:5173/VIM/
 ```
 
-Open http://localhost:5173/VIM/ and start using VIM!
+### Enterprise Deployment
 
-### 🏢 Deploy to GitLab (Offline/Internal Networks)
+For air-gapped or internal networks:
+
 ```bash
-# Download the latest release package
-# Available at: https://github.com/Real-Fruit-Snacks/VIM/releases/latest
-
-# Or generate your own offline deployment package
+# Generate offline deployment package
 ./create-gitlab-release.sh
 
-# Package includes:
-# ✅ Complete pre-built application (3.2 MB)
-# ✅ vim.wasm binaries for offline operation
-# ✅ GitLab CI/CD configuration
-# ✅ Comprehensive deployment guide
-# ✅ Zero external dependencies
+# Package includes everything needed for internal deployment
+# See releases for pre-built packages
 ```
 
-## ⚡ Features Deep Dive
+## Browser Support
 
-### 🎯 Which-Key Helper
-The Which-Key system works in BOTH vim.wasm and Monaco fallback modes:
-- **Available commands** for any key sequence
-- **Mode-aware suggestions** - different options for normal/visual/insert modes
-- **Visual navigation** for easy discovery
-- **Full support** in both implementation modes
+| Browser | Support Level | Notes |
+|---------|--------------|-------|
+| Chrome/Edge 90+ | ✅ Full | Native vim.wasm with optimal performance |
+| Firefox 89+ | ✅ Full | Enable SharedArrayBuffer flag for vim.wasm* |
+| Safari 15.2+ | ✅ Full | Enable developer settings for vim.wasm* |
+| Mobile Browsers | ✅ Supported | Monaco VIM mode with touch optimization |
 
-### 🎥 Professional Keystroke Visualizer
-Transform your content creation with our advanced visualizer:
+*Automatic fallback to Monaco VIM if configuration not enabled
 
-**Positioning Options:**
-- Top-left, top-right, bottom-left, bottom-right corners
-- Center-left, center-right for non-intrusive placement
+## Architecture Overview
 
-**Customization:**
-- 5 font sizes: `xs`, `small`, `medium`, `large`, `xl`
-- Configurable display duration (1-10 seconds)
-- Smooth fade-in/fade-out animations
-- Auto-adapts to your VIM usage patterns
-
-**Perfect for:**
-- 📺 Live streaming on Twitch/YouTube
-- 🎓 Educational content creation
-- 📹 Tutorial recording
-- 👥 Pair programming sessions
-
-### 📝 Advanced Vimrc Editor
-Professional VIM configuration made easy:
-- **Comprehensive defaults** - sensible starting configuration
-- **Real-time application** - see changes instantly without restart
-- **Line-by-line validation** - clear feedback on configuration errors
-- **Syntax highlighting** - proper vimscript formatting
-- **Error recovery** - detailed feedback when commands fail
-- **Auto-save** - your configuration persists across sessions
-
-### 📚 Cheat Sheet
-Quick command reference includes:
-- **Essential VIM commands** organized by category
-- **Mode indicators** - know when each command applies
-- **Keyboard shortcut** - press `?` anytime to open
-
-## 🛠️ Technology Stack
-
-Built with cutting-edge web technologies for optimal performance:
-
-- **[vim.wasm 0.0.13](https://github.com/rhysd/vim.wasm)** - Native VIM in WebAssembly
-- **[React 19.1.0](https://react.dev/)** - Modern reactive UI framework
-- **[TypeScript 5.8.3](https://www.typescriptlang.org/)** - Type-safe development
-- **[Tailwind CSS 3.4.17](https://tailwindcss.com/)** - Responsive, modern styling
-- **[Vite 6.3.5](https://vitejs.dev/)** - Lightning-fast development and builds
-- **[Lucide React](https://lucide.dev/)** - Beautiful, consistent icons
-
-## 🌐 Browser Compatibility
-
-| Browser | Status | Notes |
-|---------|--------|-------|
-| ✅ **Chrome/Edge** | **Full Support** | Native vim.wasm with optimal performance |
-| ✅ **Firefox** | **Full Support** | Automatic Monaco fallback or enable SharedArrayBuffer |
-| ✅ **Safari** | **Full Support** | Automatic Monaco fallback or enable developer settings |
-| ✅ **Mobile Browsers** | **Supported** | Monaco VIM mode with touch-friendly interface |
-| ❌ **Internet Explorer** | Not Supported | Requires modern browser features |
-
-### Firefox Setup
-Enable `dom.postMessage.sharedArrayBuffer.bypassCOOP_COEP.insecure.enabled` in `about:config`
-
-### Safari Setup
-Enable "Disable Cross-Origin Restrictions" in the Developer menu
-
-## 🏗️ Architecture & Performance
-
-### **Dual Implementation Architecture**
-VIM provides two implementation modes for maximum compatibility:
-
-**Native vim.wasm Mode:**
-- ✅ Full VIM functionality via WebAssembly
-- ✅ Requires SharedArrayBuffer support
-- ✅ Optimal performance and features
-
-**Monaco VIM Fallback:**
-- ✅ Automatic activation when SharedArrayBuffer unavailable
-- ✅ Full Which-Key support with mode detection
-- ✅ Complete keystroke visualizer functionality
-- ✅ Basic vimrc command support
-
-### **Intelligent Focus Management**
-Advanced focus handling ensures:
-- 🎯 VIM always receives keyboard input when appropriate
-- 🔒 Respects legitimate form inputs and modals
-- ⚡ Seamless user experience across all interactions
-
-### **Optimized Resource Loading**
-- 📦 Dynamic WebAssembly module loading
-- 🚀 Lazy component initialization
-- 💾 Efficient local storage management
-- 🎨 Smooth animations with CSS optimizations
-
-## 🎨 UI/UX Design
-
-### **Terminal-Style Interface**
-- 🖥️ Authentic terminal aesthetics with macOS-style window controls
-- 🌙 Dark theme optimized for extended coding sessions
-- 📱 Fully responsive design for any screen size
-- ✨ Smooth animations and transitions throughout
-
-### **Accessibility**
-- ⌨️ Full keyboard navigation support
-- 🎯 Clear focus indicators and states
-- 📢 Screen reader compatible structure
-- 🎨 High contrast for better visibility
-
-## 🤝 Contributing
-
-We welcome contributions of all kinds! Whether you're:
-
-- 🐛 **Reporting bugs** - Help us improve reliability
-- 💡 **Suggesting features** - Share your ideas for enhancements  
-- 📝 **Improving docs** - Help others understand and use VIM
-- 🔧 **Contributing code** - Join our development efforts
-- 🎨 **Designing assets** - Improve the visual experience
-- 🌐 **Testing browser compatibility** - Ensure VIM works everywhere
-
-### Development Setup
-
-```bash
-# Fork and clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
-
-# Install dependencies
-npm install
-
-# Start development server with hot reload
-npm run dev
-
-# Run TypeScript checking
-npx tsc --noEmit
-
-# Run linting
-npm run lint
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+```
+VIMora
+├── Hybrid Editor System
+│   ├── vim.wasm (Native VIM)
+│   └── Monaco VIM (Fallback)
+├── Interactive Features
+│   ├── Which-Key Helper
+│   ├── Keystroke Visualizer
+│   └── Live Vimrc Editor
+└── Smart Browser Detection
+    └── Automatic Implementation Selection
 ```
 
-### Code Quality Standards
-- ✅ TypeScript for all new code
-- ✅ Professional commenting and documentation
-- ✅ Responsive design principles
-- ✅ Accessibility best practices
-- ✅ Performance optimization
+### Technology Stack
 
-## 📊 Project Stats
+- **Frontend**: React 19.1 + TypeScript 5.8
+- **VIM Engine**: vim.wasm 0.0.13
+- **Editor Fallback**: Monaco Editor + monaco-vim
+- **Styling**: Tailwind CSS 3.4
+- **Build**: Vite 6.3 with optimized chunking
 
-- **2 implementation modes** - vim.wasm and Monaco VIM for universal compatibility
-- **6 positioning options** for keystroke visualization
-- **5 font sizes** for different use cases
-- **100% TypeScript** for type safety and developer experience
-- **Zero external dependencies** for VIM functionality
-- **Universal browser compatibility** with automatic mode selection
-- **3.2 MB** offline deployment package size
+## Documentation
 
-## 📄 License
+### For Users
+- [Getting Started Guide](docs/getting-started.md)
+- [Keyboard Shortcuts](docs/shortcuts.md)
+- [Configuration Guide](docs/configuration.md)
 
-VIM is open source software licensed under the [MIT License](LICENSE).
+### For Developers
+- [Architecture Documentation](docs/architecture.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [API Reference](docs/api.md)
 
-## 🙏 Acknowledgments
+## Contributing
 
-- **[Vim](https://www.vim.org/)** - The legendary text editor that started it all
-- **[vim.wasm](https://github.com/rhysd/vim.wasm)** - Making VIM possible in browsers everywhere
-- **[React Team](https://react.dev/)** - For the incredible development experience
-- **The VIM Community** - Decades of innovation, documentation, and passion
+We welcome contributions! VIMora is built by the community, for the community.
 
-<sub>VIM - A Clean, Focused VIM Experience in Your Browser!</sub>
+### Ways to Contribute
 
+- **Report Issues** - Help us improve stability
+- **Suggest Features** - Share your ideas
+- **Submit PRs** - Contribute code improvements
+- **Improve Docs** - Help others get started
+- **Test Browsers** - Ensure universal compatibility
+
+See our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## Performance
+
+- **Initial Load**: ~3.2MB (with code splitting)
+- **Time to Interactive**: <2s on modern connections
+- **Memory Usage**: ~50MB (vim.wasm) / ~30MB (Monaco)
+- **Offline Ready**: Full functionality after initial load
+
+## Security
+
+- No data leaves your browser
+- All configuration stored locally
+- Open source and auditable
+- No tracking or analytics
+
+## License
+
+VIMora is open source software licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+Built on the shoulders of giants:
+
+- [Vim](https://www.vim.org/) - The timeless text editor
+- [vim.wasm](https://github.com/rhysd/vim.wasm) - VIM in the browser
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/) - VS Code's editor
+- [React](https://react.dev/) - UI framework
+
+---
+
+<div align="center">
+  <p>
+    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>Start Using VIMora →</strong></a>
+  </p>
+  <p>
+    <sub>Made with ❤️ by developers, for developers</sub>
+  </p>
 </div>

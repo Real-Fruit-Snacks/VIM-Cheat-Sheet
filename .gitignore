@@ -70,6 +70,7 @@ RELEASE_NOTES.md
 .vscode/*
 !.vscode/extensions.json
 .idea/
+.claude/
 *.swp
 *.swo
 *~

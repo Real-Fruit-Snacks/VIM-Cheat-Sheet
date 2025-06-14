@@ -16,6 +16,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Deployment
 - `npm run deploy` - Deploy to GitHub Pages (builds first)
+- `npm run build:gitlab` - Build offline GitLab deployment package
+- `./create-gitlab-release.sh` - Create complete offline deployment package
 
 ## Architecture
 
@@ -81,3 +83,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Cross-origin isolation headers configured in `vite.config.ts` and `public/_headers`
 - Base path set to `/VIM/` for GitHub Pages
 - Service worker (`coi-serviceworker.js`) for SharedArrayBuffer support
+- Code splitting configured for vim.wasm, Monaco Editor, and React chunks
+- TypeScript strict mode enabled with comprehensive compiler options
+
+### Development Workflow
+
+#### Browser Compatibility Testing
+- **Chrome/Edge**: Full vim.wasm support out of the box
+- **Firefox**: Enable `dom.postMessage.sharedArrayBuffer.bypassCOOP_COEP.insecure.enabled` in `about:config` for vim.wasm
+- **Safari**: Enable "Disable Cross-Origin Restrictions" in Developer menu for vim.wasm
+- All browsers automatically fall back to Monaco-vim if SharedArrayBuffer unavailable
+
+#### Key Implementation Details
+- **Dynamic Loading**: vim.wasm loaded dynamically via `src/utils/vim-loader.ts`
+- **Browser Detection**: Capabilities checked in `src/utils/browser-capabilities.ts`
+- **Imperative APIs**: Both editors expose ref-based APIs for programmatic control
+- **Mode Detection**: Monaco implementation monitors status bar for VIM mode changes
+- **Event Forwarding**: Monaco editor forwards all keyboard events to monaco-vim
+
+#### localStorage Keys
+- `vim-vimrc`: User's vimrc configuration
+- `vim-which-key-enabled`: Which-Key toggle state
+- `vim-keystroke-config`: Keystroke visualizer settings (position, size, duration)
+
+#### Important Files
+- `/index.html`: Contains service worker registration and vim-wasm wrapper script
+- `/public/sw.js`: Service worker for SharedArrayBuffer support
+- `/public/_headers`: Production COOP/COEP headers for Netlify/GitHub Pages
+- `/src/main.tsx`: React app entry point
+- `/src/App.tsx`: Main component orchestrating all features
