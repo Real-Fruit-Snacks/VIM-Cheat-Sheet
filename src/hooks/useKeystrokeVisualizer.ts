@@ -21,7 +21,7 @@ const DEFAULT_CONFIG: KeystrokeVisualizerConfig = {
   fontSize: 'medium',
   maxKeystrokes: 5,
   fadeOutDelay: 2000,
-  enabled: false
+  enabled: true
 }
 
 export function useKeystrokeVisualizer() {

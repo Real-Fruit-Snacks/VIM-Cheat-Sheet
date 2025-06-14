@@ -310,16 +310,22 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         const browserEvent = e.browserEvent;
         
         // Forward to keystroke visualizer
-        if (onKeyPressRef.current) {
-          const event = new KeyboardEvent('keydown', {
-            key: browserEvent.key,
-            code: browserEvent.code,
-            shiftKey: browserEvent.shiftKey,
-            ctrlKey: browserEvent.ctrlKey,
-            altKey: browserEvent.altKey,
-            metaKey: browserEvent.metaKey
-          });
-          onKeyPressRef.current(event);
+        if (onKeyPressRef.current && browserEvent.key) {
+          try {
+            const event = new KeyboardEvent('keydown', {
+              key: browserEvent.key,
+              code: browserEvent.code || '',
+              shiftKey: browserEvent.shiftKey || false,
+              ctrlKey: browserEvent.ctrlKey || false,
+              altKey: browserEvent.altKey || false,
+              metaKey: browserEvent.metaKey || false,
+              bubbles: true,
+              cancelable: true
+            });
+            onKeyPressRef.current(event);
+          } catch (error) {
+            console.error('[MonacoVimEditor] Failed to forward keystroke:', error);
+          }
         }
         
         // Check current mode
