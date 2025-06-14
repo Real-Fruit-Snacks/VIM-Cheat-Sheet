@@ -1,8 +1,8 @@
-# VIMora v0.2.0 - Theme System & Enhanced Offline Deployment 🎨
+# VIM v0.2.0 - Theme System & Enhanced Offline Deployment 🎨
 
 ## 🌈 Major New Feature: Theme System!
 
-VIMora now includes a comprehensive theme system with **7 beautiful built-in themes**:
+VIM now includes a comprehensive theme system with **7 beautiful built-in themes**:
 
 ### 🎨 Available Themes:
 - **Dark** (Default) - Optimized for extended coding sessions
@@ -40,7 +40,7 @@ VIMora now includes a comprehensive theme system with **7 beautiful built-in the
 - Comprehensive deployment guide included
 - No technical knowledge required
 
-### Full VIMora Features
+### Full VIM Features
 - 🎹 Real VIM experience via WebAssembly
 - 🎥 Keystroke visualizer for teaching/streaming
 - 🎯 Which-Key command helper
@@ -52,7 +52,7 @@ VIMora now includes a comprehensive theme system with **7 beautiful built-in the
 ## 🚀 Quick Start
 
 ### Online Usage:
-Visit [VIMora Live](https://real-fruit-snacks.github.io/VIMora/) and click the theme toggle in the header!
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and click the theme toggle in the header!
 
 ### Offline Deployment:
 1. Download the `.tar.gz` file
@@ -97,8 +97,8 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 
 ## 🤝 Contributing
 
-VIMora is open source! Contributions welcome at:
-https://github.com/Real-Fruit-Snacks/VIMora
+VIM is open source! Contributions welcome at:
+https://github.com/Real-Fruit-Snacks/VIM
 
 ## 📄 License
 

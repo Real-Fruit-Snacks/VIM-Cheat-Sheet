@@ -2,7 +2,7 @@
 
 <img src="public/favicon-detailed.svg" alt="VIM Logo" width="120" height="120" />
   
-# 🚀 VIMora
+# 🚀 VIM
 
 ### Master VIM Without Leaving Your Browser
 *A Lightweight VIM Experience with Real-Time Keystroke Visualization*
@@ -14,17 +14,17 @@
 
 **Experience VIM directly in your browser with a clean, focused interface and real-time keystroke visualization.**
 
-[🎮 Try VIMora Live](https://real-fruit-snacks.github.io/VIMora/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
+[🎮 Try VIM Live](https://real-fruit-snacks.github.io/VIM/) | [📖 Features](#-features) | [🎥 For Streamers](#-perfect-for-content-creators) | [🤝 Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 🎯 Why VIMora?
+## 🎯 Why VIM?
 
-**VIMora** is a streamlined browser-based VIM experience focused on the essentials. Perfect for learning VIM basics and showcasing your keystrokes while coding.
+**VIM** is a streamlined browser-based VIM experience focused on the essentials. Perfect for learning VIM basics and showcasing your keystrokes while coding.
 
-### ✨ What Makes VIMora Special
+### ✨ What Makes VIM Special
 
 - **🏃 Zero Setup** - Click and start coding. No installation, no configuration hassles
 - **⚡ Real VIM** - Actual VIM compiled to WebAssembly, not a simulator
@@ -56,7 +56,7 @@
 
 ## 🎥 Perfect for Content Creators
 
-VIMora includes a professional keystroke visualizer perfect for streamers, YouTubers, and educators:
+VIM includes a professional keystroke visualizer perfect for streamers, YouTubers, and educators:
 
 ### **Professional Keystroke Visualizer**
 - ✨ **Real-time display** of every keystroke with smooth animations
@@ -75,15 +75,15 @@ VIMora includes a professional keystroke visualizer perfect for streamers, YouTu
 ## 🚀 Quick Start
 
 ### 🌐 Use Online (Recommended)
-Visit [VIMora Live](https://real-fruit-snacks.github.io/VIMora/) and start using VIM immediately - no setup required!
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and start using VIM immediately - no setup required!
 
-**Browser Compatibility:** VIMora works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
+**Browser Compatibility:** VIM works in ALL browsers! If your browser doesn't support SharedArrayBuffer, it automatically falls back to a Monaco-based VIM emulation with full Which-Key support. Check the browser console to see which mode is active.
 
 ### 💻 Run Locally
 ```bash
 # Clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIMora.git
-cd VIMora
+git clone https://github.com/Real-Fruit-Snacks/VIM.git
+cd VIM
 
 # Install dependencies
 npm install
@@ -92,7 +92,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/VIM/ and start using VIMora!
+Open http://localhost:5173/VIM/ and start using VIM!
 
 ### 🏢 Deploy to GitLab (Offline/Internal Networks)
 ```bash
@@ -196,7 +196,7 @@ Advanced focus handling ensures:
 
 ## 🌈 Theme System
 
-VIMora includes a comprehensive theme system with 7 built-in themes:
+VIM includes a comprehensive theme system with 7 built-in themes:
 
 ### Available Themes
 - **🌙 Dark** (Default) - Optimized for extended coding sessions
@@ -233,17 +233,17 @@ We welcome contributions of all kinds! Whether you're:
 
 - 🐛 **Reporting bugs** - Help us improve reliability
 - 💡 **Suggesting features** - Share your ideas for enhancements  
-- 📝 **Improving docs** - Help others understand and use VIMora
+- 📝 **Improving docs** - Help others understand and use VIM
 - 🔧 **Contributing code** - Join our development efforts
 - 🎨 **Designing assets** - Improve the visual experience
-- 🌐 **Testing browser compatibility** - Ensure VIMora works everywhere
+- 🌐 **Testing browser compatibility** - Ensure VIM works everywhere
 
 ### Development Setup
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/Real-Fruit-Snacks/VIMora.git
-cd VIMora
+git clone https://github.com/Real-Fruit-Snacks/VIM.git
+cd VIM
 
 # Install dependencies
 npm install
@@ -282,7 +282,7 @@ npm run preview
 
 ## 🏢 Offline/GitLab Deployment
 
-VIMora can be deployed on internal networks or GitLab Pages for organizations that need offline access:
+VIM can be deployed on internal networks or GitLab Pages for organizations that need offline access:
 
 ### Quick GitLab Deployment
 ```bash
@@ -311,7 +311,7 @@ VIMora can be deployed on internal networks or GitLab Pages for organizations th
 
 ## 📄 License
 
-VIMora is open source software licensed under the [MIT License](LICENSE).
+VIM is open source software licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
@@ -320,6 +320,6 @@ VIMora is open source software licensed under the [MIT License](LICENSE).
 - **[React Team](https://react.dev/)** - For the incredible development experience
 - **The VIM Community** - Decades of innovation, documentation, and passion
 
-<sub>VIMora - A Clean, Focused VIM Experience in Your Browser!</sub>
+<sub>VIM - A Clean, Focused VIM Experience in Your Browser!</sub>
 
 </div>

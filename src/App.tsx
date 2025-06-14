@@ -26,13 +26,13 @@ function App() {
 
   /** Initialize vimrc content and which-key preference from localStorage */
   useEffect(() => {
-    const savedVimrc = localStorage.getItem('vim-io-vimrc')
+    const savedVimrc = localStorage.getItem('vim-vimrc')
     if (savedVimrc) {
       setVimrcContent(savedVimrc)
     }
     
     // Load Which-Key preference
-    const savedWhichKeyEnabled = localStorage.getItem('vim-io-which-key-enabled')
+    const savedWhichKeyEnabled = localStorage.getItem('vim-which-key-enabled')
     if (savedWhichKeyEnabled !== null) {
       setWhichKeyEnabled(savedWhichKeyEnabled === 'true')
     }
@@ -69,7 +69,7 @@ function App() {
     
     // Persist configuration to localStorage
     setVimrcContent(content)
-    localStorage.setItem('vim-io-vimrc', content)
+    localStorage.setItem('vim-vimrc', content)
     
     // Display execution results to user
     if (result.failedCount === 0) {
@@ -81,7 +81,7 @@ function App() {
 
   const handleToggleWhichKey = (enabled: boolean) => {
     setWhichKeyEnabled(enabled)
-    localStorage.setItem('vim-io-which-key-enabled', enabled.toString())
+    localStorage.setItem('vim-which-key-enabled', enabled.toString())
     showSuccess(`Which-Key helper ${enabled ? 'enabled' : 'disabled'}`)
   }
 

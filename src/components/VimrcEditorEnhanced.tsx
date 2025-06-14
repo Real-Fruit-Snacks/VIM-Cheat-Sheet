@@ -8,8 +8,8 @@ interface VimrcEditorEnhancedProps {
   initialContent?: string
 }
 
-const DEFAULT_VIMRC = `" VIM.io Configuration File
-" Personal vimrc for VIM.io web application
+const DEFAULT_VIMRC = `" VIM Configuration File
+" Personal vimrc for VIM web application
 " Changes apply immediately without reload
 
 " Note: vim-wasm has browser environment limitations
@@ -45,7 +45,7 @@ set sidescrolloff=5     " Keep 5 columns left/right of cursor
 " Example: Map jj to Escape in insert mode
 " inoremap jj <Esc>
 
-" Leader key mappings (Space is the leader key in VIM.io)
+" Leader key mappings (Space is the leader key in VIM)
 " Example: Save file with Space + w
 " nnoremap <leader>w :w<CR>
 

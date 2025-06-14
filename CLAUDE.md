@@ -73,9 +73,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### State Management
 - Local state with React hooks
 - Persistence via localStorage for:
-  - Vimrc configuration (`vim-io-vimrc`)
-  - Which-Key preference (`vim-io-which-key-enabled`)
-  - Keystroke visualizer settings (`vim-io-keystroke-config`)
+  - Vimrc configuration (`vim-vimrc`)
+  - Which-Key preference (`vim-which-key-enabled`)
+  - Keystroke visualizer settings (`vim-keystroke-config`)
 
 ### Build Configuration
 - Cross-origin isolation headers configured in `vite.config.ts` and `public/_headers`

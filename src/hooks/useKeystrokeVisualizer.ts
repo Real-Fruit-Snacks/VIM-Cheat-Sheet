@@ -28,7 +28,7 @@ export function useKeystrokeVisualizer() {
   const [keystrokes, setKeystrokes] = useState<Keystroke[]>([])
   const [config, setConfig] = useState<KeystrokeVisualizerConfig>(() => {
     // Load config from localStorage
-    const saved = localStorage.getItem('vim-io-keystroke-visualizer-config')
+    const saved = localStorage.getItem('vim-keystroke-visualizer-config')
     if (saved) {
       try {
         return { ...DEFAULT_CONFIG, ...JSON.parse(saved) }
@@ -43,7 +43,7 @@ export function useKeystrokeVisualizer() {
 
   // Save config to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('vim-io-keystroke-visualizer-config', JSON.stringify(config))
+    localStorage.setItem('vim-keystroke-visualizer-config', JSON.stringify(config))
   }, [config])
 
   // Cleanup old keystrokes periodically
