@@ -1,28 +1,12 @@
-# VIM v0.2.0 - Theme System & Enhanced Offline Deployment 🎨
+# VIM v0.1.0 - GitLab Offline Deployment Release
 
-## 🌈 Major New Feature: Theme System!
+## 🎉 What's New
 
-VIM now includes a comprehensive theme system with **7 beautiful built-in themes**:
-
-### 🎨 Available Themes:
-- **Dark** (Default) - Optimized for extended coding sessions
-- **Light** - Clean, bright theme for well-lit environments  
-- **High Contrast** - Enhanced visibility with maximum contrast
-- **VIM Classic** - Traditional green-on-black terminal aesthetic
-- **Solarized Dark** - Popular color scheme with reduced eye strain
-- **Solarized Light** - Light variant of the beloved Solarized theme
-- **Monokai** - Vibrant colors inspired by the classic code editor theme
-
-### ✨ Theme Features:
-- **Instant switching** - Changes apply immediately without reload
-- **Persistent selection** - Your theme choice is saved across sessions
-- **Comprehensive coverage** - All UI elements adapt to the selected theme
-- **CSS Variables** - Easy customization for advanced users
-- **Theme Toggle** - New UI component in the header for quick theme switching
+This release provides a complete, pre-built package for deploying VIM on GitLab Pages with full offline capability.
 
 ## 📦 Download
 
-**File**: `vim-gitlab-offline-v0.2.0-*.tar.gz`  
+**File**: `vim-gitlab-offline-v0.1.0-*.tar.gz`  
 **Size**: ~3.2 MB  
 
 ## ✨ Features
@@ -32,7 +16,6 @@ VIM now includes a comprehensive theme system with **7 beautiful built-in themes
 - All dependencies included (vim.wasm, fonts, icons)
 - Works completely offline after initial load
 - GitLab CI/CD configuration included
-- **NEW**: All 7 themes included and functional offline
 
 ### Easy Deployment
 - Extract and upload to GitLab - that's it!
@@ -47,14 +30,9 @@ VIM now includes a comprehensive theme system with **7 beautiful built-in themes
 - 📝 Live vimrc configuration
 - 📚 Comprehensive cheat sheet
 - 💾 Persistent settings
-- 🌈 **NEW**: Theme system with 7 built-in themes
 
 ## 🚀 Quick Start
 
-### Online Usage:
-Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) and click the theme toggle in the header!
-
-### Offline Deployment:
 1. Download the `.tar.gz` file
 2. Extract the contents
 3. Upload all files to your GitLab repository
@@ -70,30 +48,14 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 - Vite 6.3.5 optimized production build
 - Cross-origin isolation configured
 - Compatible with all modern browsers
-- **NEW**: CSS Variables for dynamic theming
-- **NEW**: Theme Context Provider for state management
 
-## 📝 Changes from v0.1.0
+## 📝 Changes from Previous Release
 
-### New Features:
-- 🌈 Complete theme system with 7 built-in themes
-- 🎨 Theme toggle UI component in header
-- 💾 Persistent theme selection
-- 🎯 CSS Variables for easy customization
-- 📱 All themes work perfectly offline
-
-### Improvements:
-- Enhanced Toast component with theme support
-- Updated all UI components to use theme variables
-- Better TypeScript type safety
-- Improved code organization
-- Updated documentation with theme information
-
-### Technical:
-- Added ThemeContext and ThemeProvider
-- Extended Tailwind configuration for CSS variables
-- Fixed TypeScript import issues
-- Updated build process for theme support
+- Streamlined application focus
+- Enhanced Toast component with better animations
+- Removed GitLab-specific files from main repository
+- Created dedicated offline deployment package
+- Improved deployment documentation
 
 ## 🤝 Contributing
 
