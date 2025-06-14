@@ -1,79 +1,77 @@
-# VIM v0.1.1 - Enhanced User Experience
+# VIM v0.1.2 - Production Ready Release
 
 ## 🎉 What's New
 
-This release improves the user experience with a dismissible Limited Mode banner and maintains full offline deployment capability for GitLab Pages.
+This release confirms that all features work correctly in both VIM modes and provides a production-ready offline deployment package for GitLab Pages.
 
-## ✨ New Features
+## ✨ Confirmed Features
 
-### Dismissible Limited Mode Banner
-- **Added dismiss button** - Users can now close the Limited Mode warning banner
-- **Improved UI** - Better styling with hover effects and smooth transitions
-- **Session-based** - Banner reappears on page refresh for awareness
+### Keystroke Visualizer Works in Both Modes
+- ✅ **Confirmed working in Monaco VIM mode** (fallback/limited mode)
+- ✅ **Confirmed working in vim.wasm mode** (full mode)
+- Consistent experience across all browser configurations
 
-## 📦 Download
+### Complete Feature Set
+- 🎹 Real VIM experience (vim.wasm when available, Monaco fallback)
+- 🎥 Keystroke visualizer for teaching/streaming (works in ALL modes)
+- 🎯 Which-Key command helper
+- 📝 Live vimrc configuration with instant preview
+- 📚 Comprehensive cheat sheet
+- 💾 Persistent settings across sessions
+- 🚫 Dismissible Limited Mode banner
 
-**File**: `vim-gitlab-offline-v0.1.1-*.tar.gz`  
+## 📦 Offline GitLab Deployment Package
+
+**File**: `vim-gitlab-offline-v0.1.2-*.tar.gz`  
 **Size**: ~3.2 MB  
 
-## ✨ Features
+### Package Contents
+- ✅ Complete pre-built application
+- ✅ All JavaScript, CSS, and assets
+- ✅ vim.wasm binaries for offline operation
+- ✅ Service worker for cross-origin isolation
+- ✅ GitLab CI/CD configuration (`.gitlab-ci.yml`)
+- ✅ Deployment documentation
+- ✅ No external dependencies - works 100% offline
 
-### Complete Offline Package
-- Pre-built application - no build process required
-- All dependencies included (vim.wasm, fonts, icons)
-- Works completely offline after initial load
-- GitLab CI/CD configuration included
-
-### Easy Deployment
-- Extract and upload to GitLab - that's it!
-- Automatic deployment via GitLab Pages
-- Comprehensive deployment guide included
-- No technical knowledge required
-
-### Full VIM Features
-- 🎹 Real VIM experience via WebAssembly
-- 🎥 Keystroke visualizer for teaching/streaming
-- 🎯 Which-Key command helper
-- 📝 Live vimrc configuration
-- 📚 Comprehensive cheat sheet
-- 💾 Persistent settings
-
-## 🚀 Quick Start
-
-### Online Usage
-Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) to try it immediately!
-
-### Offline Deployment
-1. Download the `.tar.gz` file from this release
-2. Extract the contents
-3. Upload all files to your GitLab repository
-4. Push to main branch
-5. Access at `https://yourusername.gitlab.io/repo-name/`
-
-See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
+### Deployment Steps
+1. Download `vim-gitlab-offline-v0.1.2-*.tar.gz`
+2. Extract: `tar -xzf vim-gitlab-offline-v0.1.2-*.tar.gz`
+3. Push contents to your GitLab repository
+4. GitLab Pages will automatically deploy
+5. Access at: `https://yourusername.gitlab.io/repo-name/`
 
 ## 🛠️ Technical Details
 
 - Built with React 19.1 + TypeScript 5.8
 - vim.wasm 0.0.13 for authentic VIM experience
+- Monaco Editor with monaco-vim for fallback mode
 - Vite 6.3.5 optimized production build
-- Cross-origin isolation configured
-- Compatible with all modern browsers
+- Cross-origin isolation properly configured
+- Service worker included for SharedArrayBuffer support
 
-## 📝 Changes from v0.1.0
+## 📝 Changes from v0.1.1
 
-### User Experience
-- Added dismiss button to Limited Mode banner
-- Improved banner styling and hover effects
-- Made warning less intrusive for users who understand the limitation
+### Stability
+- Verified all features work in both editor modes
+- Confirmed offline deployment package completeness
+- Production-ready for enterprise deployment
 
-### Bug Fixes
-- Updated all "VIMora" references to "VIM" for consistent branding
-- Fixed localStorage key naming consistency
+### Documentation
+- Updated release notes with clear feature confirmations
+- Enhanced deployment instructions
 
-### Development
-- Improved TypeScript type safety
-- Better component organization
+## 🚀 Quick Start
+
+### Online Usage
+Visit [VIM Live](https://real-fruit-snacks.github.io/VIM/) - works in any modern browser!
+
+### Offline/Internal Network Deployment
+Perfect for:
+- 🏢 Corporate networks without internet access
+- 🔒 Secure environments
+- 🚀 Fast local access
+- 📡 Air-gapped systems
 
 ## 🤝 Contributing
 
