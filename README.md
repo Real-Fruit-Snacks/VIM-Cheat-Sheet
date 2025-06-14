@@ -33,6 +33,8 @@
 - **💾 Persistent Everything** - All your settings, configurations, and preferences saved locally
 - **📱 Universal Access** - Works on any device with a modern browser
 - **🎨 Beautiful Interface** - Terminal-style UI optimized for long coding sessions
+- **🌈 7 Built-in Themes** - Dark, Light, High Contrast, VIM Classic, Solarized, and Monokai
+- **🏢 Offline Deployment** - Full GitLab Pages support for internal/offline hosting
 
 ## 🖼️ Feature Overview
 
@@ -47,6 +49,8 @@
 | 📚 **Cheat Sheet** | Command reference with examples | Quick Reference |
 | 💾 **Smart Persistence** | All settings auto-saved locally | Consistent Experience |
 | 🎨 **Clean UI** | Distraction-free terminal interface | Focused Work |
+| 🌈 **Theme System** | 7 built-in themes with instant switching | Personalization |
+| 🏢 **Offline Ready** | Deploy to GitLab/internal networks | Enterprise Use |
 
 </div>
 
@@ -89,6 +93,18 @@ npm run dev
 ```
 
 Open http://localhost:5173/VIM/ and start using VIMora!
+
+### 🏢 Deploy to GitLab (Offline/Internal Networks)
+```bash
+# Generate offline deployment package
+./create-gitlab-release.sh
+
+# This creates a tarball with:
+# - Complete production build
+# - GitLab CI/CD configuration
+# - Deployment documentation
+# - All assets for offline use
+```
 
 ## ⚡ Features Deep Dive
 
@@ -178,6 +194,25 @@ Advanced focus handling ensures:
 - 💾 Efficient local storage management
 - 🎨 Smooth animations with CSS optimizations
 
+## 🌈 Theme System
+
+VIMora includes a comprehensive theme system with 7 built-in themes:
+
+### Available Themes
+- **🌙 Dark** (Default) - Optimized for extended coding sessions
+- **☀️ Light** - Clean, bright theme for well-lit environments
+- **🔍 High Contrast** - Enhanced visibility with maximum contrast
+- **💚 VIM Classic** - Traditional green-on-black terminal aesthetic
+- **🌅 Solarized Dark** - Popular color scheme with reduced eye strain
+- **🌤️ Solarized Light** - Light variant of the beloved Solarized theme
+- **🎨 Monokai** - Vibrant colors inspired by the classic code editor theme
+
+### Theme Features
+- **Instant switching** - Changes apply immediately without reload
+- **Persistent selection** - Your theme choice is saved across sessions
+- **Comprehensive coverage** - All UI elements adapt to the selected theme
+- **CSS Variables** - Easy customization for advanced users
+
 ## 🎨 UI/UX Design
 
 ### **Terminal-Style Interface**
@@ -244,6 +279,35 @@ npm run preview
 - **100% TypeScript** for type safety and developer experience
 - **Zero external dependencies** for VIM functionality
 - **Universal browser compatibility** with automatic fallback mode
+
+## 🏢 Offline/GitLab Deployment
+
+VIMora can be deployed on internal networks or GitLab Pages for organizations that need offline access:
+
+### Quick GitLab Deployment
+```bash
+# Create deployment package
+./create-gitlab-release.sh
+
+# Package includes:
+# - Pre-built production files
+# - GitLab CI/CD configuration
+# - Deployment documentation
+# - All necessary assets
+```
+
+### Features for Enterprise
+- **🔒 Self-hosted** - Complete control over your deployment
+- **🌐 No internet required** - Works entirely offline after deployment
+- **📦 Single package** - Everything needed in one tarball
+- **🚀 GitLab CI/CD ready** - Automated deployment pipeline included
+- **📖 Comprehensive docs** - Step-by-step deployment guide
+
+### Deployment Options
+1. **GitLab Pages** - Automatic deployment with included `.gitlab-ci.yml`
+2. **Static Server** - Serve the `public/` directory with any web server
+3. **Docker/Kubernetes** - Containerize for scalable deployments
+4. **Corporate CDN** - Host on internal content delivery networks
 
 ## 📄 License
 

@@ -1,14 +1,29 @@
-# VIM v0.1.0 - GitLab Offline Deployment Release
+# VIMora v0.2.0 - Theme System & Enhanced Offline Deployment 🎨
 
-## 🎉 What's New
+## 🌈 Major New Feature: Theme System!
 
-This release provides a complete, pre-built package for deploying VIM on GitLab Pages with full offline capability.
+VIMora now includes a comprehensive theme system with **7 beautiful built-in themes**:
+
+### 🎨 Available Themes:
+- **Dark** (Default) - Optimized for extended coding sessions
+- **Light** - Clean, bright theme for well-lit environments  
+- **High Contrast** - Enhanced visibility with maximum contrast
+- **VIM Classic** - Traditional green-on-black terminal aesthetic
+- **Solarized Dark** - Popular color scheme with reduced eye strain
+- **Solarized Light** - Light variant of the beloved Solarized theme
+- **Monokai** - Vibrant colors inspired by the classic code editor theme
+
+### ✨ Theme Features:
+- **Instant switching** - Changes apply immediately without reload
+- **Persistent selection** - Your theme choice is saved across sessions
+- **Comprehensive coverage** - All UI elements adapt to the selected theme
+- **CSS Variables** - Easy customization for advanced users
+- **Theme Toggle** - New UI component in the header for quick theme switching
 
 ## 📦 Download
 
-**File**: `vim-gitlab-offline-v0.1.0-20250613_165602.tar.gz`  
-**Size**: 3.2 MB  
-**SHA256**: `cbd5e089b2d98ad74b81b30550160d7e417556c9389ec8c8fef771cfdf9fae48`
+**File**: `vim-gitlab-offline-v0.2.0-*.tar.gz`  
+**Size**: ~3.2 MB  
 
 ## ✨ Features
 
@@ -17,6 +32,7 @@ This release provides a complete, pre-built package for deploying VIM on GitLab 
 - All dependencies included (vim.wasm, fonts, icons)
 - Works completely offline after initial load
 - GitLab CI/CD configuration included
+- **NEW**: All 7 themes included and functional offline
 
 ### Easy Deployment
 - Extract and upload to GitLab - that's it!
@@ -24,16 +40,21 @@ This release provides a complete, pre-built package for deploying VIM on GitLab 
 - Comprehensive deployment guide included
 - No technical knowledge required
 
-### Full VIM Features
+### Full VIMora Features
 - 🎹 Real VIM experience via WebAssembly
 - 🎥 Keystroke visualizer for teaching/streaming
 - 🎯 Which-Key command helper
 - 📝 Live vimrc configuration
 - 📚 Comprehensive cheat sheet
 - 💾 Persistent settings
+- 🌈 **NEW**: Theme system with 7 built-in themes
 
 ## 🚀 Quick Start
 
+### Online Usage:
+Visit [VIMora Live](https://real-fruit-snacks.github.io/VIMora/) and click the theme toggle in the header!
+
+### Offline Deployment:
 1. Download the `.tar.gz` file
 2. Extract the contents
 3. Upload all files to your GitLab repository
@@ -49,19 +70,35 @@ See the included `DEPLOYMENT_GUIDE.md` for detailed instructions.
 - Vite 6.3.5 optimized production build
 - Cross-origin isolation configured
 - Compatible with all modern browsers
+- **NEW**: CSS Variables for dynamic theming
+- **NEW**: Theme Context Provider for state management
 
-## 📝 Changes from Previous Release
+## 📝 Changes from v0.1.0
 
-- Streamlined application focus
-- Enhanced Toast component with better animations
-- Removed GitLab-specific files from main repository
-- Created dedicated offline deployment package
-- Improved deployment documentation
+### New Features:
+- 🌈 Complete theme system with 7 built-in themes
+- 🎨 Theme toggle UI component in header
+- 💾 Persistent theme selection
+- 🎯 CSS Variables for easy customization
+- 📱 All themes work perfectly offline
+
+### Improvements:
+- Enhanced Toast component with theme support
+- Updated all UI components to use theme variables
+- Better TypeScript type safety
+- Improved code organization
+- Updated documentation with theme information
+
+### Technical:
+- Added ThemeContext and ThemeProvider
+- Extended Tailwind configuration for CSS variables
+- Fixed TypeScript import issues
+- Updated build process for theme support
 
 ## 🤝 Contributing
 
-VIM is open source! Contributions welcome at:
-https://github.com/Real-Fruit-Snacks/VIM
+VIMora is open source! Contributions welcome at:
+https://github.com/Real-Fruit-Snacks/VIMora
 
 ## 📄 License
 

@@ -86,13 +86,13 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
     const iconClass = "w-5 h-5 flex-shrink-0"
     switch (type) {
       case 'success':
-        return <CheckCircle className={`${iconClass} text-green-400 ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
+        return <CheckCircle className={`${iconClass} text-status-success ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
       case 'error':
-        return <XCircle className={`${iconClass} text-red-400 ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
+        return <XCircle className={`${iconClass} text-status-error ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
       case 'warning':
-        return <AlertCircle className={`${iconClass} text-amber-400 ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
+        return <AlertCircle className={`${iconClass} text-status-warning ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
       case 'info':
-        return <Info className={`${iconClass} text-blue-400 ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
+        return <Info className={`${iconClass} text-status-info ${isVisible && !isExiting ? 'animate-icon-bounce' : ''}`} />
     }
   }
 
@@ -120,10 +120,10 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
 
   const getProgressColor = () => {
     switch (type) {
-      case 'success': return 'bg-green-500'
-      case 'error': return 'bg-red-500'
-      case 'warning': return 'bg-amber-500'
-      case 'info': return 'bg-blue-500'
+      case 'success': return 'bg-status-success'
+      case 'error': return 'bg-status-error'
+      case 'warning': return 'bg-status-warning'
+      case 'info': return 'bg-status-info'
     }
   }
 
@@ -148,7 +148,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
     >
       <div className={`
         relative overflow-hidden
-        bg-gray-900/80 backdrop-blur-xl
+        bg-background-secondary/80 backdrop-blur-xl
         bg-gradient-to-r ${getGradient()}
         border ${getBorderColor()}
         rounded-xl

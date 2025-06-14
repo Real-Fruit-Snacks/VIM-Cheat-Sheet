@@ -11,6 +11,7 @@ import KeystrokeOverlay from './components/KeystrokeOverlay'
 import KeystrokeVisualizerButton from './components/KeystrokeVisualizerButton'
 import PracticeFilesButton from './components/PracticeFilesButton'
 import PracticeFilesModal from './components/PracticeFilesModal'
+import { ThemeToggle } from './components/ThemeToggle'
 
 function App() {
   const [showCheatSheet, setShowCheatSheet] = useState(false)
@@ -108,10 +109,10 @@ function App() {
 
 
   return (
-    <div className="h-screen bg-gray-950 text-gray-100 overflow-hidden p-2 flex items-center justify-center">
-      <div className="w-full h-full max-w-none max-h-[calc(100vh-1rem)] bg-gray-900 rounded-lg shadow-2xl overflow-hidden flex flex-col">
+    <div className="h-screen bg-background-primary text-text-primary overflow-hidden p-2 flex items-center justify-center">
+      <div className="w-full h-full max-w-none max-h-[calc(100vh-1rem)] bg-background-secondary rounded-lg shadow-2xl overflow-hidden flex flex-col">
         {/* Terminal window header with control buttons */}
-        <div className="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-700">
+        <div className="bg-background-tertiary px-4 py-2 flex items-center justify-between border-b border-border">
           <div className="flex items-center space-x-2">
             {/* macOS-style window controls */}
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -121,15 +122,15 @@ function App() {
           
           <div className="flex-1 text-center">
             <div className="flex items-center justify-center gap-2">
-              <span className="text-sm text-gray-400 font-mono">Interactive VIM Learning Platform</span>
+              <span className="text-sm text-text-muted font-mono">Interactive VIM Learning Platform</span>
               {vimFullyReady ? (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded">
-                  <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-status-success/20 text-status-success rounded">
+                  <span className="w-2 h-2 bg-status-success rounded-full"></span>
                   VIM Ready
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-yellow-500/20 text-yellow-400 rounded">
-                  <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-status-warning/20 text-status-warning rounded">
+                  <span className="w-2 h-2 bg-status-warning rounded-full animate-pulse"></span>
                   Initializing...
                 </span>
               )}
@@ -159,6 +160,10 @@ function App() {
                 whichKeyEnabled={whichKeyEnabled}
                 onToggleWhichKey={handleToggleWhichKey}
               />
+              
+              <div className="ml-2 border-l border-border pl-2">
+                <ThemeToggle />
+              </div>
             </div>
           )}
         </div>
