@@ -104,12 +104,12 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
                 How to enable?
               </button>
               <button
-                className="ml-3 px-2 py-1 text-yellow-200 hover:text-white hover:bg-yellow-800/50 rounded transition-colors text-xl leading-none"
+                className="ml-3 px-3 py-1 bg-yellow-800 text-yellow-100 hover:bg-yellow-700 hover:text-white border border-yellow-600 rounded transition-colors text-lg leading-none font-bold shadow-sm"
                 onClick={() => setBannerDismissed(true)}
                 aria-label="Dismiss banner"
                 title="Dismiss"
               >
-                ×
+                ✕
               </button>
               </div>
             </div>
