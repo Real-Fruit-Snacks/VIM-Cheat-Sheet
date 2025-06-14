@@ -64,6 +64,7 @@ vim-gitlab-offline-*/
 *.zip
 release-checksums.txt
 checksums.txt
+RELEASE_NOTES.md
 
 # Editor directories and files
 .vscode/*
