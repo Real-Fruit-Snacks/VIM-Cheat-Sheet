@@ -221,6 +221,10 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
       });
       
+      // Set container style to ensure proper layout
+      containerRef.current.style.position = 'relative';
+      containerRef.current.style.overflow = 'hidden';
+      
       // Create editor instance
       const editor = monaco.editor.create(containerRef.current, {
         value: '# Welcome to VIM (Monaco Mode)\n# SharedArrayBuffer is not available, using Monaco-vim fallback\n# Most VIM commands work, but some advanced features may be limited\n\n',
@@ -233,7 +237,11 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         scrollBeyondLastLine: false,
         automaticLayout: true,
         cursorStyle: 'block',
-        cursorBlinking: 'solid'
+        cursorBlinking: 'solid',
+        // Add padding at the bottom to prevent content from going under status bar
+        padding: {
+          bottom: 28
+        }
       });
       
       editorRef.current = editor;
@@ -242,12 +250,19 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       const statusNode = document.createElement('div');
       statusNode.className = 'monaco-vim-status-bar';
       statusNode.style.cssText = `
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
         background-color: #24283b;
         color: #a9b1d6;
         padding: 4px 8px;
         font-family: Menlo, Monaco, "Courier New", monospace;
         font-size: 12px;
         border-top: 1px solid #3b4261;
+        height: 28px;
+        box-sizing: border-box;
+        z-index: 1;
       `;
       containerRef.current.appendChild(statusNode);
       statusNodeRef.current = statusNode;
@@ -431,10 +446,10 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       <div className="relative w-full h-full flex flex-col">
         <div 
           ref={containerRef} 
-          className="flex-1 w-full"
-          style={{ minHeight: 0 }}
+          className="flex-1 w-full relative"
+          style={{ minHeight: 0, paddingBottom: '28px' }}
         />
-        <div className="absolute top-2 right-2 bg-yellow-900/80 text-yellow-200 px-2 py-1 rounded text-xs">
+        <div className="absolute top-2 right-2 bg-yellow-900/80 text-yellow-200 px-2 py-1 rounded text-xs z-10">
           Monaco VIM Mode (Fallback)
         </div>
         
