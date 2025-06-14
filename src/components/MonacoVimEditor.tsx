@@ -27,6 +27,12 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     const [currentMode, setCurrentMode] = useState('normal');
     const keyEventHandledRef = useRef(false);
     
+    // Keep a ref to the latest onKeyPress callback
+    const onKeyPressRef = useRef(onKeyPress);
+    useEffect(() => {
+      onKeyPressRef.current = onKeyPress;
+    }, [onKeyPress]);
+    
     // Initialize which-key system
     const whichKey = useWhichKey({
       timeout: 200,
@@ -304,7 +310,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         const browserEvent = e.browserEvent;
         
         // Forward to keystroke visualizer
-        if (onKeyPress) {
+        if (onKeyPressRef.current) {
           const event = new KeyboardEvent('keydown', {
             key: browserEvent.key,
             code: browserEvent.code,
@@ -313,7 +319,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
             altKey: browserEvent.altKey,
             metaKey: browserEvent.metaKey
           });
-          onKeyPress(event);
+          onKeyPressRef.current(event);
         }
         
         // Check current mode
