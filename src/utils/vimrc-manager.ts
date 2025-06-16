@@ -116,6 +116,7 @@ export class VimrcManager {
   }
   
   /** Validation delegated to vim-wasm */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validateVimrc(_content: string): { valid: boolean; errors: string[] } {
     return {
       valid: true,

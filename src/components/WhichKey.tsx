@@ -64,13 +64,14 @@ export default function WhichKey({
             onKeySelect(availableKeys[selectedIndex].key)
           }
           break
-        default:
+        default: {
           // Match key to available options
           const matchingKey = availableKeys.find(k => k.key === e.key)
           if (matchingKey) {
             onKeySelect(matchingKey.key)
           }
           break
+        }
       }
     }
 

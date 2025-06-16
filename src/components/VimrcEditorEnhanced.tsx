@@ -75,7 +75,7 @@ export default function VimrcEditorEnhanced({
       await onSave(content)
       setHasChanges(false)
       onClose()
-    } catch (err) {
+    } catch {
       // Parent component handles error display
     } finally {
       setIsSaving(false)

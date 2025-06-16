@@ -603,7 +603,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
               const refreshScreen = async () => {
                 try {
                   await vim.cmdline('redraw!')
-                } catch (e) {
+                } catch {
                   console.log('Redraw failed, trying alternative methods')
                 }
                 
@@ -611,7 +611,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
                   try {
                     // Ctrl+L refresh
                     vim.input('<C-l>')
-                  } catch (e) {
+                  } catch {
                     // Ignore
                   }
                   
@@ -621,7 +621,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
                       setTimeout(() => {
                         vim.cmdline('redraw!')
                       }, 50)
-                    } catch (e) {
+                    } catch {
                       // Ignore
                     }
                   }, 100)

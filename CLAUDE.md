@@ -108,7 +108,139 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 #### Important Files
 - `/index.html`: Contains service worker registration and vim-wasm wrapper script
-- `/public/sw.js`: Service worker for SharedArrayBuffer support
+- `/public/coi-serviceworker.js`: Service worker for SharedArrayBuffer support via COOP/COEP headers
+- `/public/vim-wasm-wrapper.js`: Conditionally loads vim.wasm based on browser capabilities
 - `/public/_headers`: Production COOP/COEP headers for Netlify/GitHub Pages
-- `/src/main.tsx`: React app entry point
+- `/src/main.tsx`: React app entry point with early browser detection
 - `/src/App.tsx`: Main component orchestrating all features
+
+## Critical Architecture Patterns
+
+### Early Browser Detection System
+The application implements a sophisticated browser capability detection system that runs **before** React renders:
+
+1. **Detection Phase** (`src/main.tsx`): 
+   - `detectBrowserCapabilitiesEarly()` checks WebAssembly, SharedArrayBuffer, and secure context
+   - Sets `window.__skipVimWasmLoad` flag to prevent unnecessary loading
+   - Creates `BrowserCapabilitiesProvider` context for component access
+
+2. **Loading Coordination** (`public/vim-wasm-wrapper.js`):
+   - Exports `window.__vimWasmPromise` for coordinated loading
+   - Respects early detection flags to avoid loading 2MB+ vim.wasm unnecessarily
+   - Provides proper error handling and timeout management
+
+3. **Component Integration** (`src/components/VimEditorHybrid.tsx`):
+   - Uses pre-detected capabilities from context instead of runtime detection
+   - Eliminates loading states when using early detection
+   - Provides consistent user experience across browser types
+
+### Hybrid Editor Architecture
+The application seamlessly switches between two VIM implementations:
+
+**vim.wasm Mode (Full Experience)**:
+- Real VIM compiled to WebAssembly 
+- Requires SharedArrayBuffer + secure context
+- Promise-based loading with 10-second timeout
+- Full VIM command compatibility
+- Used in Chrome/Edge by default
+
+**Monaco-vim Mode (Universal Fallback)**:
+- Monaco Editor with vim-mode extension
+- Works in all browsers without special configuration
+- Sophisticated key event handling to prevent conflicts
+- Mode detection via status bar text parsing
+- Operator-pending state tracking for complex VIM operations
+
+### Space Key Handling (Critical Implementation Detail)
+The Monaco-vim fallback has sophisticated logic to handle space as both a leader key and regular character:
+
+```typescript
+// Only treat space as which-key leader when ALL conditions met:
+const shouldHandleAsLeader = 
+  mode === 'normal' && 
+  currentMode === 'normal' && 
+  !recentModeChangeKey && 
+  !operatorPendingRef.current &&
+  !(lastOperatorRef.current && ['f','F','t','T','r'].includes(lastOperatorRef.current)) &&
+  !disableWhichKey;
+```
+
+This prevents space from being intercepted in:
+- Insert mode (allows typing spaces)
+- After motion operators like `f<space>` (find space character)
+- During mode transitions (150ms protection window)
+- When operators are pending
+
+### Which-Key System Integration
+Space serves as the leader key with extensive command mappings:
+- ` f` → File operations (find, recent, search)
+- ` b` → Buffer operations (list, next, previous, delete)
+- ` w` → Window operations (navigation, splits)
+- ` g` → Git operations 
+- ` t` → Tab operations
+
+The system is mode-aware and automatically resets when leaving normal mode.
+
+### Error Handling & Recovery
+Multiple layers ensure graceful degradation:
+
+1. **ErrorBoundary** catches React render errors with user-friendly display
+2. **Promise timeouts** prevent infinite loading (vim.wasm, VIM operations)
+3. **Automatic fallback** from vim.wasm to Monaco-vim on any failure
+4. **Memory cleanup** with proper disposal of observers, intervals, and references
+5. **Browser compatibility warnings** with specific instructions for Firefox/Safari
+
+### Performance Optimizations
+- **Early detection** prevents loading unnecessary resources (saves 2MB+ for incompatible browsers)
+- **Code splitting** separates vim.wasm, Monaco, and React chunks for optimal caching
+- **Dynamic imports** ensure vim.wasm only loads when needed
+- **localStorage persistence** for user preferences and configuration
+- **Service worker** enables SharedArrayBuffer in supported browsers
+
+## Development Notes
+
+### Testing Browser Modes
+- Chrome/Edge: Full vim.wasm experience by default
+- Firefox: Requires `dom.postMessage.sharedArrayBuffer.bypassCOOP_COEP.insecure.enabled=true` in about:config
+- Safari: Requires "Disable Cross-Origin Restrictions" in Developer menu
+- All browsers fall back to Monaco-vim gracefully
+
+### Memory Management
+Components implement comprehensive cleanup in useEffect return functions:
+- Event listeners properly removed with null reference setting
+- MutationObserver disposal and disconnect
+- Timeout clearing with variable nulling
+- VIM instance shutdown with timeout protection
+
+### Common Pitfalls
+- **useEffect dependencies**: Many effects intentionally omit dependencies for one-time initialization
+- **Mode detection timing**: 150ms buffer prevents race conditions during mode transitions
+- **TypeScript any types**: vim.wasm interfaces use `any` due to WebAssembly binding limitations
+- **Bundle size warnings**: Monaco editor chunk is necessarily large (~890KB gzipped)
+
+## File Structure Overview
+
+### Core Application Files
+- `/src/main.tsx` - Entry point with early browser detection
+- `/src/App.tsx` - Main application component
+- `/src/components/VimEditorHybrid.tsx` - Smart editor selector
+- `/src/components/VimEditor.tsx` - vim.wasm implementation
+- `/src/components/MonacoVimEditor.tsx` - Monaco fallback implementation
+
+### Utility Modules
+- `/src/utils/early-browser-detection.ts` - Pre-React capability detection
+- `/src/utils/browser-capabilities.ts` - Runtime browser checks
+- `/src/utils/vim-loader.ts` - Dynamic vim.wasm loading
+- `/src/utils/vimrc-manager.ts` - Configuration management
+
+### Feature Components
+- `/src/components/WhichKey.tsx` - Command hint system
+- `/src/components/KeystrokeOverlay.tsx` - Keystroke visualizer
+- `/src/components/VimrcEditorEnhanced.tsx` - Live config editor
+- `/src/components/PracticeFilesModal.tsx` - Learning examples
+
+### Data and Configuration
+- `/src/data/key-bindings.ts` - Which-key command mappings
+- `/src/data/practice-files.ts` - Example files for learning
+- `/public/coi-serviceworker.js` - SharedArrayBuffer enabler
+- `/public/vim-wasm-wrapper.js` - Conditional vim.wasm loader
