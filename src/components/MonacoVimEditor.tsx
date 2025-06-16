@@ -489,22 +489,31 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
       };
       
-      // DISABLED: Don't override Monaco's key handling - let monaco-vim work naturally
-      // editor.onKeyDown(handleKeyDown);
-      
-      // Add minimal DOM listener for which-key only
-      const domKeyHandler = (e: KeyboardEvent) => {
+      // Use a lightweight Monaco key handler that doesn't block normal vim operations
+      const lightweightKeyHandler = (e: monaco.IKeyboardEvent) => {
+        const browserEvent = e.browserEvent;
+        
         // Forward to keystroke visualizer
-        if (onKeyPressRef.current) {
+        if (onKeyPressRef.current && browserEvent.key) {
           try {
-            onKeyPressRef.current(e);
+            const event = new KeyboardEvent('keydown', {
+              key: browserEvent.key,
+              code: browserEvent.code || '',
+              shiftKey: browserEvent.shiftKey || false,
+              ctrlKey: browserEvent.ctrlKey || false,
+              altKey: browserEvent.altKey || false,
+              metaKey: browserEvent.metaKey || false,
+              bubbles: true,
+              cancelable: true
+            });
+            onKeyPressRef.current(event);
           } catch (error) {
             console.error('[MonacoVimEditor] Failed to forward keystroke:', error);
           }
         }
         
-        // ONLY handle space for which-key in normal mode
-        if (e.key === ' ') {
+        // ONLY handle space for which-key in normal mode - let everything else pass through
+        if (browserEvent.key === ' ') {
           const mode = checkMode();
           const shouldHandleAsLeader = 
             mode === 'normal' && 
@@ -516,22 +525,25 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
             if (handled) {
               e.preventDefault();
               e.stopPropagation();
+              return; // Important: return here to prevent normal space processing
             }
           }
+          // If not handling as leader, let Monaco-vim handle it normally
         }
         
-        // Handle other which-key sequences
-        if (whichKey.keySequence && e.key !== ' ') {
-          const handled = whichKey.handleKeyPress(e.key);
+        // Handle other which-key sequences (non-space keys)
+        if (whichKey.keySequence && browserEvent.key !== ' ') {
+          const handled = whichKey.handleKeyPress(browserEvent.key);
           if (handled) {
             e.preventDefault();
             e.stopPropagation();
           }
         }
+        
+        // For all other keys, let Monaco-vim handle them normally (don't preventDefault)
       };
       
-      // Attach DOM listener with capture to intercept before Monaco
-      containerRef.current.addEventListener('keydown', domKeyHandler, true);
+      editor.onKeyDown(lightweightKeyHandler);
       
       editor.onDidChangeCursorPosition(() => {
         checkMode();
@@ -567,10 +579,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
       
       return () => {
-        // Cleanup DOM event listener
-        if (containerRef.current) {
-          containerRef.current.removeEventListener('keydown', domKeyHandler, true);
-        }
+        // Monaco key handler cleanup is automatic with editor disposal
         
         // Cleanup MutationObserver
         if (observer) {
