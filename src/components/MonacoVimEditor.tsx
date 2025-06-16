@@ -352,15 +352,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         // Check current mode
         const mode = checkMode();
         
-        // Debug: log all key presses temporarily
-        if (browserEvent.key === ' ' || ['i', 'a', 'Escape'].includes(browserEvent.key)) {
-          console.log('[MonacoVim Debug] Key pressed:', browserEvent.key, {
-            mode,
-            currentMode,
-            statusText: statusNodeRef.current?.textContent?.trim(),
-            recentModeChangeKey
-          });
-        }
         
         // Track operators that expect a motion
         const operators = ['d', 'c', 'y', 'g', 'z', '>', '<', '='];
@@ -442,14 +433,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
             !(lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) &&
             !disableWhichKey;
             
-          console.log('[MonacoVim Debug] Space key:', {
-            shouldHandleAsLeader,
-            mode,
-            currentMode,
-            recentModeChangeKey,
-            operatorPending: operatorPendingRef.current,
-            lastOperator: lastOperatorRef.current
-          });
           
           if (shouldHandleAsLeader) {
             handled = whichKey.handleKeyPress(' ');
