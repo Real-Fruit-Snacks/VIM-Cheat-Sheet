@@ -441,11 +441,11 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
               e.stopPropagation();
             }
             keyEventHandledRef.current = handled;
+            return; // Only return when we handle the space as leader
           } else {
-            // Let monaco-vim handle it normally
+            // Let monaco-vim handle it normally - don't return, let normal flow continue
             keyEventHandledRef.current = false;
           }
-          return;
         }
         
         // Tab key in sequences
@@ -489,7 +489,49 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
       };
       
-      editor.onKeyDown(handleKeyDown);
+      // DISABLED: Don't override Monaco's key handling - let monaco-vim work naturally
+      // editor.onKeyDown(handleKeyDown);
+      
+      // Add minimal DOM listener for which-key only
+      const domKeyHandler = (e: KeyboardEvent) => {
+        // Forward to keystroke visualizer
+        if (onKeyPressRef.current) {
+          try {
+            onKeyPressRef.current(e);
+          } catch (error) {
+            console.error('[MonacoVimEditor] Failed to forward keystroke:', error);
+          }
+        }
+        
+        // ONLY handle space for which-key in normal mode
+        if (e.key === ' ') {
+          const mode = checkMode();
+          const shouldHandleAsLeader = 
+            mode === 'normal' && 
+            currentMode === 'normal' && 
+            !disableWhichKey;
+            
+          if (shouldHandleAsLeader) {
+            const handled = whichKey.handleKeyPress(' ');
+            if (handled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }
+        }
+        
+        // Handle other which-key sequences
+        if (whichKey.keySequence && e.key !== ' ') {
+          const handled = whichKey.handleKeyPress(e.key);
+          if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      };
+      
+      // Attach DOM listener with capture to intercept before Monaco
+      containerRef.current.addEventListener('keydown', domKeyHandler, true);
       
       editor.onDidChangeCursorPosition(() => {
         checkMode();
@@ -525,6 +567,11 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
       
       return () => {
+        // Cleanup DOM event listener
+        if (containerRef.current) {
+          containerRef.current.removeEventListener('keydown', domKeyHandler, true);
+        }
+        
         // Cleanup MutationObserver
         if (observer) {
           observer.disconnect();
