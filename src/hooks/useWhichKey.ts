@@ -102,6 +102,9 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
   /** Handle key press from main application */
   const handleKeyPress = useCallback((key: string): boolean => {
     if (!enabled) return false
+    
+    // Always check current mode - don't process in insert mode
+    if (mode !== 'normal') return false
 
     const now = Date.now()
     const timeSinceLastKey = now - lastKeyTimeRef.current
@@ -157,7 +160,7 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
 
     // Indicate key handled
     return true
-  }, [enabled, keySequence, mode, timeout, clearCurrentTimeout, reset, updateAvailableKeys])
+  }, [enabled, mode, timeout, clearCurrentTimeout, reset, updateAvailableKeys])
 
   /** Cleanup timeouts on unmount */
   useEffect(() => {
@@ -172,6 +175,13 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
       setIsVisible(false)
     }
   }, [keySequence])
+
+  /** Reset which-key when mode changes away from normal */
+  useEffect(() => {
+    if (mode !== 'normal' && (isVisible || keySequence)) {
+      reset()
+    }
+  }, [mode, isVisible, keySequence, reset])
 
   return {
     isVisible,
