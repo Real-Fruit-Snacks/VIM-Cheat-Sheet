@@ -352,6 +352,16 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         // Check current mode
         const mode = checkMode();
         
+        // Debug: log all key presses temporarily
+        if (browserEvent.key === ' ' || ['i', 'a', 'Escape'].includes(browserEvent.key)) {
+          console.log('[MonacoVim Debug] Key pressed:', browserEvent.key, {
+            mode,
+            currentMode,
+            statusText: statusNodeRef.current?.textContent?.trim(),
+            recentModeChangeKey
+          });
+        }
+        
         // Track operators that expect a motion
         const operators = ['d', 'c', 'y', 'g', 'z', '>', '<', '='];
         const motionExpectingOperators = ['f', 'F', 't', 'T', 'r'];
@@ -412,22 +422,46 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           return;
         }
         
-        // Space as leader key (but not after motion operators like f, t)
+        // Space as leader key - only process in specific conditions
         if (browserEvent.key === ' ') {
-          // Don't process space as leader if we're expecting a character for f/F/t/T/r
-          const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
-          if (lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) {
-            // Let monaco-vim handle the space as the target character
-            keyEventHandledRef.current = false;
-            return;
-          }
+          // Very conservative check: only process space as leader if:
+          // 1. Mode is definitely normal
+          // 2. No recent mode changes
+          // 3. No operators pending
+          // 4. Not after character-expecting operators
+          // 5. Which-key is enabled and ready
           
-          handled = whichKey.handleKeyPress(' ');
-          if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
+          const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
+          
+          // Check if we're definitely in normal mode and should handle space
+          const shouldHandleAsLeader = 
+            mode === 'normal' && 
+            currentMode === 'normal' && 
+            !recentModeChangeKey && 
+            !operatorPendingRef.current &&
+            !(lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) &&
+            !disableWhichKey;
+            
+          console.log('[MonacoVim Debug] Space key:', {
+            shouldHandleAsLeader,
+            mode,
+            currentMode,
+            recentModeChangeKey,
+            operatorPending: operatorPendingRef.current,
+            lastOperator: lastOperatorRef.current
+          });
+          
+          if (shouldHandleAsLeader) {
+            handled = whichKey.handleKeyPress(' ');
+            if (handled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            keyEventHandledRef.current = handled;
+          } else {
+            // Let monaco-vim handle it normally
+            keyEventHandledRef.current = false;
           }
-          keyEventHandledRef.current = handled;
           return;
         }
         
@@ -473,6 +507,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       };
       
       editor.onKeyDown(handleKeyDown);
+      
       editor.onDidChangeCursorPosition(() => {
         checkMode();
         // Clear operator pending on cursor movement (indicates operation completed)
