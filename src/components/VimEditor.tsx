@@ -759,7 +759,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
     if (currentMode !== 'normal') {
       whichKey.reset()
     }
-  }, [currentMode, whichKey])
+  }, [currentMode])
 
   return (
     <div className="h-full bg-gray-950 overflow-hidden">

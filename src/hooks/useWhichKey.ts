@@ -181,7 +181,7 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
     if (mode !== 'normal' && (isVisible || keySequence)) {
       reset()
     }
-  }, [mode, isVisible, keySequence, reset])
+  }, [mode, isVisible, keySequence])
 
   return {
     isVisible,

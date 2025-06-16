@@ -54,7 +54,7 @@ function App() {
     const interval = setInterval(checkVimReadiness, 1000)
     
     return () => clearInterval(interval)
-  }, [vimFullyReady])
+  }, [])
 
   const handleSaveVimrc = async (content: string) => {
     /** Ensure vim-wasm is ready before applying configuration */

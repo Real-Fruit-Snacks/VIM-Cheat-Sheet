@@ -576,7 +576,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       if (currentMode !== 'normal') {
         whichKey.reset();
       }
-    }, [currentMode, whichKey]);
+    }, [currentMode]);
     
     return (
       <div className="relative w-full h-full flex flex-col">
