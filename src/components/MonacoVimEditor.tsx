@@ -542,12 +542,41 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
       
       return () => {
-        observer.disconnect();
-        vimModeRef.current?.dispose();
-        editor.dispose();
-        if (modeChangeTimeout) clearTimeout(modeChangeTimeout);
+        // Cleanup MutationObserver
+        if (observer) {
+          observer.disconnect();
+        }
+        
+        // Cleanup vim mode and null reference
+        if (vimModeRef.current) {
+          vimModeRef.current.dispose();
+          vimModeRef.current = null;
+        }
+        
+        // Cleanup Monaco editor and null reference
+        if (editorRef.current) {
+          editorRef.current.dispose();
+          editorRef.current = null;
+        }
+        
+        // Clear timeout and null reference
+        if (modeChangeTimeout) {
+          clearTimeout(modeChangeTimeout);
+          modeChangeTimeout = null;
+        }
+        
+        // Clear operator state
+        operatorPendingRef.current = false;
+        lastOperatorRef.current = null;
+        
+        // Remove status node from DOM
+        if (statusNodeRef.current && statusNodeRef.current.parentNode) {
+          statusNodeRef.current.parentNode.removeChild(statusNodeRef.current);
+          statusNodeRef.current = null;
+        }
       };
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // Note: Dependencies intentionally omitted for one-time initialization
     
     // Handle focus management
     useEffect(() => {

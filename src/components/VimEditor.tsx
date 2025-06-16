@@ -147,14 +147,27 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           throw new Error('Your browser does not support SharedArrayBuffer. Please use Chrome, Firefox, or Safari with the required flags enabled.')
         }
 
-        // Wait for VimWasm module to load
-        let attempts = 0;
-        while (!(window as any).VimWasm && attempts < 50) {
-          await new Promise(resolve => setTimeout(resolve, 100))
-          attempts++
+        // Wait for VimWasm module to load using promise-based approach
+        let VimWasm;
+        try {
+          // Use the promise created by vim-wasm-wrapper.js with 10-second timeout
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('VimWasm loading timeout after 10 seconds')), 10000)
+          );
+          
+          if ((window as any).__vimWasmPromise) {
+            VimWasm = await Promise.race([
+              (window as any).__vimWasmPromise,
+              timeoutPromise
+            ]);
+          } else {
+            throw new Error('VimWasm loading not initiated. Browser may not support required features.');
+          }
+        } catch (error) {
+          console.error('[VimEditor] VimWasm loading failed:', error);
+          throw error;
         }
 
-        const VimWasm = (window as any).VimWasm
         if (!VimWasm) {
           throw new Error('VimWasm not loaded. The vim-wasm module may not have loaded correctly.')
         }
@@ -684,44 +697,64 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
     return () => {
       if (vimRef.current) {
         try {
+          // Clear resize observer and null reference
           if ((vimRef.current as any)._resizeObserver) {
-            ;(vimRef.current as any)._resizeObserver.disconnect()
+            const observer = (vimRef.current as any)._resizeObserver;
+            observer.disconnect();
+            (vimRef.current as any)._resizeObserver = null;
           }
           
-          // Clear resize timeout
+          // Clear resize timeout and null reference
           if ((vimRef.current as any)._resizeTimeout) {
-            clearTimeout((vimRef.current as any)._resizeTimeout)
+            clearTimeout((vimRef.current as any)._resizeTimeout);
+            (vimRef.current as any)._resizeTimeout = null;
           }
           
-          // Remove window handler
+          // Remove window handler and null reference
           if ((vimRef.current as any)._windowResizeHandler) {
-            window.removeEventListener('resize', (vimRef.current as any)._windowResizeHandler)
+            window.removeEventListener('resize', (vimRef.current as any)._windowResizeHandler);
+            (vimRef.current as any)._windowResizeHandler = null;
           }
           
-          // Clear focus timer
+          // Clear focus timer and null reference
           if ((vimRef.current as any)._focusGuardian) {
-            clearInterval((vimRef.current as any)._focusGuardian)
+            clearInterval((vimRef.current as any)._focusGuardian);
+            (vimRef.current as any)._focusGuardian = null;
           }
           
-          // Clean VIM shutdown
-          vimRef.current.cmdline('qa!')
+          // Clean VIM shutdown with timeout to prevent hanging
+          const shutdownPromise = Promise.race([
+            vimRef.current.cmdline('qa!'),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('VIM shutdown timeout')), 2000)
+            )
+          ]);
+          
+          // Don't await in cleanup, but log any errors
+          shutdownPromise.catch(error => {
+            console.warn('[VimEditor] VIM shutdown error:', error);
+          });
+          
         } catch (e) {
-          // Ignore cleanup errors
+          console.warn('[VimEditor] Cleanup error:', e);
         }
-        vimRef.current = null
+        vimRef.current = null;
       }
+      
       if (containerRef.current) {
-        // Remove which-key handler
-        const input = containerRef.current.querySelector('input')
+        // Remove which-key handler and null reference
+        const input = containerRef.current.querySelector('input');
         if (input && (input as any)._whichKeyHandler) {
-          document.removeEventListener('keydown', (input as any)._whichKeyHandler, true)
+          document.removeEventListener('keydown', (input as any)._whichKeyHandler, true);
+          (input as any)._whichKeyHandler = null;
         }
         
-        containerRef.current.innerHTML = ''
+        containerRef.current.innerHTML = '';
       }
-      initStartedRef.current = false
+      initStartedRef.current = false;
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: Dependencies intentionally omitted for one-time initialization
   useEffect(() => {
     if (currentMode !== 'normal') {
       whichKey.reset()

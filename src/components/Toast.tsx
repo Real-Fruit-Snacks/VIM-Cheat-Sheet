@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { CheckCircle, XCircle, AlertCircle, Info, X } from 'lucide-react'
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
@@ -20,6 +20,11 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
   const dismissTimerRef = useRef<NodeJS.Timeout | null>(null)
   const startTimeRef = useRef<number>(Date.now())
   const remainingTimeRef = useRef<number>(duration)
+
+  const handleClose = useCallback(() => {
+    setIsExiting(true)
+    setTimeout(onClose, 300)
+  }, [onClose])
 
   useEffect(() => {
     // Trigger enter animation
@@ -62,7 +67,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
       if (progressRef.current) clearTimeout(progressRef.current)
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
     }
-  }, [isVisible, isPaused, duration])
+  }, [isVisible, isPaused, duration, handleClose])
 
   const handleMouseEnter = () => {
     setIsPaused(true)
@@ -75,11 +80,6 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
 
   const handleMouseLeave = () => {
     setIsPaused(false)
-  }
-
-  const handleClose = () => {
-    setIsExiting(true)
-    setTimeout(onClose, 300)
   }
 
   const getIcon = () => {
