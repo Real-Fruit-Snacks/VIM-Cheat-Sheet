@@ -269,7 +269,7 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       subKeys: [
         { key: 'f', description: 'Find file', command: ':e ' },
         { key: 'g', description: 'Search in files', command: '/' },
-        { key: 'r', description: 'Recent files', command: ':oldfiles' },
+        { key: 'r', description: 'Recent files (limited)', command: ':echo "Recent files not available in browser"' },
         { key: 'b', description: 'Find in buffer', command: '/' },
         { key: 'l', description: 'Find line', command: ':' },
       ]
@@ -323,8 +323,8 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       group: 'Code',
       mode: ['normal', 'visual'],
       subKeys: [
-        { key: 'c', description: 'Comment line', command: 'gcc' },
-        { key: 'b', description: 'Comment block', command: 'gcb' },
+        { key: 'c', description: 'Comment line (plugin required)', command: ':echo "Commenting requires vim-commentary plugin"' },
+        { key: 'b', description: 'Comment block (plugin required)', command: ':echo "Commenting requires vim-commentary plugin"' },
         { key: 'f', description: 'Format code', command: '=' },
         { key: 'i', description: 'Indent', command: '>>' },
         { key: 'u', description: 'Unindent', command: '<<' },
@@ -336,12 +336,12 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       group: 'Git',
       mode: ['normal'],
       subKeys: [
-        { key: 's', description: 'Git status', command: ':!git status' },
-        { key: 'a', description: 'Git add', command: ':!git add %' },
-        { key: 'c', description: 'Git commit', command: ':!git commit' },
-        { key: 'd', description: 'Git diff', command: ':!git diff' },
-        { key: 'l', description: 'Git log', command: ':!git log --oneline' },
-        { key: 'p', description: 'Git push', command: ':!git push' },
+        { key: 's', description: 'Git status (external)', command: ':echo "Git commands require external terminal"' },
+        { key: 'a', description: 'Git add (external)', command: ':echo "Git commands require external terminal"' },
+        { key: 'c', description: 'Git commit (external)', command: ':echo "Git commands require external terminal"' },
+        { key: 'd', description: 'Git diff (external)', command: ':echo "Git commands require external terminal"' },
+        { key: 'l', description: 'Git log (external)', command: ':echo "Git commands require external terminal"' },
+        { key: 'p', description: 'Git push (external)', command: ':echo "Git commands require external terminal"' },
       ]
     },
     {
@@ -367,7 +367,7 @@ export const keyBindings: Record<string, KeyBinding[]> = {
         { key: 'v', description: 'VIM version', command: ':version' },
         { key: 'm', description: 'Show marks', command: ':marks' },
         { key: 'r', description: 'Show registers', command: ':reg' },
-        { key: '?', description: 'Which-key help', command: '?' },
+        { key: '?', description: 'Which-key help', command: ':echo "Which-key active - press space for commands"' },
       ]
     },
   ],
@@ -406,19 +406,19 @@ export const keyBindings: Record<string, KeyBinding[]> = {
     },
     {
       key: 'c',
-      description: 'Comment line',
-      command: 'gcc',
+      description: 'Comment line (plugin required)',
+      command: ':echo "Commenting requires vim-commentary plugin"',
       mode: ['normal']
     },
     {
       key: 'j',
-      description: 'Join lines without space',
-      command: 'gJ',
+      description: 'Join lines with space',
+      command: 'gj',
       mode: ['normal']
     },
     {
       key: 'J',
-      description: 'Join lines with space',
+      description: 'Join lines without space',
       command: 'gJ',
       mode: ['normal']
     },
@@ -516,18 +516,6 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       key: ',',
       description: 'Go to next change location',
       command: 'g,',
-      mode: ['normal']
-    },
-    {
-      key: 'f',
-      description: 'Go to file under cursor',
-      command: 'gf',
-      mode: ['normal']
-    },
-    {
-      key: 'd',
-      description: 'Go to definition',
-      command: 'gd',
       mode: ['normal']
     },
     {
@@ -751,12 +739,6 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       mode: ['normal']
     },
     {
-      key: 'f',
-      description: 'Create fold for motion',
-      command: 'zf',
-      mode: ['normal']
-    },
-    {
       key: 'd',
       description: 'Delete fold',
       command: 'zd',
@@ -772,30 +754,6 @@ export const keyBindings: Record<string, KeyBinding[]> = {
       key: 'E',
       description: 'Eliminate all folds in window',
       command: 'zE',
-      mode: ['normal']
-    },
-    {
-      key: 'h',
-      description: 'Scroll right',
-      command: 'zh',
-      mode: ['normal']
-    },
-    {
-      key: 'l',
-      description: 'Scroll left',
-      command: 'zl',
-      mode: ['normal']
-    },
-    {
-      key: 'H',
-      description: 'Scroll half screen right',
-      command: 'zH',
-      mode: ['normal']
-    },
-    {
-      key: 'L',
-      description: 'Scroll half screen left',
-      command: 'zL',
       mode: ['normal']
     },
   ],

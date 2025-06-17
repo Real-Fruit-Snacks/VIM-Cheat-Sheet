@@ -22,9 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Testing
 The project uses Puppeteer-based end-to-end tests (no unit testing framework):
 - `npm run dev` - Start dev server first (required for tests)
-- `node test-puppeteer.cjs` - Run comprehensive E2E test suite
-- `node simple-monaco-test.cjs` - Test Monaco-vim space handling
+- `node test-puppeteer.cjs` - Run comprehensive E2E test suite  
 - `node test-monaco-fallback.cjs` - Test Monaco fallback mode
+- `node test-vim-wasm-space.cjs` - Test vim.wasm space key handling
+- `node test-space-debug.cjs` - Debug space key behavior
+- `node test-monaco-minimal.cjs` - Minimal Monaco editor tests
+- `node test-nbsp.cjs` - Test non-breaking space handling
 - Tests generate screenshots in `test-screenshots/` directory
 - All test files are CommonJS (`.cjs`) and use Puppeteer for browser automation
 
@@ -188,7 +191,7 @@ Space serves as the leader key with extensive command mappings:
 - ` g` → Git operations 
 - ` t` → Tab operations
 
-The system is mode-aware and automatically resets when leaving normal mode.
+The system is mode-aware with a 50ms timeout for near-instant response and automatically resets when leaving normal mode.
 
 ### Error Handling & Recovery
 Multiple layers ensure graceful degradation:
@@ -205,6 +208,8 @@ Multiple layers ensure graceful degradation:
 - **Dynamic imports** ensure vim.wasm only loads when needed
 - **localStorage persistence** for user preferences and configuration
 - **Service worker** enables SharedArrayBuffer in supported browsers
+- **Which-Key timeout** optimized to 50ms for instant command hint response
+- **Toast notifications** with proper auto-dismiss timing and pause-on-hover
 
 ## Development Notes
 
