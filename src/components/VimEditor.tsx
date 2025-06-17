@@ -53,7 +53,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
 
   /** Initialize which-key system for command discovery */
   const whichKey = useWhichKey({
-    timeout: 800, // Match Monaco-vim timeout
+    timeout: 400, // Reduced timeout for faster response
     enabled: !disableWhichKey && currentMode === 'normal',
     mode: currentMode,
     onExecuteCommand: (command: string) => {
@@ -410,7 +410,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
                       console.error('Failed to send key to VIM:', e)
                     }
                   }
-                }, 850) // Slightly longer than Which-Key timeout
+                }, 450) // Slightly longer than Which-Key timeout
               }
               return
             }

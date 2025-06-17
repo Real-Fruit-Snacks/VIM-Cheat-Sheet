@@ -56,7 +56,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     
     // Initialize which-key system
     const whichKey = useWhichKey({
-      timeout: 800,  // Increased timeout to match vim.wasm behavior
+      timeout: 400,  // Reduced timeout for faster Which-Key appearance
       enabled: !disableWhichKey && currentMode === 'normal',
       mode: currentMode,
       onExecuteCommand: (command: string) => {
@@ -452,7 +452,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
                   // Which-Key didn't show, send 'c' to editor
                   editorRef.current?.trigger('which-key', 'type', { text: 'c' });
                 }
-              }, 850);
+              }, 450); // Slightly longer than Which-Key timeout
               return;
             }
             
