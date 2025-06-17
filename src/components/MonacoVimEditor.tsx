@@ -368,37 +368,9 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           console.log(`[MonacoVimEditor] Space key pressed - mode: ${mode}, currentMode: ${currentMode}, statusText: "${statusNodeRef.current?.textContent || ''}"`);
         }
         
-        // WORKAROUND: Monaco-vim has a bug where it prevents spaces in insert mode
-        // Manually insert space when in insert mode
-        if (browserEvent.key === ' ' && mode === 'insert') {
-          console.log('[MonacoVimEditor] Space in insert mode detected, manually inserting...');
-          
-          // Use setTimeout to insert space after monaco-vim processes the event
-          setTimeout(() => {
-            // Get current position
-            const position = editor.getPosition();
-            if (position) {
-              // Insert space at current position
-              editor.executeEdits('insert-space', [{
-                range: {
-                  startLineNumber: position.lineNumber,
-                  startColumn: position.column,
-                  endLineNumber: position.lineNumber,
-                  endColumn: position.column
-                },
-                text: ' ',
-                forceMoveMarkers: true
-              }]);
-              
-              // Move cursor forward
-              editor.setPosition({
-                lineNumber: position.lineNumber,
-                column: position.column + 1
-              });
-            }
-          }, 0);
-          
-          // Don't prevent default here - let monaco-vim process it first
+        // IMPORTANT: In insert mode, don't handle space key at all - let monaco-vim handle it
+        if (browserEvent.key === ' ' && mode !== 'normal') {
+          // Don't do anything - let monaco-vim handle spaces in insert mode naturally
           return;
         }
         

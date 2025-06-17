@@ -57,7 +57,38 @@ async function testSpaceDebug() {
     
     // Get content
     const content = await page.evaluate(() => {
+      // Try multiple methods to get content
+      const methods = [];
+      
+      // Method 1: Via models
       const models = window.monaco?.editor?.getModels();
+      if (models && models.length > 0) {
+        methods.push(`Model[0]: "${models[0].getValue()}"`);
+      }
+      
+      // Method 2: Via editor instances
+      if (window.monaco && window.monaco.editor) {
+        const editors = window.monaco.editor.getEditors();
+        if (editors && editors.length > 0) {
+          methods.push(`Editor[0]: "${editors[0].getValue()}"`);
+        }
+      }
+      
+      // Method 3: Check DOM
+      const editorTextarea = document.querySelector('.monaco-editor textarea');
+      if (editorTextarea) {
+        methods.push(`Textarea: "${editorTextarea.value}"`);
+      }
+      
+      // Method 4: Check view lines
+      const viewLines = document.querySelectorAll('.view-line');
+      if (viewLines.length > 0) {
+        const domText = Array.from(viewLines).map(el => el.textContent).join('\\n');
+        methods.push(`DOM: "${domText}"`);
+      }
+      
+      console.log('[Debug] Content methods:', methods.join(' | '));
+      
       return models?.[0]?.getValue() || '';
     });
     
