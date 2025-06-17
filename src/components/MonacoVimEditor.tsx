@@ -489,8 +489,8 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
       };
       
-      // Use a lightweight Monaco key handler that doesn't block normal vim operations
-      const lightweightKeyHandler = (e: monaco.IKeyboardEvent) => {
+      // Track mode changes without interfering with Monaco-vim
+      editor.onKeyDown((e: monaco.IKeyboardEvent) => {
         const browserEvent = e.browserEvent;
         
         // Forward to keystroke visualizer
@@ -512,26 +512,31 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           }
         }
         
-        // ONLY handle space for which-key in normal mode - let everything else pass through
-        if (browserEvent.key === ' ') {
-          const mode = checkMode();
-          const shouldHandleAsLeader = 
-            mode === 'normal' && 
-            currentMode === 'normal' && 
-            !disableWhichKey;
-            
-          if (shouldHandleAsLeader) {
-            const handled = whichKey.handleKeyPress(' ');
-            if (handled) {
-              e.preventDefault();
-              e.stopPropagation();
-              return; // Important: return here to prevent normal space processing
-            }
-          }
-          // If not handling as leader, let Monaco-vim handle it normally
+        // Detect mode-changing keys for better tracking
+        const modeChangeKeys = ['i', 'a', 'I', 'A', 'o', 'O', 's', 'S', 'c', 'C', 'v', 'V'];
+        if (modeChangeKeys.includes(browserEvent.key) && !browserEvent.ctrlKey && !browserEvent.altKey) {
+          recentModeChangeKey = true;
+          if (modeChangeTimeout) clearTimeout(modeChangeTimeout);
+          modeChangeTimeout = setTimeout(() => {
+            recentModeChangeKey = false;
+          }, 150);
         }
         
-        // Handle other which-key sequences (non-space keys)
+        // Check current mode
+        const mode = checkMode();
+        
+        // CRITICAL: Only intercept space for which-key in normal mode
+        // In insert mode, do NOT preventDefault - let Monaco-vim handle it
+        if (browserEvent.key === ' ' && mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey) {
+          const handled = whichKey.handleKeyPress(' ');
+          if (handled) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+        }
+        
+        // Handle other which-key sequences
         if (whichKey.keySequence && browserEvent.key !== ' ') {
           const handled = whichKey.handleKeyPress(browserEvent.key);
           if (handled) {
@@ -540,10 +545,9 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           }
         }
         
-        // For all other keys, let Monaco-vim handle them normally (don't preventDefault)
-      };
-      
-      editor.onKeyDown(lightweightKeyHandler);
+        // IMPORTANT: Do NOT preventDefault for any other keys
+        // Let Monaco-vim handle all normal typing
+      });
       
       editor.onDidChangeCursorPosition(() => {
         checkMode();
