@@ -5,6 +5,7 @@ interface UseWhichKeyOptions {
   timeout?: number
   enabled?: boolean
   mode?: string
+  onExecuteCommand?: (command: string) => void
 }
 
 interface UseWhichKeyReturn {
@@ -21,7 +22,8 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
   const {
     timeout = 800, // ms to wait before showing which-key
     enabled = true,
-    mode = 'normal'
+    mode = 'normal',
+    onExecuteCommand
   } = options
 
   const [isVisible, setIsVisible] = useState(false)
@@ -92,12 +94,12 @@ export function useWhichKey(options: UseWhichKeyOptions = {}): UseWhichKeyReturn
     } else {
       // Execute complete command
       const keys = availableKeys.find(k => k.key === key)
-      if (keys && keys.command) {
-        // TODO: Execute command via vim.wasm
+      if (keys && keys.command && onExecuteCommand) {
+        onExecuteCommand(keys.command)
       }
       reset()
     }
-  }, [keySequence, availableKeys, mode, reset, updateAvailableKeys])
+  }, [keySequence, availableKeys, mode, reset, updateAvailableKeys, onExecuteCommand])
 
   /** Handle key press from main application */
   const handleKeyPress = useCallback((key: string): boolean => {

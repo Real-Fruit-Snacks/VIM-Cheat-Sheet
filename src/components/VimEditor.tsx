@@ -53,9 +53,22 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
 
   /** Initialize which-key system for command discovery */
   const whichKey = useWhichKey({
-    timeout: 200,
+    timeout: 800, // Match Monaco-vim timeout
     enabled: !disableWhichKey && currentMode === 'normal',
-    mode: currentMode
+    mode: currentMode,
+    onExecuteCommand: (command: string) => {
+      // Execute the command in VIM
+      if (vimRef.current && vimRef.current.isRunning && vimRef.current.isRunning()) {
+        try {
+          // Send the command sequence to VIM
+          for (const char of command) {
+            vimRef.current.input(char)
+          }
+        } catch (e) {
+          console.error('Failed to execute VIM command:', command, e)
+        }
+      }
+    }
   })
   
   /** Expose VIM instance control methods to parent component */
@@ -379,7 +392,26 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           if (prefixKeys.includes(event.key)) {
             const handled = whichKey.handleKeyPress(event.key)
             if (handled) {
-              // Let VIM handle naturally, which-key observes
+              // For operators that show Which-Key, prevent default to give time for popup
+              // The key will be sent to VIM when Which-Key closes or a command is selected
+              if (['g', 'z', 'c', 'd', 'y', '>', '<', '='].includes(event.key)) {
+                event.preventDefault()
+                event.stopPropagation()
+                
+                // Set up a handler to send the key to VIM after Which-Key timeout
+                setTimeout(() => {
+                  if (whichKey.isVisible && vimRef.current) {
+                    // Which-Key is showing, user will interact with it
+                  } else if (!whichKey.isVisible && vimRef.current && whichKey.keySequence === '') {
+                    // Which-Key didn't show or was cancelled, send key to VIM
+                    try {
+                      vimRef.current.input(event.key)
+                    } catch (e) {
+                      console.error('Failed to send key to VIM:', e)
+                    }
+                  }
+                }, 850) // Slightly longer than Which-Key timeout
+              }
               return
             }
             return

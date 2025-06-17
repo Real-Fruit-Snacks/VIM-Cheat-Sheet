@@ -58,7 +58,22 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     const whichKey = useWhichKey({
       timeout: 800,  // Increased timeout to match vim.wasm behavior
       enabled: !disableWhichKey && currentMode === 'normal',
-      mode: currentMode
+      mode: currentMode,
+      onExecuteCommand: (command: string) => {
+        // Execute the command in Monaco-vim
+        if (vimModeRef.current && editorRef.current) {
+          try {
+            // Monaco-vim doesn't have a direct command execution API
+            // So we simulate keypresses by dispatching keyboard events
+            const editor = editorRef.current;
+            for (const char of command) {
+              editor.trigger('which-key', 'type', { text: char });
+            }
+          } catch (e) {
+            console.error('[MonacoVim] Failed to execute command:', command, e);
+          }
+        }
+      }
     });
     
     useImperativeHandle(ref, () => ({
@@ -364,7 +379,8 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
         
         // Detect mode-changing keys for better tracking
-        const modeChangeKeys = ['i', 'a', 'I', 'A', 'o', 'O', 's', 'S', 'c', 'C', 'v', 'V'];
+        // Note: 'c' is handled specially as it's also an operator that needs Which-Key
+        const modeChangeKeys = ['i', 'a', 'I', 'A', 'o', 'O', 's', 'S', 'C', 'v', 'V'];
         if (modeChangeKeys.includes(browserEvent.key) && !browserEvent.ctrlKey && !browserEvent.altKey) {
           recentModeChangeKey = true;
           if (modeChangeTimeout) clearTimeout(modeChangeTimeout);
@@ -401,6 +417,13 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           // Handle VIM prefix keys that start sequences
           const prefixKeys = ['g', 'z', '[', ']', 'c', 'd', 'y', 'v', '"', "'", 'm', 'r', 't', 'T', 'f', 'F', '@', 'q', '`', '>', '<', '=', ':'];
           if (prefixKeys.includes(browserEvent.key) && !browserEvent.ctrlKey && !browserEvent.altKey && !browserEvent.metaKey) {
+            // Special case: 'c' is handled in the operator tracking section
+            if (browserEvent.key === 'c') {
+              whichKey.handleKeyPress(browserEvent.key);
+              // 'c' is already prevented in operator tracking
+              return;
+            }
+            
             const handled = whichKey.handleKeyPress(browserEvent.key);
             if (handled) {
               // Don't prevent default - let monaco-vim handle the key
@@ -413,11 +436,37 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         // Track operators that expect a motion
         if (mode === 'normal' && !browserEvent.ctrlKey && !browserEvent.altKey) {
           if (operators.includes(browserEvent.key)) {
+            // Special handling for 'c' operator - prevent immediate mode change
+            if (browserEvent.key === 'c') {
+              // For 'c' operator, we need to wait for Which-Key or motion
+              operatorPendingRef.current = true;
+              lastOperatorRef.current = browserEvent.key;
+              
+              // Prevent Monaco-vim from immediately switching to insert mode
+              e.preventDefault();
+              e.stopPropagation();
+              
+              // Let Which-Key handle it, then send the key if needed
+              setTimeout(() => {
+                if (!whichKey.isVisible && operatorPendingRef.current && lastOperatorRef.current === 'c') {
+                  // Which-Key didn't show, send 'c' to editor
+                  editorRef.current?.trigger('which-key', 'type', { text: 'c' });
+                }
+              }, 850);
+              return;
+            }
+            
             // Check for double operator (dd, yy, cc)
             if (lastOperatorRef.current === browserEvent.key) {
               // Double operator executes immediately
               operatorPendingRef.current = false;
               lastOperatorRef.current = null;
+              
+              // For 'cc', send both keys to change entire line
+              if (browserEvent.key === 'c') {
+                // Send both 'c' keys
+                editorRef.current?.trigger('which-key', 'type', { text: 'cc' });
+              }
             } else {
               operatorPendingRef.current = true;
               lastOperatorRef.current = browserEvent.key;
