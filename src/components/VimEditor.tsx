@@ -62,7 +62,7 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
         try {
           // Send the command sequence to VIM
           for (const char of command) {
-            vimRef.current.input(char)
+            vimRef.current.sendKeydown(char, char.charCodeAt(0), {})
           }
         } catch (e) {
           console.error('Failed to execute VIM command:', command, e)
@@ -405,7 +405,12 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
                   } else if (!whichKey.isVisible && vimRef.current && whichKey.keySequence === '') {
                     // Which-Key didn't show or was cancelled, send key to VIM
                     try {
-                      vimRef.current.input(event.key)
+                      vimRef.current.sendKeydown(event.key, event.key.charCodeAt(0), {
+                        ctrl: event.ctrlKey,
+                        shift: event.shiftKey,
+                        alt: event.altKey,
+                        meta: event.metaKey
+                      })
                     } catch (e) {
                       console.error('Failed to send key to VIM:', e)
                     }
@@ -649,14 +654,14 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
                 setTimeout(() => {
                   try {
                     // Ctrl+L refresh
-                    vim.input('<C-l>')
+                    vim.sendKeydown('l', 'l'.charCodeAt(0), { ctrl: true })
                   } catch {
                     // Ignore
                   }
                   
                   setTimeout(() => {
                     try {
-                      vim.input('<Esc>')
+                      vim.sendKeydown('Escape', 27, {})
                       setTimeout(() => {
                         vim.cmdline('redraw!')
                       }, 50)
