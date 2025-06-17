@@ -34,7 +34,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
   }, [index])
 
   useEffect(() => {
-    if (!isVisible || isPaused) return
+    if (!isVisible) return
 
     const startAnimation = () => {
       startTimeRef.current = Date.now()
@@ -46,19 +46,19 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
         const remaining = Math.max(0, 100 - (elapsed / remainingTimeRef.current) * 100)
         setProgress(remaining)
         
-        if (remaining > 0 && !isPaused) {
+        if (remaining > 0) {
           progressRef.current = setTimeout(updateProgress, 30)
         }
       }
       
-      updateProgress()
-      
-      // Set dismiss timer
-      dismissTimerRef.current = setTimeout(() => {
-        if (!isPaused) {
+      if (!isPaused) {
+        updateProgress()
+        
+        // Set dismiss timer
+        dismissTimerRef.current = setTimeout(() => {
           handleClose()
-        }
-      }, remainingTimeRef.current)
+        }, remainingTimeRef.current)
+      }
     }
 
     startAnimation()
@@ -67,7 +67,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
       if (progressRef.current) clearTimeout(progressRef.current)
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
     }
-  }, [isVisible, isPaused, duration, handleClose])
+  }, [isVisible, isPaused, handleClose])
 
   const handleMouseEnter = () => {
     setIsPaused(true)
