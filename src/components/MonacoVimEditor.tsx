@@ -6,6 +6,25 @@ import type { VimEditorRef } from './VimEditor';
 import WhichKey from './WhichKey';
 import { useWhichKey } from '../hooks/useWhichKey';
 
+// Configure Monaco environment to suppress web worker warnings in private mode
+declare global {
+  interface Window {
+    MonacoEnvironment?: {
+      getWorker?: () => Worker | null;
+    };
+  }
+}
+
+if (typeof window !== 'undefined' && !window.MonacoEnvironment) {
+  window.MonacoEnvironment = {
+    getWorker: () => {
+      // Return null to disable web workers and suppress warnings
+      // Monaco will fall back to synchronous mode automatically
+      return null;
+    }
+  };
+}
+
 interface MonacoVimEditorProps {
   vimrcContent?: string;
   disableWhichKey?: boolean;
@@ -42,7 +61,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     
     // Initialize which-key system
     const whichKey = useWhichKey({
-      timeout: 200,
+      timeout: 800,  // Increased timeout to match vim.wasm behavior
       enabled: !disableWhichKey && currentMode === 'normal',
       mode: currentMode
     });
@@ -463,13 +482,23 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         
         // Cleanup vim mode and null reference
         if (vimModeRef.current) {
-          vimModeRef.current.dispose();
+          try {
+            vimModeRef.current.dispose();
+          } catch (error) {
+            // Ignore disposal errors - these can occur during rapid mount/unmount
+            console.debug('[MonacoVim] Vim mode disposal error (safe to ignore):', error);
+          }
           vimModeRef.current = null;
         }
         
         // Cleanup Monaco editor and null reference
         if (editorRef.current) {
-          editorRef.current.dispose();
+          try {
+            editorRef.current.dispose();
+          } catch (error) {
+            // Ignore disposal errors - these can occur during rapid mount/unmount
+            console.debug('[MonacoVim] Editor disposal error (safe to ignore):', error);
+          }
           editorRef.current = null;
         }
         

@@ -19,6 +19,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build:gitlab` - Build offline GitLab deployment package
 - `./create-gitlab-release.sh` - Create complete offline deployment package
 
+### Testing
+The project uses Puppeteer-based end-to-end tests (no unit testing framework):
+- `npm run dev` - Start dev server first (required for tests)
+- `node test-puppeteer.cjs` - Run comprehensive E2E test suite
+- `node simple-monaco-test.cjs` - Test Monaco-vim space handling
+- `node test-monaco-fallback.cjs` - Test Monaco fallback mode
+- Tests generate screenshots in `test-screenshots/` directory
+- All test files are CommonJS (`.cjs`) and use Puppeteer for browser automation
+
 ## Architecture
 
 ### Core Technologies
