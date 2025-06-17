@@ -302,7 +302,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         }
         
         if (detectedMode !== currentMode) {
-          console.log(`[MonacoVimEditor] Mode change detected: ${currentMode} -> ${detectedMode}`);
           setCurrentMode(detectedMode);
           currentModeRef.current = detectedMode;
           onModeChange?.(detectedMode);
@@ -362,17 +361,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         
         // Check current mode
         const mode = checkMode();
-        
-        // Debug logging for space key
-        if (browserEvent.key === ' ') {
-          console.log(`[MonacoVimEditor] Space key pressed - mode: ${mode}, currentMode: ${currentMode}, statusText: "${statusNodeRef.current?.textContent || ''}"`);
-        }
-        
-        // IMPORTANT: In insert mode, don't handle space key at all - let monaco-vim handle it
-        if (browserEvent.key === ' ' && mode !== 'normal') {
-          // Don't do anything - let monaco-vim handle spaces in insert mode naturally
-          return;
-        }
         
         // Handle space for which-key in normal mode
         if (browserEvent.key === ' ' && mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey && !operatorPendingRef.current) {

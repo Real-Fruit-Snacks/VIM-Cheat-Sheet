@@ -62,15 +62,11 @@ async function verifyMonacoSpaces() {
     await page.keyboard.press('Escape');
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    // Get content
+    // Get content from DOM (more reliable for Monaco-vim)
     const content = await page.evaluate(() => {
-      if (window.monaco && window.monaco.editor) {
-        const instances = window.monaco.editor.getModels();
-        if (instances.length > 0) {
-          return instances[0].getValue();
-        }
-      }
-      return '';
+      const viewLines = document.querySelectorAll('.view-line');
+      const domText = Array.from(viewLines).map(el => el.textContent || '').join('\n');
+      return domText.trim();
     });
     
     console.log(`Content: "${content}"`);
@@ -89,14 +85,11 @@ async function verifyMonacoSpaces() {
     await new Promise(resolve => setTimeout(resolve, 500));
     await page.keyboard.press('Escape');
     
+    // Get final content from DOM
     const finalContent = await page.evaluate(() => {
-      if (window.monaco && window.monaco.editor) {
-        const instances = window.monaco.editor.getModels();
-        if (instances.length > 0) {
-          return instances[0].getValue();
-        }
-      }
-      return '';
+      const viewLines = document.querySelectorAll('.view-line');
+      const domText = Array.from(viewLines).map(el => el.textContent || '').join('\n');
+      return domText.trim();
     });
     
     console.log('\\nFinal content:', JSON.stringify(finalContent));
@@ -104,10 +97,12 @@ async function verifyMonacoSpaces() {
     // Analysis
     console.log('\\n📊 Test Results:');
     
-    const hasMultipleSpaces = content.includes('  ') && content.includes('   ') && content.includes('    ');
-    const hasLeadingSpace = finalContent.includes('\\n leading');
-    const hasTrailingSpace = finalContent.includes('trailing \\n');
-    const hasMidSpace = finalContent.includes('mid dle');
+    // Monaco uses non-breaking spaces (\\u00A0) in the DOM
+    const nbsp = '\\u00A0';
+    const hasMultipleSpaces = content.includes(`a${nbsp}${nbsp}b`) && content.includes(`b${nbsp}${nbsp}${nbsp}c`) && content.includes(`c${nbsp}${nbsp}${nbsp}${nbsp}d`);
+    const hasLeadingSpace = finalContent.includes(`${nbsp}leading`);
+    const hasTrailingSpace = finalContent.includes(`trailing${nbsp}`);
+    const hasMidSpace = finalContent.includes(`mid${nbsp}dle`);
     
     console.log(`✅ Which-key in normal mode: ${whichKeyVisible ? 'PASS' : 'FAIL'}`);
     console.log(`✅ Multiple spaces preserved: ${hasMultipleSpaces ? 'PASS' : 'FAIL'}`);
