@@ -112,6 +112,29 @@ tmp/
 .netlify
 
 # ============================================
+# Testing & Development
+# ============================================
+
+# Test screenshots and outputs
+test-screenshots/
+*.png
+debug-*.png
+test-*.png
+screenshot-*.png
+
+# Test and debug files
+test-*.cjs
+debug-*.cjs
+audit-*.cjs
+comprehensive-*.cjs
+
+# Audit reports and analysis
+AUDIT_*.md
+COMPREHENSIVE_*.md
+*-audit-report.json
+audit-report-*.json
+
+# ============================================
 # Miscellaneous
 # ============================================
 

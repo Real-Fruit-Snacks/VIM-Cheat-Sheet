@@ -171,14 +171,14 @@ VIMora
 ## Documentation
 
 ### For Users
-- [Getting Started Guide](docs/getting-started.md)
-- [Keyboard Shortcuts](docs/shortcuts.md)
-- [Configuration Guide](docs/configuration.md)
+- **Getting Started** - Visit the live application at [vimora.app](https://real-fruit-snacks.github.io/VIM/)
+- **Keyboard Shortcuts** - Press `?` in the application for built-in help
+- **Configuration** - Use the live vimrc editor within the application
 
 ### For Developers
-- [Architecture Documentation](docs/architecture.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [API Reference](docs/api.md)
+- **Architecture** - See [CLAUDE.md](CLAUDE.md) for comprehensive technical documentation
+- **Contributing** - Open issues and pull requests are welcome
+- **Source Code** - All components are well-documented with TypeScript
 
 ## Contributing
 
@@ -189,10 +189,10 @@ We welcome contributions! VIMora is built by the community, for the community.
 - **Report Issues** - Help us improve stability
 - **Suggest Features** - Share your ideas
 - **Submit PRs** - Contribute code improvements
-- **Improve Docs** - Help others get started
+- **Improve Documentation** - Help others get started
 - **Test Browsers** - Ensure universal compatibility
 
-See our [Contributing Guide](CONTRIBUTING.md) for details.
+Review the [CLAUDE.md](CLAUDE.md) file for technical architecture details before contributing.
 
 ## Performance
 
