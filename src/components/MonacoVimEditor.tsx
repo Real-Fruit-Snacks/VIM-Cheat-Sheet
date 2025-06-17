@@ -376,20 +376,37 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         // Check current mode
         const mode = checkMode();
         
-        // Handle space for which-key in normal mode
-        if (browserEvent.key === ' ' && mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey && !operatorPendingRef.current) {
-          // Additional check: ensure we're not after character-expecting operators
-          const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
-          if (lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) {
-            // Let monaco-vim handle the space after these operators
-            return;
+        // Handle which-key triggers in normal mode
+        if (mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey) {
+          // Skip if we're in the middle of an operator sequence
+          if (operatorPendingRef.current) {
+            // Additional check: ensure we're not after character-expecting operators
+            const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
+            if (lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current) && browserEvent.key === ' ') {
+              // Let monaco-vim handle the space after these operators
+              return;
+            }
           }
           
-          const handled = whichKey.handleKeyPress(' ');
-          if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-            return;
+          // Handle space as leader key
+          if (browserEvent.key === ' ' && !operatorPendingRef.current) {
+            const handled = whichKey.handleKeyPress(' ');
+            if (handled) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+          }
+          
+          // Handle VIM prefix keys that start sequences
+          const prefixKeys = ['g', 'z', '[', ']', 'c', 'd', 'y', 'v', '"', "'", 'm', 'r', 't', 'T', 'f', 'F', '@', 'q', '`', '>', '<', '=', ':'];
+          if (prefixKeys.includes(browserEvent.key) && !browserEvent.ctrlKey && !browserEvent.altKey && !browserEvent.metaKey) {
+            const handled = whichKey.handleKeyPress(browserEvent.key);
+            if (handled) {
+              // Don't prevent default - let monaco-vim handle the key
+              // Which-Key will show the popup but vim will still process the key
+              return;
+            }
           }
         }
         
