@@ -1,0 +1,25 @@
+
+VIM APPLICATION FOCUSED AUDIT REPORT
+===================================
+Generated: 2025-06-17T20:32:13.273Z
+
+SUMMARY STATISTICS:
+- Total Errors: 2
+- Total Warnings: 0
+- Console Messages: 20
+- Features Tested: 0
+
+CRITICAL FINDINGS:
+❌ [Normal] Critical: page.waitForTimeout is not a function
+❌ [Private] Critical: page.waitForTimeout is not a function
+
+WARNINGS:
+✅ No warnings found
+
+KEY FEATURE STATUS:
+
+
+BROWSER STORAGE STATUS:
+
+
+See focused-audit-report.json for complete details and console logs.

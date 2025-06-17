@@ -516,10 +516,17 @@ const VimEditor = forwardRef<VimEditorRef, VimEditorProps>(({ vimrcContent, disa
           }
         }
 
-        await vim.start({
+        // Add timeout to vim.start() to prevent infinite hanging
+        const startPromise = vim.start({
           clipboard: true, // Enable clipboard integration
           cmdArgs: [], // Start with empty session
         })
+        
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('vim.start() timeout after 10 seconds')), 10000)
+        )
+        
+        await Promise.race([startPromise, timeoutPromise])
 
         vimRef.current = vim
         

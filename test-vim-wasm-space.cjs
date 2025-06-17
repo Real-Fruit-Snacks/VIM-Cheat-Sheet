@@ -12,7 +12,7 @@ async function testVimWasmSpace() {
   
   try {
     // Load the application (will use vim.wasm by default)
-    await page.goto('http://localhost:5174/VIM/', { 
+    await page.goto('http://localhost:5173/VIM/', { 
       waitUntil: 'networkidle0',
       timeout: 30000 
     });

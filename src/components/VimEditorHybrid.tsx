@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, createElement, useRef } from 'react';
+import { useEffect, useState, forwardRef, useRef } from 'react';
 import { getBrowserCapabilities, getBrowserInstructions } from '../utils/browser-capabilities';
 import { useBrowserCapabilities } from '../contexts/BrowserCapabilities';
 import { getEditorLoader, type EditorComponent } from '../utils/dynamic-editor-loader';
@@ -83,10 +83,8 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
         try {
           const loader = getEditorLoader(useVimWasm);
           const component = await loader();
-          if (isMountedRef.current) {
-            setEditorComponent(component);
-            setIsLoadingEditor(false);
-          }
+          setEditorComponent(component);
+          setIsLoadingEditor(false);
         } catch (error) {
           console.error('[VimEditorHybrid] Failed to load editor component:', error);
           if (isMountedRef.current) {
@@ -112,7 +110,6 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
       editorType === 'vim-wasm' ?
         'Loading VIM...' :
         'Loading Monaco Editor...';
-        
     return (
       <div className="h-full bg-gray-950 overflow-hidden">
         <div className="h-full relative overflow-hidden">
@@ -129,7 +126,8 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
 
   if (editorType === 'vim-wasm') {
     // Use the full vim.wasm implementation
-    return createElement(EditorComponent, { ref, ...props });
+    const VimEditorComponent = EditorComponent;
+    return <VimEditorComponent ref={ref} {...props} />;
   }
 
   // Use Monaco-vim fallback
@@ -171,11 +169,14 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
             </div>
           </div>
         )}
-        {createElement(EditorComponent, { 
-          ref, 
-          ...props, 
-          onModeChange: handleModeChange 
-        })}
+        {(() => {
+          const MonacoEditorComponent = EditorComponent;
+          return <MonacoEditorComponent 
+            ref={ref} 
+            {...props} 
+            onModeChange={handleModeChange} 
+          />;
+        })()}
       </div>
     </div>
   );

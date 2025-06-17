@@ -108,6 +108,7 @@ The project uses Puppeteer-based end-to-end tests (no unit testing framework):
 
 #### Key Implementation Details
 - **Dynamic Loading**: vim.wasm loaded dynamically via `src/utils/vim-loader.ts`
+- **Dynamic Editor Loading**: `src/utils/dynamic-editor-loader.ts` prevents Monaco from loading when vim.wasm is available
 - **Browser Detection**: Capabilities checked in `src/utils/browser-capabilities.ts`
 - **Imperative APIs**: Both editors expose ref-based APIs for programmatic control
 - **Mode Detection**: Monaco implementation monitors status bar for VIM mode changes
@@ -143,6 +144,7 @@ The application implements a sophisticated browser capability detection system t
 
 3. **Component Integration** (`src/components/VimEditorHybrid.tsx`):
    - Uses pre-detected capabilities from context instead of runtime detection
+   - Dynamically imports editor components to prevent unnecessary Monaco loading
    - Eliminates loading states when using early detection
    - Provides consistent user experience across browser types
 
@@ -245,6 +247,7 @@ Components implement comprehensive cleanup in useEffect return functions:
 - `/src/utils/early-browser-detection.ts` - Pre-React capability detection
 - `/src/utils/browser-capabilities.ts` - Runtime browser checks
 - `/src/utils/vim-loader.ts` - Dynamic vim.wasm loading
+- `/src/utils/dynamic-editor-loader.ts` - Prevents Monaco loading when vim.wasm available
 - `/src/utils/vimrc-manager.ts` - Configuration management
 
 ### Feature Components
