@@ -20,7 +20,7 @@ async function verifyMonacoSpaces() {
   });
   
   try {
-    await page.goto('http://localhost:5174/VIM/', { 
+    await page.goto('http://localhost:5175/VIM/', { 
       waitUntil: 'networkidle0',
       timeout: 30000 
     });

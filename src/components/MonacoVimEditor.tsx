@@ -25,7 +25,7 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     const statusNodeRef = useRef<HTMLDivElement>(null);
     const [isReady, setIsReady] = useState(false);
     const [currentMode, setCurrentMode] = useState('normal');
-    const keyEventHandledRef = useRef(false);
+    const currentModeRef = useRef('normal');
     const lastOperatorRef = useRef<string | null>(null);
     const operatorPendingRef = useRef(false);
     
@@ -34,6 +34,11 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
     useEffect(() => {
       onKeyPressRef.current = onKeyPress;
     }, [onKeyPress]);
+    
+    // Update mode ref when state changes
+    useEffect(() => {
+      currentModeRef.current = currentMode;
+    }, [currentMode]);
     
     // Initialize which-key system
     const whichKey = useWhichKey({
@@ -275,32 +280,31 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       containerRef.current.appendChild(statusNode);
       statusNodeRef.current = statusNode;
       
-      // Initialize VIM mode
-      const vimMode = initVimMode(editor, statusNode);
-      vimModeRef.current = vimMode;
-      
       // Track mode changes
       const checkMode = () => {
         const statusText = statusNode.textContent || '';
         let detectedMode = 'normal';
         
-        // Detect mode from status bar text
-        if (statusText.includes('-- INSERT --') || statusText.includes('-- (insert) --')) {
+        // Detect mode from status bar text (case-insensitive and flexible)
+        const statusLower = statusText.toLowerCase();
+        if (statusLower.includes('insert')) {
           detectedMode = 'insert';
-        } else if (statusText.includes('-- VISUAL --') || statusText.includes('-- (visual) --')) {
+        } else if (statusLower.includes('visual line')) {
           detectedMode = 'visual';
-        } else if (statusText.includes('-- VISUAL LINE --')) {
-          detectedMode = 'visual';
-        } else if (statusText.includes('-- VISUAL BLOCK --')) {
+        } else if (statusLower.includes('visual block')) {
           detectedMode = 'visual-block';
-        } else if (statusText.includes('-- REPLACE --')) {
+        } else if (statusLower.includes('visual')) {
+          detectedMode = 'visual';
+        } else if (statusLower.includes('replace')) {
           detectedMode = 'replace';
         } else if (statusText.startsWith(':')) {
           detectedMode = 'command';
         }
         
         if (detectedMode !== currentMode) {
+          console.log(`[MonacoVimEditor] Mode change detected: ${currentMode} -> ${detectedMode}`);
           setCurrentMode(detectedMode);
+          currentModeRef.current = detectedMode;
           onModeChange?.(detectedMode);
           // Reset which-key immediately when leaving normal mode
           if (detectedMode !== 'normal') {
@@ -315,181 +319,15 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       let recentModeChangeKey = false;
       let modeChangeTimeout: NodeJS.Timeout | null = null;
       
-      // Set up event listeners for keypress tracking and which-key
-      const handleKeyDown = (e: monaco.IKeyboardEvent) => {
-        const browserEvent = e.browserEvent;
-        
-        // Forward to keystroke visualizer
-        if (onKeyPressRef.current && browserEvent.key) {
-          try {
-            const event = new KeyboardEvent('keydown', {
-              key: browserEvent.key,
-              code: browserEvent.code || '',
-              shiftKey: browserEvent.shiftKey || false,
-              ctrlKey: browserEvent.ctrlKey || false,
-              altKey: browserEvent.altKey || false,
-              metaKey: browserEvent.metaKey || false,
-              bubbles: true,
-              cancelable: true
-            });
-            onKeyPressRef.current(event);
-          } catch (error) {
-            console.error('[MonacoVimEditor] Failed to forward keystroke:', error);
-          }
-        }
-        
-        // Detect mode-changing keys
-        const modeChangeKeys = ['i', 'a', 'I', 'A', 'o', 'O', 's', 'S', 'c', 'C', 'v', 'V'];
-        if (modeChangeKeys.includes(browserEvent.key) && !browserEvent.ctrlKey && !browserEvent.altKey) {
-          recentModeChangeKey = true;
-          operatorPendingRef.current = false; // Clear operator pending on mode change
-          if (modeChangeTimeout) clearTimeout(modeChangeTimeout);
-          modeChangeTimeout = setTimeout(() => {
-            recentModeChangeKey = false;
-          }, 150); // Increased timeout for better reliability
-        }
-        
-        // Check current mode
-        const mode = checkMode();
-        
-        
-        // Track operators that expect a motion
-        const operators = ['d', 'c', 'y', 'g', 'z', '>', '<', '='];
-        const motionExpectingOperators = ['f', 'F', 't', 'T', 'r'];
-        
-        // Handle operator-pending mode
-        if (mode === 'normal' && !browserEvent.ctrlKey && !browserEvent.altKey) {
-          if (operators.includes(browserEvent.key)) {
-            // Check for double operator (dd, yy, cc)
-            if (lastOperatorRef.current === browserEvent.key) {
-              // Double operator executes immediately
-              operatorPendingRef.current = false;
-              lastOperatorRef.current = null;
-            } else {
-              operatorPendingRef.current = true;
-              lastOperatorRef.current = browserEvent.key;
-            }
-          } else if (motionExpectingOperators.includes(browserEvent.key)) {
-            operatorPendingRef.current = true;
-            lastOperatorRef.current = browserEvent.key;
-          } else if (operatorPendingRef.current && browserEvent.key !== 'Escape') {
-            // Clear operator pending after motion/operation
-            setTimeout(() => {
-              operatorPendingRef.current = false;
-              lastOperatorRef.current = null;
-            }, 50);
-          }
-        }
-        
-        // Clear operator pending on Escape
-        if (browserEvent.key === 'Escape') {
-          operatorPendingRef.current = false;
-          lastOperatorRef.current = null;
-        }
-        
-        // Only process which-key in normal mode and not in special states
-        if (mode !== 'normal' || disableWhichKey || recentModeChangeKey || operatorPendingRef.current) {
-          keyEventHandledRef.current = false;
-          return;
-        }
-        
-        // Handle which-key sequences
-        let handled = false;
-        
-        // Handle Ctrl-w window management prefix
-        if (browserEvent.ctrlKey && browserEvent.key === 'w') {
-          handled = whichKey.handleKeyPress('Ctrl-w');
-          if (handled) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          keyEventHandledRef.current = handled;
-          return;
-        }
-        
-        // Skip other modifier combinations
-        if (browserEvent.ctrlKey || browserEvent.altKey || browserEvent.metaKey) {
-          keyEventHandledRef.current = false;
-          return;
-        }
-        
-        // Space as leader key - only process in specific conditions
-        if (browserEvent.key === ' ') {
-          // Very conservative check: only process space as leader if:
-          // 1. Mode is definitely normal
-          // 2. No recent mode changes
-          // 3. No operators pending
-          // 4. Not after character-expecting operators
-          // 5. Which-key is enabled and ready
-          
-          const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
-          
-          // Check if we're definitely in normal mode and should handle space
-          const shouldHandleAsLeader = 
-            mode === 'normal' && 
-            currentMode === 'normal' && 
-            !recentModeChangeKey && 
-            !operatorPendingRef.current &&
-            !(lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) &&
-            !disableWhichKey;
-            
-          
-          if (shouldHandleAsLeader) {
-            handled = whichKey.handleKeyPress(' ');
-            if (handled) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-            keyEventHandledRef.current = handled;
-            return; // Only return when we handle the space as leader
-          } else {
-            // Let monaco-vim handle it normally - don't return, let normal flow continue
-            keyEventHandledRef.current = false;
-          }
-        }
-        
-        // Tab key in sequences
-        if (browserEvent.key === 'Tab') {
-          handled = whichKey.handleKeyPress('Tab');
-          if (handled && whichKey.keySequence) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          keyEventHandledRef.current = handled;
-          return;
-        }
-        
-        // VIM prefix keys (but be careful with operators)
-        const prefixKeys = ['g', 'z', '[', ']', '"', "'", 'm', '@', 'q', '`'];
-        // These can be both operators and prefix keys, so check context
-        const contextualPrefixKeys = ['c', 'd', 'y', 'v', 'r', 't', 'T', 'f', 'F', '>', '<', '='];
-        
-        if (prefixKeys.includes(browserEvent.key) || 
-            (contextualPrefixKeys.includes(browserEvent.key) && !operatorPendingRef.current)) {
-          handled = whichKey.handleKeyPress(browserEvent.key);
-          keyEventHandledRef.current = handled;
-          return;
-        }
-        
-        // Numeric prefixes
-        if (/^[0-9]$/.test(browserEvent.key)) {
-          handled = whichKey.handleKeyPress(browserEvent.key);
-          if (handled && whichKey.keySequence) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          keyEventHandledRef.current = handled;
-          return;
-        }
-        
-        // Other keys when in a sequence
-        if (whichKey.keySequence) {
-          handled = whichKey.handleKeyPress(browserEvent.key);
-          keyEventHandledRef.current = handled;
-        }
-      };
+      // Track operators that expect a motion or character
+      const operators = ['d', 'c', 'y', 'g', 'z', '>', '<', '='];
+      const motionExpectingOperators = ['f', 'F', 't', 'T', 'r'];
       
-      // Track mode changes without interfering with Monaco-vim
+      // Initialize VIM mode AFTER setting up our key handler
+      const vimMode = initVimMode(editor, statusNode);
+      vimModeRef.current = vimMode;
+      
+      // Track mode changes and forward keystrokes
       editor.onKeyDown((e: monaco.IKeyboardEvent) => {
         const browserEvent = e.browserEvent;
         
@@ -525,9 +363,54 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
         // Check current mode
         const mode = checkMode();
         
-        // CRITICAL: Only intercept space for which-key in normal mode
-        // In insert mode, do NOT preventDefault - let Monaco-vim handle it
-        if (browserEvent.key === ' ' && mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey) {
+        // Debug logging for space key
+        if (browserEvent.key === ' ') {
+          console.log(`[MonacoVimEditor] Space key pressed - mode: ${mode}, currentMode: ${currentMode}, statusText: "${statusNodeRef.current?.textContent || ''}"`);
+        }
+        
+        // WORKAROUND: Monaco-vim has a bug where it prevents spaces in insert mode
+        // Manually insert space when in insert mode
+        if (browserEvent.key === ' ' && mode === 'insert') {
+          console.log('[MonacoVimEditor] Space in insert mode detected, manually inserting...');
+          
+          // Use setTimeout to insert space after monaco-vim processes the event
+          setTimeout(() => {
+            // Get current position
+            const position = editor.getPosition();
+            if (position) {
+              // Insert space at current position
+              editor.executeEdits('insert-space', [{
+                range: {
+                  startLineNumber: position.lineNumber,
+                  startColumn: position.column,
+                  endLineNumber: position.lineNumber,
+                  endColumn: position.column
+                },
+                text: ' ',
+                forceMoveMarkers: true
+              }]);
+              
+              // Move cursor forward
+              editor.setPosition({
+                lineNumber: position.lineNumber,
+                column: position.column + 1
+              });
+            }
+          }, 0);
+          
+          // Don't prevent default here - let monaco-vim process it first
+          return;
+        }
+        
+        // Handle space for which-key in normal mode
+        if (browserEvent.key === ' ' && mode === 'normal' && currentMode === 'normal' && !disableWhichKey && !recentModeChangeKey && !operatorPendingRef.current) {
+          // Additional check: ensure we're not after character-expecting operators
+          const charExpectingOperators = ['f', 'F', 't', 'T', 'r'];
+          if (lastOperatorRef.current && charExpectingOperators.includes(lastOperatorRef.current)) {
+            // Let monaco-vim handle the space after these operators
+            return;
+          }
+          
           const handled = whichKey.handleKeyPress(' ');
           if (handled) {
             e.preventDefault();
@@ -536,8 +419,38 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
           }
         }
         
-        // Handle other which-key sequences
-        if (whichKey.keySequence && browserEvent.key !== ' ') {
+        // Track operators that expect a motion
+        if (mode === 'normal' && !browserEvent.ctrlKey && !browserEvent.altKey) {
+          if (operators.includes(browserEvent.key)) {
+            // Check for double operator (dd, yy, cc)
+            if (lastOperatorRef.current === browserEvent.key) {
+              // Double operator executes immediately
+              operatorPendingRef.current = false;
+              lastOperatorRef.current = null;
+            } else {
+              operatorPendingRef.current = true;
+              lastOperatorRef.current = browserEvent.key;
+            }
+          } else if (motionExpectingOperators.includes(browserEvent.key)) {
+            operatorPendingRef.current = true;
+            lastOperatorRef.current = browserEvent.key;
+          } else if (operatorPendingRef.current && browserEvent.key !== 'Escape') {
+            // Clear operator pending after motion/operation
+            setTimeout(() => {
+              operatorPendingRef.current = false;
+              lastOperatorRef.current = null;
+            }, 50);
+          }
+        }
+        
+        // Clear operator pending on Escape
+        if (browserEvent.key === 'Escape') {
+          operatorPendingRef.current = false;
+          lastOperatorRef.current = null;
+        }
+        
+        // Handle other which-key sequences ONLY in normal mode
+        if (mode === 'normal' && whichKey.keySequence && browserEvent.key !== ' ') {
           const handled = whichKey.handleKeyPress(browserEvent.key);
           if (handled) {
             e.preventDefault();
@@ -583,8 +496,6 @@ const MonacoVimEditor = forwardRef<VimEditorRef, MonacoVimEditorProps>(
       }
       
       return () => {
-        // Monaco key handler cleanup is automatic with editor disposal
-        
         // Cleanup MutationObserver
         if (observer) {
           observer.disconnect();

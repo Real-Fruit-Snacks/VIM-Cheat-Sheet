@@ -1,52 +1,15 @@
 const puppeteer = require('puppeteer');
 
 async function debugMonacoSpace() {
-  console.log('🔍 Debugging Monaco-vim space handling...');
+  console.log('🔍 Debugging Monaco-vim space issue...');
   
   const browser = await puppeteer.launch({
     headless: false,
+    devtools: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
   
   const page = await browser.newPage();
-  
-  // Listen to all key events
-  await page.evaluateOnNewDocument(() => {
-    window.keyEventLog = [];
-    
-    // Capture at multiple levels
-    document.addEventListener('keydown', (e) => {
-      window.keyEventLog.push({
-        type: 'keydown',
-        key: e.key,
-        code: e.code,
-        prevented: e.defaultPrevented,
-        target: e.target.tagName,
-        phase: 'capture'
-      });
-    }, true);
-    
-    document.addEventListener('keypress', (e) => {
-      window.keyEventLog.push({
-        type: 'keypress',
-        key: e.key,
-        code: e.code,
-        prevented: e.defaultPrevented,
-        target: e.target.tagName,
-        phase: 'capture'
-      });
-    }, true);
-    
-    document.addEventListener('beforeinput', (e) => {
-      window.keyEventLog.push({
-        type: 'beforeinput',
-        data: e.data,
-        inputType: e.inputType,
-        prevented: e.defaultPrevented,
-        target: e.target.tagName
-      });
-    }, true);
-  });
   
   // Force Monaco fallback
   await page.evaluateOnNewDocument(() => {
@@ -57,8 +20,15 @@ async function debugMonacoSpace() {
     });
   });
   
+  // Add console logging
+  page.on('console', msg => {
+    if (msg.text().includes('[MonacoVim]') || msg.text().includes('Space key')) {
+      console.log('Browser:', msg.text());
+    }
+  });
+  
   try {
-    await page.goto('http://localhost:5174/VIM/', { 
+    await page.goto('http://localhost:5175/VIM/', { 
       waitUntil: 'networkidle0',
       timeout: 30000 
     });
@@ -66,131 +36,114 @@ async function debugMonacoSpace() {
     await page.waitForSelector('div.h-screen.bg-gray-950', { timeout: 15000 });
     await new Promise(resolve => setTimeout(resolve, 4000));
     
-    console.log('✅ Application loaded in Monaco mode');
+    console.log('✅ Page loaded');
     
-    // Clear event log
-    await page.evaluate(() => { window.keyEventLog = []; });
+    // Inject debugging code
+    await page.evaluate(() => {
+      console.log('[MonacoVim] Injecting debug code...');
+      
+      // Find Monaco editor instance
+      let editor = null;
+      if (window.monaco && window.monaco.editor) {
+        const models = window.monaco.editor.getModels();
+        if (models.length > 0) {
+          // Find editor by model
+          const editors = Array.from(document.querySelectorAll('.monaco-editor')).map(el => {
+            return el._editor || el.editor;
+          }).filter(e => e);
+          editor = editors[0];
+        }
+      }
+      
+      if (!editor) {
+        console.log('[MonacoVim] No editor found! Checking alternative methods...');
+        // Try to find via global references
+        if (window.editorRef?.current) {
+          editor = window.editorRef.current;
+          console.log('[MonacoVim] Found editor via editorRef');
+        }
+      }
+      
+      if (!editor) {
+        console.log('[MonacoVim] Still no editor found!');
+        return;
+      }
+      
+      console.log('[MonacoVim] Found editor:', editor);
+      
+      // Log all key events
+      const domNode = editor.getDomNode();
+      if (domNode) {
+        // Add capture phase listener
+        domNode.addEventListener('keydown', (e) => {
+          console.log(`[MonacoVim] keydown (capture): key="${e.key}" code="${e.code}" prevented=${e.defaultPrevented}`);
+        }, true);
+        
+        // Add bubble phase listener
+        domNode.addEventListener('keydown', (e) => {
+          console.log(`[MonacoVim] keydown (bubble): key="${e.key}" code="${e.code}" prevented=${e.defaultPrevented}`);
+        }, false);
+        
+        // Add keypress listener
+        domNode.addEventListener('keypress', (e) => {
+          console.log(`[MonacoVim] keypress: key="${e.key}" code="${e.code}" prevented=${e.defaultPrevented}`);
+        }, true);
+      }
+      
+      // Monitor editor content changes
+      editor.onDidChangeModelContent((e) => {
+        console.log('[MonacoVim] Content changed:', editor.getValue());
+      });
+      
+      // Check vim mode status
+      const statusBar = document.querySelector('.monaco-vim-status-bar');
+      if (statusBar) {
+        console.log('[MonacoVim] Status bar found:', statusBar.textContent);
+      }
+    });
     
-    // Focus and enter insert mode
+    // Test space in insert mode
+    console.log('\\n🧪 Testing space in insert mode...');
     await page.click('.monaco-editor');
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
     await page.keyboard.press('Escape');
     await new Promise(resolve => setTimeout(resolve, 300));
     
+    // Clear content
+    await page.keyboard.type('ggdG');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Enter insert mode
     await page.keyboard.press('i');
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 300));
     
-    // Clear log again after mode change
-    await page.evaluate(() => { window.keyEventLog = []; });
+    console.log('\\n📝 Typing "hello world" with space...');
+    await page.keyboard.type('hello');
+    await new Promise(resolve => setTimeout(resolve, 100));
     
-    console.log('\\n🔍 Pressing space key...');
-    
-    // Press space
+    console.log('\\n🔍 Now pressing space key...');
     await page.keyboard.press(' ');
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    await page.keyboard.type('world');
     await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Get the event log
-    const events = await page.evaluate(() => window.keyEventLog);
-    
-    console.log('\\n📊 Key Events for Space:');
-    events.forEach(e => {
-      console.log(`  ${e.type}: key="${e.key}" prevented=${e.prevented} target=${e.target} ${e.phase || ''}`);
-    });
-    
-    // Check if space was actually inserted
+    // Get content
     const content = await page.evaluate(() => {
-      const editor = document.querySelector('.monaco-editor');
-      if (editor && window.monaco && window.monaco.editor) {
-        const instances = window.monaco.editor.getModels();
-        if (instances.length > 0) {
-          return instances[0].getValue();
-        }
-      }
-      return '';
+      const editor = window.monaco?.editor?.getEditors()?.[0];
+      return editor ? editor.getValue() : '';
     });
     
-    console.log('\\nEditor content after space:', JSON.stringify(content));
+    console.log(`\\n📋 Final content: "${content}"`);
+    console.log(`\\n✅ Space working: ${content.includes(' ') ? 'YES' : 'NO'}`);
     
-    // Try different space insertion methods
-    console.log('\\n🔍 Testing different insertion methods...');
+    console.log('\\n⏳ Keeping browser open for manual inspection...');
+    console.log('Press Ctrl+C to close');
     
-    // Method 1: Direct input event
-    await page.evaluate(() => {
-      const textarea = document.querySelector('.monaco-editor textarea');
-      if (textarea) {
-        const event = new InputEvent('input', {
-          bubbles: true,
-          cancelable: true,
-          data: ' ',
-          inputType: 'insertText'
-        });
-        textarea.dispatchEvent(event);
-      }
-    });
-    
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const content2 = await page.evaluate(() => {
-      if (window.monaco && window.monaco.editor) {
-        const instances = window.monaco.editor.getModels();
-        if (instances.length > 0) {
-          return instances[0].getValue();
-        }
-      }
-      return '';
-    });
-    
-    console.log('Content after input event:', JSON.stringify(content2));
-    
-    // Method 2: Direct Monaco API
-    await page.evaluate(() => {
-      if (window.monaco && window.monaco.editor) {
-        const editors = window.monaco.editor.getEditors();
-        if (editors.length > 0) {
-          const editor = editors[0];
-          const position = editor.getPosition();
-          editor.executeEdits('', [{
-            range: new window.monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
-            text: ' ',
-            forceMoveMarkers: true
-          }]);
-        }
-      }
-    });
-    
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const content3 = await page.evaluate(() => {
-      if (window.monaco && window.monaco.editor) {
-        const instances = window.monaco.editor.getModels();
-        if (instances.length > 0) {
-          return instances[0].getValue();
-        }
-      }
-      return '';
-    });
-    
-    console.log('Content after Monaco API:', JSON.stringify(content3));
-    
-    // Check monaco-vim status
-    const vimInfo = await page.evaluate(() => {
-      const statusBar = document.querySelector('.monaco-vim-status-bar');
-      const vimMode = window.vimMode || window.vim || window.monacoVim;
-      
-      return {
-        statusText: statusBar ? statusBar.textContent : 'no status bar',
-        hasVimMode: !!vimMode,
-        vimModeType: vimMode ? typeof vimMode : 'undefined'
-      };
-    });
-    
-    console.log('\\nVim info:', vimInfo);
+    // Keep browser open
+    await new Promise(() => {});
     
   } catch (error) {
-    console.log(`❌ Test failed: ${error.message}`);
-  } finally {
-    await browser.close();
+    console.log(`❌ Error: ${error.message}`);
   }
 }
 
