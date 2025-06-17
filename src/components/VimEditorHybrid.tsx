@@ -1,8 +1,7 @@
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState, forwardRef, Suspense, createElement, useRef } from 'react';
 import { getBrowserCapabilities, getBrowserInstructions } from '../utils/browser-capabilities';
 import { useBrowserCapabilities } from '../contexts/BrowserCapabilities';
-import VimEditor from './VimEditor';
-import MonacoVimEditor from './MonacoVimEditor';
+import { getEditorLoader, type EditorComponent } from '../utils/dynamic-editor-loader';
 import type { VimEditorRef } from './VimEditor';
 
 interface VimEditorHybridProps {
@@ -18,6 +17,8 @@ interface VimEditorHybridProps {
  */
 const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, ref) => {
   const [editorType, setEditorType] = useState<'loading' | 'vim-wasm' | 'monaco'>('loading');
+  const [EditorComponent, setEditorComponent] = useState<EditorComponent | null>(null);
+  const [isLoadingEditor, setIsLoadingEditor] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
   
   // Use pre-detected capabilities from context
@@ -25,37 +26,77 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
   
   // For compatibility, we'll also get runtime capabilities for the banner
   const [runtimeCapabilities, setRuntimeCapabilities] = useState<ReturnType<typeof getBrowserCapabilities> | null>(null);
+  
+  // Track if component is mounted to prevent state updates after unmount
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
-    // Use early detected capabilities first
-    if (earlyCapabilities.detectedAt === 'early') {
-      console.log('🔍 VIM Editor - Using early-detected browser capabilities:', {
-        hasSharedArrayBuffer: earlyCapabilities.hasSharedArrayBuffer,
-        hasWebAssembly: earlyCapabilities.hasWebAssembly,
-        browser: earlyCapabilities.browserName,
-        isSecureContext: earlyCapabilities.isSecureContext,
-        detectedAt: earlyCapabilities.detectedAt
-      });
+    // Cleanup function
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    async function loadEditor() {
+      // Use early detected capabilities first
+      if (earlyCapabilities.detectedAt === 'early') {
+        console.log('🔍 VIM Editor - Using early-detected browser capabilities:', {
+          hasSharedArrayBuffer: earlyCapabilities.hasSharedArrayBuffer,
+          hasWebAssembly: earlyCapabilities.hasWebAssembly,
+          browser: earlyCapabilities.browserName,
+          isSecureContext: earlyCapabilities.isSecureContext,
+          detectedAt: earlyCapabilities.detectedAt
+        });
+      }
+      
+      // Get runtime capabilities for additional checks
+      const runtimeCaps = getBrowserCapabilities();
+      if (isMountedRef.current) {
+        setRuntimeCapabilities(runtimeCaps);
+      }
+      
+      // Determine which editor to use based on early detection
+      const useVimWasm = earlyCapabilities.hasSharedArrayBuffer && earlyCapabilities.hasWebAssembly;
+      
+      if (useVimWasm) {
+        console.log('✅ Using vim.wasm (full VIM experience)');
+        if (isMountedRef.current) {
+          setEditorType('vim-wasm');
+        }
+      } else if (earlyCapabilities.hasWebAssembly && !earlyCapabilities.hasSharedArrayBuffer) {
+        console.log('⚠️ Using Monaco-vim fallback (SharedArrayBuffer not available)');
+        console.log('💡 Tip:', getBrowserInstructions(earlyCapabilities.browserName));
+        if (isMountedRef.current) {
+          setEditorType('monaco');
+        }
+      } else {
+        console.log('⚠️ Using Monaco-vim fallback (WebAssembly not supported)');
+        if (isMountedRef.current) {
+          setEditorType('monaco');
+        }
+      }
+      
+      // Load the appropriate editor component
+      if (isMountedRef.current) {
+        setIsLoadingEditor(true);
+        try {
+          const loader = getEditorLoader(useVimWasm);
+          const component = await loader();
+          if (isMountedRef.current) {
+            setEditorComponent(component);
+            setIsLoadingEditor(false);
+          }
+        } catch (error) {
+          console.error('[VimEditorHybrid] Failed to load editor component:', error);
+          if (isMountedRef.current) {
+            setIsLoadingEditor(false);
+          }
+        }
+      }
     }
     
-    // Get runtime capabilities for additional checks
-    const runtimeCaps = getBrowserCapabilities();
-    setRuntimeCapabilities(runtimeCaps);
-    
-    // Determine which editor to use based on early detection
-    if (earlyCapabilities.hasSharedArrayBuffer && earlyCapabilities.hasWebAssembly) {
-      console.log('✅ Using vim.wasm (full VIM experience)');
-      setEditorType('vim-wasm');
-    } else if (earlyCapabilities.hasWebAssembly && !earlyCapabilities.hasSharedArrayBuffer) {
-      // Browser supports WebAssembly but not SharedArrayBuffer
-      console.log('⚠️ Using Monaco-vim fallback (SharedArrayBuffer not available)');
-      console.log('💡 Tip:', getBrowserInstructions(earlyCapabilities.browserName));
-      setEditorType('monaco');
-    } else {
-      // No WebAssembly support at all
-      console.log('⚠️ Using Monaco-vim fallback (WebAssembly not supported)');
-      setEditorType('monaco');
-    }
+    loadEditor();
   }, [earlyCapabilities]);
 
   // Handle mode change for Which-Key integration
@@ -64,15 +105,21 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
     // VimEditor handles this internally
   };
 
-  // Skip loading state when using early detection
-  if (editorType === 'loading' && earlyCapabilities.detectedAt !== 'early') {
+  // Show loading state while detecting capabilities or loading editor
+  if (editorType === 'loading' || isLoadingEditor || !EditorComponent) {
+    const loadingMessage = editorType === 'loading' ? 
+      'Detecting browser capabilities...' :
+      editorType === 'vim-wasm' ?
+        'Loading VIM...' :
+        'Loading Monaco Editor...';
+        
     return (
       <div className="h-full bg-gray-950 overflow-hidden">
         <div className="h-full relative overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-400 mx-auto mb-4"></div>
-              <p className="text-gray-400">Detecting browser capabilities...</p>
+              <p className="text-gray-400">{loadingMessage}</p>
             </div>
           </div>
         </div>
@@ -82,7 +129,7 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
 
   if (editorType === 'vim-wasm') {
     // Use the full vim.wasm implementation
-    return <VimEditor ref={ref} {...props} />;
+    return createElement(EditorComponent, { ref, ...props });
   }
 
   // Use Monaco-vim fallback
@@ -124,11 +171,11 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
             </div>
           </div>
         )}
-        <MonacoVimEditor 
-          ref={ref} 
-          {...props} 
-          onModeChange={handleModeChange}
-        />
+        {createElement(EditorComponent, { 
+          ref, 
+          ...props, 
+          onModeChange: handleModeChange 
+        })}
       </div>
     </div>
   );
