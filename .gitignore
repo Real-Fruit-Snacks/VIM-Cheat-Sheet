@@ -149,3 +149,6 @@ pids
 .grunt
 .lock-wscript
 .node_repl_history
+
+# Claude Code documentation (not tracked)
+CLAUDE.md
