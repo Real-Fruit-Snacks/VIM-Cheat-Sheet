@@ -20,6 +20,11 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
   const dismissTimerRef = useRef<NodeJS.Timeout | null>(null)
   const startTimeRef = useRef<number>(Date.now())
   const remainingTimeRef = useRef<number>(duration)
+  
+  // Update remaining time when duration changes
+  useEffect(() => {
+    remainingTimeRef.current = duration
+  }, [duration])
 
   const handleClose = useCallback(() => {
     setIsExiting(true)
@@ -56,7 +61,8 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
         
         // Set dismiss timer
         dismissTimerRef.current = setTimeout(() => {
-          handleClose()
+          setIsExiting(true)
+          setTimeout(onClose, 300)
         }, remainingTimeRef.current)
       }
     }
@@ -67,7 +73,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
       if (progressRef.current) clearTimeout(progressRef.current)
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
     }
-  }, [isVisible, isPaused, handleClose])
+  }, [isVisible, isPaused, onClose])
 
   const handleMouseEnter = () => {
     setIsPaused(true)
@@ -80,6 +86,13 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
 
   const handleMouseLeave = () => {
     setIsPaused(false)
+    // When unpausing, restart the timer with remaining time
+    if (remainingTimeRef.current > 0) {
+      dismissTimerRef.current = setTimeout(() => {
+        setIsExiting(true)
+        setTimeout(onClose, 300)
+      }, remainingTimeRef.current)
+    }
   }
 
   const getIcon = () => {
