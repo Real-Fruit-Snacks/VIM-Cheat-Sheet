@@ -7,20 +7,15 @@ import WhichKey from './WhichKey';
 import { useWhichKey } from '../hooks/useWhichKey';
 
 // Configure Monaco environment to suppress web worker warnings in private mode
-declare global {
-  interface Window {
-    MonacoEnvironment?: {
-      getWorker?: () => Worker | null;
-    };
-  }
-}
-
 if (typeof window !== 'undefined' && !window.MonacoEnvironment) {
   window.MonacoEnvironment = {
-    getWorker: () => {
-      // Return null to disable web workers and suppress warnings
+    getWorker: function() {
+      // Return a fake worker that does nothing to suppress warnings
       // Monaco will fall back to synchronous mode automatically
-      return null;
+      return {
+        postMessage: () => {},
+        terminate: () => {}
+      } as unknown as Worker;
     }
   };
 }
