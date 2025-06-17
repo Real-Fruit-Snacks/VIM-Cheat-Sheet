@@ -41,33 +41,39 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
   useEffect(() => {
     if (!isVisible) return
 
-    const startAnimation = () => {
+    const startTimer = () => {
+      // Clear any existing timers
+      if (progressRef.current) clearTimeout(progressRef.current)
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current)
+
+      if (isPaused) return
+
       startTimeRef.current = Date.now()
       
       const updateProgress = () => {
         if (isPaused) return
         
         const elapsed = Date.now() - startTimeRef.current
-        const remaining = Math.max(0, 100 - (elapsed / remainingTimeRef.current) * 100)
-        setProgress(remaining)
+        const newProgress = Math.max(0, 100 - (elapsed / remainingTimeRef.current) * 100)
+        setProgress(newProgress)
         
-        if (remaining > 0) {
+        if (newProgress > 0 && !isPaused) {
           progressRef.current = setTimeout(updateProgress, 30)
         }
       }
+
+      updateProgress()
       
-      if (!isPaused) {
-        updateProgress()
-        
-        // Set dismiss timer
-        dismissTimerRef.current = setTimeout(() => {
+      // Set dismiss timer
+      dismissTimerRef.current = setTimeout(() => {
+        if (!isPaused) {
           setIsExiting(true)
           setTimeout(onClose, 300)
-        }, remainingTimeRef.current)
-      }
+        }
+      }, remainingTimeRef.current)
     }
 
-    startAnimation()
+    startTimer()
 
     return () => {
       if (progressRef.current) clearTimeout(progressRef.current)
@@ -86,13 +92,7 @@ export function Toast({ message, type, onClose, duration = 4000, index = 0 }: To
 
   const handleMouseLeave = () => {
     setIsPaused(false)
-    // When unpausing, restart the timer with remaining time
-    if (remainingTimeRef.current > 0) {
-      dismissTimerRef.current = setTimeout(() => {
-        setIsExiting(true)
-        setTimeout(onClose, 300)
-      }, remainingTimeRef.current)
-    }
+    // The main useEffect will handle restarting both timers when isPaused changes
   }
 
   const getIcon = () => {

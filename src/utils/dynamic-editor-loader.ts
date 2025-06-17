@@ -1,4 +1,4 @@
-import type { ComponentType, ForwardRefExoticComponent, RefAttributes } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { VimEditorRef } from '../components/VimEditor';
 
 // Define the common props interface for both editors

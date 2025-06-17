@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, Suspense, createElement, useRef } from 'react';
+import { useEffect, useState, forwardRef, createElement, useRef } from 'react';
 import { getBrowserCapabilities, getBrowserInstructions } from '../utils/browser-capabilities';
 import { useBrowserCapabilities } from '../contexts/BrowserCapabilities';
 import { getEditorLoader, type EditorComponent } from '../utils/dynamic-editor-loader';
