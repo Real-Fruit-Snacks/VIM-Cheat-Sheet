@@ -70,6 +70,7 @@ async function verifyMonacoSpaces() {
     });
     
     console.log(`Content: "${content}"`);
+    console.log(`Content char codes:`, Array.from(content).map(c => c.charCodeAt(0)));
     
     // Test 3: Space at different positions
     console.log('\\n🧪 Test 3: Spaces at different positions');
@@ -98,7 +99,7 @@ async function verifyMonacoSpaces() {
     console.log('\\n📊 Test Results:');
     
     // Monaco uses non-breaking spaces (\\u00A0) in the DOM
-    const nbsp = '\\u00A0';
+    const nbsp = '\u00A0'; // Note: single backslash in the actual code
     const hasMultipleSpaces = content.includes(`a${nbsp}${nbsp}b`) && content.includes(`b${nbsp}${nbsp}${nbsp}c`) && content.includes(`c${nbsp}${nbsp}${nbsp}${nbsp}d`);
     const hasLeadingSpace = finalContent.includes(`${nbsp}leading`);
     const hasTrailingSpace = finalContent.includes(`trailing${nbsp}`);
