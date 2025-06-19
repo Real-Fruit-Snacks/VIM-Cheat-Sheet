@@ -4,5 +4,5 @@ export interface BrowserCapabilities {
   hasServiceWorker: boolean;
   isSecureContext: boolean;
   browserName: string;
-  detectedAt: 'early' | 'runtime';
+  detectedAt: 'ultra-early' | 'early' | 'runtime' | 'fallback';
 }

@@ -72,7 +72,7 @@
       (function() {
         if (window.__canUseVimWasm && window.__browserCapabilities.hasServiceWorker && !window.crossOriginIsolated) {
           const script = document.createElement('script');
-          script.src = '/coi-serviceworker.js';
+          script.src = '/VIM/coi-serviceworker.js'; // Use proper base path
           document.head.appendChild(script);
           console.log('[Conditional Load] Loading COOP/COEP service worker');
         }
@@ -122,16 +122,20 @@
     <script type="module">
       (function() {
         if (window.__canUseVimWasm) {
-          // Only import vim-wasm wrapper if browser supports it
+          // Only load vim-wasm wrapper if browser supports it
           console.log('[Conditional Load] Loading vim-wasm wrapper...');
-          import('/vim-wasm-wrapper.js').then(() => {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = '/VIM/vim-wasm-wrapper.js'; // Use proper base path
+          script.onload = () => {
             console.log('[Conditional Load] vim-wasm wrapper loaded successfully');
-          }).catch(err => {
+          };
+          script.onerror = (err) => {
             console.error('[Conditional Load] Failed to load vim-wasm:', err);
             window.__vimWasmLoadError = err;
-            // Set flag to use fallback
             window.__skipVimWasmLoad = true;
-          });
+          };
+          document.head.appendChild(script);
         } else {
           // Signal that vim-wasm was intentionally skipped
           window.__skipVimWasmLoad = true;

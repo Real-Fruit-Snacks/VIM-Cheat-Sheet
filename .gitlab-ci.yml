@@ -1,20 +1,127 @@
-# Minimal CI configuration for pre-built GitLab Pages deployment
-# Designed for offline environments with no internet access
-# No Docker images, no npm, no external dependencies required
+# GitLab CI/CD configuration for VIM application
+# Supports both online build and offline pre-built deployment
 
-pages:
-  # Use the most basic image available on your GitLab instance
-  # This could be alpine, busybox, or whatever minimal image your GitLab has
+# For offline environments, use the pre-built deployment
+pages:deploy-prebuilt:
+  # Use minimal image for offline environments
   image: busybox:latest
   stage: deploy
   script:
-    # GitLab Pages expects files in a 'public' directory
-    # Simple copy operation - works on any Unix-like system
-    - cp -r gitlab-public public
+    # Check if dist folder exists (pre-built)
+    - if [ -d "dist" ]; then
+    -   echo "Using pre-built dist folder"
+    -   cp -r dist public
+    - elif [ -d "gitlab-public" ]; then
+    -   echo "Using gitlab-public folder"
+    -   cp -r gitlab-public public
+    - else
+    -   echo "ERROR: No dist or gitlab-public folder found!"
+    -   exit 1
+    - fi
   artifacts:
     paths:
       - public
-  # Deploy from both main and gitlab branches
+  rules:
+    # Only run if node is not available (offline environment)
+    - if: '$CI_OFFLINE_DEPLOY == "true"'
+    - exists:
+      - dist/index.html
+      - gitlab-public/index.html
   only:
     - main
     - gitlab
+    - tags
+
+# For online environments with Node.js available
+pages:
+  image: node:20-alpine
+  stage: deploy
+  cache:
+    paths:
+      - node_modules/
+  script:
+    # Install dependencies
+    - npm ci --prefer-offline --no-audit
+    
+    # Build the application
+    - npm run build
+    
+    # Add build information
+    - echo "Build Date: $(date)" > dist/VERSION
+    - echo "Commit: $CI_COMMIT_SHA" >> dist/VERSION
+    - echo "Branch: $CI_COMMIT_REF_NAME" >> dist/VERSION
+    
+    # Copy to public directory
+    - cp -r dist public
+    
+    # Create .htaccess for proper MIME types (if Apache is used)
+    - |
+      cat > public/.htaccess <<EOF
+      AddType application/wasm .wasm
+      AddType application/javascript .js
+      AddType text/css .css
+      EOF
+    
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  rules:
+    # Only run if node is available (online environment)
+    - if: '$CI_OFFLINE_DEPLOY != "true"'
+      exists:
+        - package.json
+  only:
+    - main
+    - tags
+
+# Optional: Create a downloadable release artifact
+build:release:
+  image: node:20-alpine
+  stage: build
+  script:
+    - npm ci --prefer-offline --no-audit
+    - npm run build
+    
+    # Create a release archive with everything needed for offline deployment
+    - apk add --no-cache tar
+    - tar -czf vim-editor-offline.tar.gz -C dist .
+    
+    # Create deployment instructions
+    - |
+      cat > OFFLINE_DEPLOYMENT.md <<EOF
+      # VIM Editor - Offline Deployment Instructions
+      
+      ## GitLab Pages Deployment
+      
+      1. Extract vim-editor-offline.tar.gz to a 'dist' folder
+      2. Commit the dist folder to your GitLab repository
+      3. Set CI variable: CI_OFFLINE_DEPLOY=true
+      4. Push to trigger deployment
+      
+      ## Manual Web Server Deployment
+      
+      1. Extract vim-editor-offline.tar.gz to your web server directory
+      2. Ensure your web server serves:
+         - .wasm files as application/wasm
+         - Proper COOP/COEP headers for SharedArrayBuffer
+      
+      ## Nginx Configuration Example:
+      
+      location /VIM/ {
+          add_header Cross-Origin-Embedder-Policy "require-corp";
+          add_header Cross-Origin-Opener-Policy "same-origin";
+          
+          location ~ \.wasm$ {
+              add_header Content-Type application/wasm;
+          }
+      }
+      EOF
+    
+  artifacts:
+    paths:
+      - vim-editor-offline.tar.gz
+      - OFFLINE_DEPLOYMENT.md
+    expire_in: 90 days
+  only:
+    - tags

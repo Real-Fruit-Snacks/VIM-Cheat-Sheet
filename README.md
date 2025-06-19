@@ -134,6 +134,82 @@ For air-gapped or internal networks:
 # See releases for pre-built packages
 ```
 
+### GitLab Pages Deployment
+
+#### Option 1: Automated Build (Online GitLab)
+
+For GitLab instances with internet access:
+
+```bash
+# The repository includes .gitlab-ci.yml
+# Simply push to your GitLab repository
+git push gitlab main
+
+# Access at: https://yourusername.gitlab.io/VIM/
+```
+
+#### Option 2: Pre-Built Deployment (Offline GitLab)
+
+For air-gapped GitLab instances:
+
+1. **Download Pre-Built Release**
+   ```bash
+   # Get the latest release from GitHub
+   wget https://github.com/Real-Fruit-Snacks/VIM/releases/latest/download/vim-editor-offline.tar.gz
+   ```
+
+2. **Prepare for GitLab**
+   ```bash
+   # Extract to dist folder
+   mkdir dist
+   tar -xzf vim-editor-offline.tar.gz -C dist/
+   
+   # Commit dist folder
+   git add dist/
+   git commit -m "Add pre-built VIM editor for offline deployment"
+   ```
+
+3. **Configure GitLab CI**
+   ```bash
+   # Set environment variable in GitLab CI/CD settings
+   CI_OFFLINE_DEPLOY=true
+   ```
+
+4. **Deploy**
+   ```bash
+   git push gitlab main
+   ```
+
+#### Option 3: Manual Web Server Deployment
+
+For any web server (Apache, Nginx, etc.):
+
+1. **Extract Release**
+   ```bash
+   tar -xzf vim-editor-offline.tar.gz -C /var/www/html/vim/
+   ```
+
+2. **Configure Web Server**
+   
+   **Nginx:**
+   ```nginx
+   location /vim/ {
+       add_header Cross-Origin-Embedder-Policy "require-corp";
+       add_header Cross-Origin-Opener-Policy "same-origin";
+       
+       location ~ \.wasm$ {
+           add_header Content-Type application/wasm;
+       }
+   }
+   ```
+   
+   **Apache (.htaccess included):**
+   ```apache
+   AddType application/wasm .wasm
+   Header set Cross-Origin-Embedder-Policy "require-corp"
+   Header set Cross-Origin-Opener-Policy "same-origin"
+   ```
+
 ## Browser Support
 
 | Browser | Support Level | Notes |

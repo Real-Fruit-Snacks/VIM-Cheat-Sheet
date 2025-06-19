@@ -85,7 +85,7 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
       if (isMountedRef.current) {
         setIsLoadingEditor(true);
         try {
-          const loader = getEditorLoader(canUseVimWasm && !vimWasmError);
+          const loader = getEditorLoader(!!canUseVimWasm && !vimWasmError);
           const component = await loader();
           setEditorComponent(component);
           setIsLoadingEditor(false);
