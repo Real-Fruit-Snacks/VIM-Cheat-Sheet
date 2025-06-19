@@ -1,0 +1,409 @@
+{
+  "normal": {
+    "mode": "normal",
+    "success": true,
+    "compatibility": {
+      "ultraEarlyCapabilities": {
+        "hasWebAssembly": true,
+        "hasSharedArrayBuffer": true,
+        "isSecureContext": true,
+        "hasServiceWorker": true,
+        "browserName": "Chrome",
+        "detectedAt": "ultra-early",
+        "timestamp": 1750376509055
+      },
+      "canUseVimWasm": true,
+      "vimWasmError": null,
+      "detectedEditorMode": "vim-wasm",
+      "editorInfo": {
+        "vimWasm": true
+      },
+      "bannerInfo": null,
+      "pageTitle": "VIM - Interactive VIM Learning Platform",
+      "pageUrl": "http://localhost:5175/VIM/"
+    },
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Compatibility] Starting comprehensive browser test...",
+        "timestamp": "2025-06-19T23:41:49.873Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Initializing progressive editor system...",
+        "timestamp": "2025-06-19T23:41:49.876Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Test completed in 28.57 ms",
+        "timestamp": "2025-06-19T23:41:49.901Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:49.902Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:49.902Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:41:49.902Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:41:49.902Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:49.902Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:41:49.903Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:41:49.903Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:49.903Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:49.903Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:41:49.914Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:41:49.915Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:41:49.918Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:41:49.918Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:41:49.919Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:41:49.919Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:41:50.007Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:41:50.007Z"
+      }
+    ],
+    "errors": [],
+    "screenshot": "test-screenshot-normal-1750376515565.png",
+    "metrics": {
+      "JSEventListeners": 390,
+      "Nodes": 264,
+      "JSHeapUsedSize": 7.94,
+      "JSHeapTotalSize": 14.89
+    },
+    "testCompletedAt": "2025-06-19T23:41:55.639Z"
+  },
+  "private": {
+    "mode": "private",
+    "success": true,
+    "compatibility": {
+      "ultraEarlyCapabilities": {
+        "hasWebAssembly": true,
+        "hasSharedArrayBuffer": true,
+        "isSecureContext": true,
+        "hasServiceWorker": true,
+        "browserName": "Chrome",
+        "detectedAt": "ultra-early",
+        "timestamp": 1750376516099
+      },
+      "canUseVimWasm": true,
+      "vimWasmError": null,
+      "detectedEditorMode": "vim-wasm",
+      "editorInfo": {
+        "vimWasm": true
+      },
+      "bannerInfo": null,
+      "pageTitle": "VIM - Interactive VIM Learning Platform",
+      "pageUrl": "http://localhost:5175/VIM/"
+    },
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Compatibility] Starting comprehensive browser test...",
+        "timestamp": "2025-06-19T23:41:56.306Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Initializing progressive editor system...",
+        "timestamp": "2025-06-19T23:41:56.308Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Test completed in 31.76 ms",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:41:56.336Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:56.338Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:41:56.338Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:41:56.354Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:41:56.354Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:41:56.356Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:41:56.357Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:41:56.357Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:41:56.357Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:41:56.377Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:41:56.377Z"
+      }
+    ],
+    "errors": [],
+    "screenshot": "test-screenshot-private-1750376521913.png",
+    "metrics": {
+      "JSEventListeners": 386,
+      "Nodes": 264,
+      "JSHeapUsedSize": 9.29,
+      "JSHeapTotalSize": 14.89
+    },
+    "testCompletedAt": "2025-06-19T23:42:02.003Z"
+  },
+  "restricted": {
+    "mode": "restricted",
+    "success": true,
+    "compatibility": {
+      "ultraEarlyCapabilities": {
+        "hasWebAssembly": true,
+        "hasSharedArrayBuffer": true,
+        "isSecureContext": true,
+        "hasServiceWorker": true,
+        "browserName": "Chrome",
+        "detectedAt": "ultra-early",
+        "timestamp": 1750376522434
+      },
+      "canUseVimWasm": true,
+      "vimWasmError": null,
+      "detectedEditorMode": "vim-wasm",
+      "editorInfo": {
+        "vimWasm": true
+      },
+      "bannerInfo": null,
+      "pageTitle": "VIM - Interactive VIM Learning Platform",
+      "pageUrl": "http://localhost:5175/VIM/"
+    },
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Compatibility] Starting comprehensive browser test...",
+        "timestamp": "2025-06-19T23:42:02.609Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Initializing progressive editor system...",
+        "timestamp": "2025-06-19T23:42:02.611Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Test completed in 33.94 ms",
+        "timestamp": "2025-06-19T23:42:02.643Z"
+      },
+      {
+        "type": "log",
+        "text": "[Compatibility] Results: JSHandle@object",
+        "timestamp": "2025-06-19T23:42:02.644Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:42:02.644Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:42:02.644Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:42:02.644Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Browser compatibility results: JSHandle@object",
+        "timestamp": "2025-06-19T23:42:02.645Z"
+      },
+      {
+        "type": "log",
+        "text": "✅ Target: vim.wasm (full VIM experience)",
+        "timestamp": "2025-06-19T23:42:02.645Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Ensuring service worker for mode: vim-wasm",
+        "timestamp": "2025-06-19T23:42:02.645Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:42:02.646Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Current state: JSHandle@object",
+        "timestamp": "2025-06-19T23:42:02.646Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:42:02.664Z"
+      },
+      {
+        "type": "log",
+        "text": "[SW Manager] Service worker registered for vim.wasm: http://localhost:5175/VIM/",
+        "timestamp": "2025-06-19T23:42:02.665Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:42:02.667Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:42:02.667Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] Loading vim.wasm editor...",
+        "timestamp": "2025-06-19T23:42:02.667Z"
+      },
+      {
+        "type": "log",
+        "text": "[Dynamic Loader] Loading vim.wasm editor",
+        "timestamp": "2025-06-19T23:42:02.667Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:42:02.688Z"
+      },
+      {
+        "type": "log",
+        "text": "[VimEditorHybrid] vim.wasm editor loaded successfully",
+        "timestamp": "2025-06-19T23:42:02.688Z"
+      }
+    ],
+    "errors": [],
+    "screenshot": "test-screenshot-restricted-1750376528265.png",
+    "metrics": {
+      "JSEventListeners": 390,
+      "Nodes": 264,
+      "JSHeapUsedSize": 7.94,
+      "JSHeapTotalSize": 14.89
+    },
+    "testCompletedAt": "2025-06-19T23:42:08.339Z"
+  },
+  "timestamp": "2025-06-19T23:41:46.306Z",
+  "testDuration": 22127
+}
