@@ -1,18 +1,20 @@
-// This wrapper conditionally loads vim-wasm based on early browser detection
+// This wrapper loads vim-wasm (only called if browser is compatible)
 window.__vimWasmPromise = (async () => {
   try {
-    // Check if early detection flagged to skip vim.wasm loading
+    // Double-check we should be loading (defensive programming)
     if (window.__skipVimWasmLoad) {
-      console.log('[vim-wasm-wrapper] Skipping vim.wasm load as requested by early detection');
-      throw new Error('vim.wasm loading skipped due to browser incompatibility');
+      console.warn('[vim-wasm-wrapper] Unexpected state: wrapper loaded but skip flag is set');
+      throw new Error('vim.wasm loading skipped');
     }
     
-    // Check if browser has necessary capabilities
+    // Verify capabilities one more time
     const capabilities = window.__browserCapabilities;
-    if (capabilities && (!capabilities.hasWebAssembly || !capabilities.hasSharedArrayBuffer)) {
-      console.warn('[vim-wasm-wrapper] Browser lacks required capabilities for vim.wasm');
-      throw new Error('Browser lacks required capabilities for vim.wasm');
+    if (!capabilities || !capabilities.hasWebAssembly || !capabilities.hasSharedArrayBuffer || !capabilities.isSecureContext) {
+      console.error('[vim-wasm-wrapper] Critical: wrapper loaded but browser incompatible', capabilities);
+      throw new Error('Browser incompatible with vim.wasm');
     }
+    
+    console.log('[vim-wasm-wrapper] Browser verified, loading vim.wasm...');
     
     // Dynamically import vim-wasm
     const { VimWasm } = await import('./vim-wasm/vimwasm.js');

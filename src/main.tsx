@@ -4,22 +4,36 @@ import './index.css'
 import App from './App.tsx'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { BrowserCapabilitiesProvider } from './contexts/BrowserCapabilities'
-import { detectBrowserCapabilitiesEarly, shouldLoadVimWasm, getBrowserCompatibilityMessage } from './utils/early-browser-detection'
+import type { BrowserCapabilities } from './contexts/browser-capabilities-types'
 
-// Perform early browser detection before React renders
-const browserCapabilities = detectBrowserCapabilitiesEarly();
-
-// Show console warning if browser has compatibility issues
-const compatMessage = getBrowserCompatibilityMessage(browserCapabilities);
-if (compatMessage) {
-  console.warn(compatMessage);
+// Define window extension interface
+interface WindowWithCapabilities extends Window {
+  __browserCapabilities?: BrowserCapabilities;
+  __canUseVimWasm?: boolean;
 }
 
-// Conditionally prevent vim.wasm loading by setting a flag
-if (!shouldLoadVimWasm(browserCapabilities)) {
-  (window as unknown as { __skipVimWasmLoad?: boolean }).__skipVimWasmLoad = true;
-  console.log('[Early Detection] Skipping vim.wasm load due to browser incompatibility');
+// Get capabilities detected in HTML (ultra-early detection)
+const browserCapabilities = (window as WindowWithCapabilities).__browserCapabilities as BrowserCapabilities;
+
+// Verify we have capabilities (fallback if somehow missing)
+if (!browserCapabilities) {
+  console.error('[Main] Browser capabilities not found! This should not happen.');
+  // Create minimal fallback
+  (window as WindowWithCapabilities).__browserCapabilities = {
+    hasWebAssembly: false,
+    hasSharedArrayBuffer: false,
+    isSecureContext: false,
+    hasServiceWorker: false,
+    browserName: 'Unknown',
+    detectedAt: 'fallback'
+  };
 }
+
+// Log capabilities usage
+console.log('[Main] Using ultra-early detected capabilities:', {
+  ...browserCapabilities,
+  decision: (window as WindowWithCapabilities).__canUseVimWasm ? 'vim.wasm' : 'monaco'
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

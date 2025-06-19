@@ -7,11 +7,140 @@
     <link rel="apple-touch-icon" href="/favicon-detailed.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VIM - Interactive VIM Learning Platform</title>
-    <script src="/coi-serviceworker.js"></script>
-    <script type="module" src="/vim-wasm-wrapper.js"></script>
+    
+    <!-- Ultra-early browser detection (runs before any module loads) -->
+    <script>
+      (function() {
+        'use strict';
+        
+        // Start performance tracking
+        performance.mark('browser-detection-start');
+        
+        // Detect capabilities at the earliest possible moment
+        const hasWebAssembly = typeof WebAssembly !== 'undefined' && 
+          typeof WebAssembly.instantiate === 'function';
+        const hasSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
+        const isSecureContext = window.isSecureContext || false;
+        const hasServiceWorker = 'serviceWorker' in navigator;
+        
+        // Detect browser type
+        const ua = navigator.userAgent.toLowerCase();
+        let browserName = 'Unknown';
+        if (ua.includes('firefox')) {
+          browserName = 'Firefox';
+        } else if (ua.includes('safari') && !ua.includes('chrome')) {
+          browserName = 'Safari';
+        } else if (ua.includes('edg')) {
+          browserName = 'Edge';
+        } else if (ua.includes('chrome')) {
+          browserName = 'Chrome';
+        }
+        
+        // Store capabilities globally
+        const capabilities = {
+          hasWebAssembly,
+          hasSharedArrayBuffer,
+          isSecureContext,
+          hasServiceWorker,
+          browserName,
+          detectedAt: 'ultra-early',
+          timestamp: Date.now()
+        };
+        
+        window.__browserCapabilities = capabilities;
+        window.__canUseVimWasm = hasWebAssembly && hasSharedArrayBuffer && isSecureContext;
+        
+        // Log decision
+        console.log('[Ultra-Early Detection] Browser capabilities:', capabilities);
+        console.log('[Ultra-Early Detection] Decision:', window.__canUseVimWasm ? 'Will load vim.wasm' : 'Will use Monaco fallback');
+        
+        // Mark detection complete
+        performance.mark('browser-detection-end');
+        performance.measure('browser-detection', 'browser-detection-start', 'browser-detection-end');
+        
+        // Store in sessionStorage for persistence
+        try {
+          sessionStorage.setItem('vim-browser-capabilities', JSON.stringify(capabilities));
+        } catch (e) {
+          // Ignore storage errors
+        }
+      })();
+    </script>
+    
+    <!-- Conditionally load service worker (only if needed for vim.wasm) -->
+    <script>
+      (function() {
+        if (window.__canUseVimWasm && window.__browserCapabilities.hasServiceWorker && !window.crossOriginIsolated) {
+          const script = document.createElement('script');
+          script.src = '/coi-serviceworker.js';
+          document.head.appendChild(script);
+          console.log('[Conditional Load] Loading COOP/COEP service worker');
+        }
+      })();
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Immediate loading feedback while app initializes -->
+      <div style="
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0a0a0a;
+        color: #666;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      ">
+        <div style="text-align: center;">
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+          <div style="
+            width: 40px;
+            height: 40px;
+            border: 3px solid #1e293b;
+            border-top-color: #22c55e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+          "></div>
+          <div style="font-size: 14px;">Initializing VIM Editor...</div>
+          <div id="early-status" style="font-size: 12px; margin-top: 8px; opacity: 0.7;"></div>
+        </div>
+      </div>
+      
+      <!-- Update status based on early detection -->
+      <script>
+        document.getElementById('early-status').textContent = 
+          window.__canUseVimWasm ? 'Loading full VIM experience...' : 'Loading VIM emulation...';
+      </script>
+    </div>
+    
+    <!-- Conditionally load vim-wasm wrapper based on early detection -->
+    <script type="module">
+      (function() {
+        if (window.__canUseVimWasm) {
+          // Only import vim-wasm wrapper if browser supports it
+          console.log('[Conditional Load] Loading vim-wasm wrapper...');
+          import('/vim-wasm-wrapper.js').then(() => {
+            console.log('[Conditional Load] vim-wasm wrapper loaded successfully');
+          }).catch(err => {
+            console.error('[Conditional Load] Failed to load vim-wasm:', err);
+            window.__vimWasmLoadError = err;
+            // Set flag to use fallback
+            window.__skipVimWasmLoad = true;
+          });
+        } else {
+          // Signal that vim-wasm was intentionally skipped
+          window.__skipVimWasmLoad = true;
+          console.log('[Conditional Load] Skipping vim-wasm (browser incompatible)');
+        }
+      })();
+    </script>
+    
+    <!-- Main app entry point -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

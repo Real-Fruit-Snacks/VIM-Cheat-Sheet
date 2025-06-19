@@ -1,52 +1,27 @@
 import type { BrowserCapabilities } from '../contexts/browser-capabilities-types';
 
 /**
- * Performs early browser capability detection before React renders
- * This helps prevent loading unnecessary resources and provides better error messages
+ * Gets browser capabilities that were detected ultra-early in index.html
+ * This is now just a helper to access the pre-detected capabilities
  */
-export function detectBrowserCapabilitiesEarly(): BrowserCapabilities {
-  const isSecureContext = window.isSecureContext ?? false;
-  
-  // Check WebAssembly support
-  const hasWebAssembly = typeof WebAssembly !== 'undefined' && 
-    typeof WebAssembly.instantiate === 'function';
-  
-  // Check SharedArrayBuffer support
-  const hasSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
-  
-  // Check Service Worker support
-  const hasServiceWorker = 'serviceWorker' in navigator;
-  
-  // Detect browser name
-  const userAgent = navigator.userAgent.toLowerCase();
-  let browserName = 'Unknown';
-  
-  if (userAgent.includes('firefox')) {
-    browserName = 'Firefox';
-  } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
-    browserName = 'Safari';
-  } else if (userAgent.includes('chrome')) {
-    if (userAgent.includes('edg')) {
-      browserName = 'Edge';
-    } else {
-      browserName = 'Chrome';
-    }
+export function getBrowserCapabilities(): BrowserCapabilities {
+  interface WindowWithCapabilities extends Window {
+    __browserCapabilities?: BrowserCapabilities;
   }
   
-  const capabilities: BrowserCapabilities = {
-    hasWebAssembly,
-    hasSharedArrayBuffer,
-    hasServiceWorker,
-    isSecureContext,
-    browserName,
-    detectedAt: 'early'
-  };
+  const capabilities = (window as WindowWithCapabilities).__browserCapabilities;
   
-  // Log capabilities for debugging
-  console.log('[Early Detection] Browser capabilities:', capabilities);
-  
-  // Store in window for emergency access
-  (window as unknown as { __browserCapabilities?: BrowserCapabilities }).__browserCapabilities = capabilities;
+  if (!capabilities) {
+    console.warn('[getBrowserCapabilities] Capabilities not found, using fallback');
+    return {
+      hasWebAssembly: false,
+      hasSharedArrayBuffer: false,
+      hasServiceWorker: false,
+      isSecureContext: false,
+      browserName: 'Unknown',
+      detectedAt: 'fallback'
+    };
+  }
   
   return capabilities;
 }

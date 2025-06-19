@@ -39,39 +39,43 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
 
   useEffect(() => {
     async function loadEditor() {
-      // Use early detected capabilities first
-      if (earlyCapabilities.detectedAt === 'early') {
-        console.log('🔍 VIM Editor - Using early-detected browser capabilities:', {
-          hasSharedArrayBuffer: earlyCapabilities.hasSharedArrayBuffer,
-          hasWebAssembly: earlyCapabilities.hasWebAssembly,
-          browser: earlyCapabilities.browserName,
-          isSecureContext: earlyCapabilities.isSecureContext,
-          detectedAt: earlyCapabilities.detectedAt
-        });
+      // Check if we're already using the ultra-early detection
+      if (earlyCapabilities.detectedAt === 'ultra-early') {
+        console.log('🔍 VIM Editor - Using ultra-early detected capabilities');
       }
       
-      // Get runtime capabilities for additional checks
+      // Get runtime capabilities for banner display
       const runtimeCaps = getBrowserCapabilities();
       if (isMountedRef.current) {
         setRuntimeCapabilities(runtimeCaps);
       }
       
-      // Determine which editor to use based on early detection
-      const useVimWasm = earlyCapabilities.hasSharedArrayBuffer && earlyCapabilities.hasWebAssembly;
+      // Define window extension interface
+      interface WindowWithVimFlags extends Window {
+        __canUseVimWasm?: boolean;
+        __vimWasmLoadError?: Error;
+      }
       
-      if (useVimWasm) {
-        console.log('✅ Using vim.wasm (full VIM experience)');
+      // Check if vim.wasm was already decided in HTML
+      const canUseVimWasm = (window as WindowWithVimFlags).__canUseVimWasm;
+      
+      // Also check for vim.wasm load errors from conditional loading
+      const vimWasmError = (window as WindowWithVimFlags).__vimWasmLoadError;
+      
+      if (canUseVimWasm && !vimWasmError) {
+        console.log('✅ Using vim.wasm (decision made ultra-early)');
         if (isMountedRef.current) {
           setEditorType('vim-wasm');
         }
-      } else if (earlyCapabilities.hasWebAssembly && !earlyCapabilities.hasSharedArrayBuffer) {
-        console.log('⚠️ Using Monaco-vim fallback (SharedArrayBuffer not available)');
-        console.log('💡 Tip:', getBrowserInstructions(earlyCapabilities.browserName));
-        if (isMountedRef.current) {
-          setEditorType('monaco');
-        }
       } else {
-        console.log('⚠️ Using Monaco-vim fallback (WebAssembly not supported)');
+        const reason = vimWasmError ? 'load error' : 
+                      !earlyCapabilities.hasWebAssembly ? 'no WebAssembly' :
+                      !earlyCapabilities.hasSharedArrayBuffer ? 'no SharedArrayBuffer' :
+                      'not secure context';
+        console.log(`⚠️ Using Monaco-vim fallback (${reason})`);
+        if (reason === 'no SharedArrayBuffer') {
+          console.log('💡 Tip:', getBrowserInstructions(earlyCapabilities.browserName));
+        }
         if (isMountedRef.current) {
           setEditorType('monaco');
         }
@@ -81,7 +85,7 @@ const VimEditorHybrid = forwardRef<VimEditorRef, VimEditorHybridProps>((props, r
       if (isMountedRef.current) {
         setIsLoadingEditor(true);
         try {
-          const loader = getEditorLoader(useVimWasm);
+          const loader = getEditorLoader(canUseVimWasm && !vimWasmError);
           const component = await loader();
           setEditorComponent(component);
           setIsLoadingEditor(false);
