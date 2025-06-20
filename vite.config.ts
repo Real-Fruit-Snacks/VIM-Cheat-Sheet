@@ -11,6 +11,24 @@ export default defineConfig({
       'Cross-Origin-Embedder-Policy': 'require-corp',
       'Cross-Origin-Opener-Policy': 'same-origin',
     },
+    proxy: {
+      // Proxy GitLab API requests to avoid CORS issues
+      '/api/v4': {
+        target: 'https://gitlab.com',
+        changeOrigin: true,
+        secure: true,
+        headers: {
+          'Authorization': process.env.GITLAB_TOKEN ? `Bearer ${process.env.GITLAB_TOKEN}` : undefined,
+        },
+      },
+      // Proxy to your GitLab Pages if needed
+      '/gitlab-pages': {
+        target: process.env.GITLAB_PAGES_URL || 'https://your-username.gitlab.io',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/gitlab-pages/, ''),
+      },
+    },
   },
   build: {
     // Ensure proper chunk splitting for better caching

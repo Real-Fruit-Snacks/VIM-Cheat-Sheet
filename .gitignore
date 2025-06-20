@@ -128,11 +128,26 @@ debug-*.cjs
 audit-*.cjs
 comprehensive-*.cjs
 
+# Browser compatibility test reports
+browser-test-report-*.json
+test-screenshot-*.png
+
 # Audit reports and analysis
 AUDIT_*.md
 COMPREHENSIVE_*.md
 *-audit-report.json
 audit-report-*.json
+
+# Generated documentation (keep only README.md, LICENSE, CLAUDE.md)
+BROWSER-COMPATIBILITY-GUIDE.md
+COMPLETE-LOGGING-SUMMARY.md
+CORS-SOLUTIONS.md
+HOTFIX_*.md
+LOGGING-GUIDE.md
+OFFLINE_DEPLOYMENT_*.md
+RELEASE_NOTES_*.md
+RESILIENCE-FEATURES.md
+SECURITY.md
 
 # ============================================
 # Miscellaneous
@@ -150,6 +165,4 @@ pids
 .lock-wscript
 .node_repl_history
 
-# Claude Code documentation (not tracked)
-CLAUDE.md
-dist
+# Claude Code documentation is now tracked in the repository

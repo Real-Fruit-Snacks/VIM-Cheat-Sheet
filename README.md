@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-1.4.1-blue.svg" alt="Version" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
@@ -88,6 +88,8 @@ VIMora brings the complete VIM experience to your browser with **zero installati
 - **Live Configuration** - Real-time vimrc editing with instant preview
 - **Persistent Settings** - All preferences saved locally across sessions
 - **Practice Files** - Built-in examples for learning VIM techniques
+- **Resilient Architecture** - Comprehensive error recovery and self-healing systems
+- **Complete Transparency** - Detailed logging of all operations with interactive debugging
 
 ### For Educators & Content Creators
 
@@ -120,6 +122,9 @@ npm install
 npm run dev
 
 # Open http://localhost:5173/VIM/
+
+# Run browser compatibility tests
+node test-browser-compatibility.js
 ```
 
 ### Enterprise Deployment
@@ -232,8 +237,18 @@ VIMora
 │   ├── Which-Key Helper
 │   ├── Keystroke Visualizer
 │   └── Live Vimrc Editor
+├── Resilience & Recovery
+│   ├── Ultra-Early Browser Detection
+│   ├── Automated Error Recovery
+│   ├── Memory & Storage Management
+│   └── Network Failure Handling
+├── Comprehensive Logging
+│   ├── Real-time Operation Tracking
+│   ├── User Action Monitoring
+│   ├── Performance Metrics
+│   └── Interactive Debug Console
 └── Smart Browser Detection
-    └── Automatic Implementation Selection
+    └── Progressive Enhancement Strategy
 ```
 
 ### Technology Stack
@@ -276,6 +291,8 @@ Review the [CLAUDE.md](CLAUDE.md) file for technical architecture details before
 - **Time to Interactive**: <2s on modern connections
 - **Memory Usage**: ~50MB (vim.wasm) / ~30MB (Monaco)
 - **Offline Ready**: Full functionality after initial load
+- **Real-time Monitoring**: Memory, storage, and network performance tracking
+- **Automatic Optimization**: Memory cleanup and resource management
 
 ## Security
 
