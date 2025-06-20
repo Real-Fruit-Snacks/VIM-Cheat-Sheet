@@ -17,9 +17,9 @@ export default defineConfig({
         target: 'https://gitlab.com',
         changeOrigin: true,
         secure: true,
-        headers: {
-          'Authorization': process.env.GITLAB_TOKEN ? `Bearer ${process.env.GITLAB_TOKEN}` : undefined,
-        },
+        headers: process.env.GITLAB_TOKEN ? {
+          'Authorization': `Bearer ${process.env.GITLAB_TOKEN}`,
+        } : {},
       },
       // Proxy to your GitLab Pages if needed
       '/gitlab-pages': {

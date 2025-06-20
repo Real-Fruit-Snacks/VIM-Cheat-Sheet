@@ -1,6 +1,4 @@
 // Global Error Recovery System
-
-import React from 'react';
 import { log } from './logger';
 
 interface ErrorContext {
@@ -516,45 +514,18 @@ export class ErrorRecoverySystem {
 // Export singleton instance
 export const errorRecovery = ErrorRecoverySystem.getInstance();
 
-// React Error Boundary Component
-export class ErrorBoundary extends React.Component<
-  { children: React.ReactNode; fallback?: React.ComponentType<{ error: Error }> },
-  { hasError: boolean; error: Error | null }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    errorRecovery.reportError(error, {
-      component: errorInfo.componentStack,
-      action: 'react-render'
-    });
-  }
-
-  render() {
-    if (this.state.hasError && this.state.error) {
-      const Fallback = this.props.fallback;
-      if (Fallback) {
-        return <Fallback error={this.state.error} />;
-      }
-
-      return (
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h2>Something went wrong</h2>
-          <details style={{ whiteSpace: 'pre-wrap', textAlign: 'left' }}>
-            {this.state.error.toString()}
-          </details>
-          <button onClick={() => window.location.reload()}>Reload Page</button>
-        </div>
-      );
+// Error boundary integration utility
+export function integrateWithErrorBoundary(errorRecoveryInstance: ErrorRecoverySystem) {
+  // This function can be called from React ErrorBoundary components
+  // to integrate with the error recovery system
+  return {
+    reportError: (error: Error, context: Partial<ErrorContext> = {}) => {
+      errorRecoveryInstance.reportError(error, {
+        component: 'react-boundary',
+        action: 'react-render',
+        timestamp: Date.now(),
+        ...context
+      });
     }
-
-    return this.props.children;
-  }
+  };
 }

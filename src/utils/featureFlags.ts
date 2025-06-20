@@ -470,20 +470,18 @@ export function useFeatureFlag(flagId: string): boolean {
   return enabled;
 }
 
-// HOC for feature-flagged components
-export function withFeatureFlag<P extends object>(
-  flagId: string,
-  FallbackComponent?: React.ComponentType<P>
-) {
-  return function FeatureFlaggedComponent(Component: React.ComponentType<P>) {
-    return function WrappedComponent(props: P) {
-      const enabled = useFeatureFlag(flagId);
-      
-      if (!enabled && FallbackComponent) {
-        return <FallbackComponent {...props} />;
-      }
-      
-      return enabled ? <Component {...props} /> : null;
-    };
+// Utility for checking feature flags in components
+export function shouldRenderFeature(flagId: string): boolean {
+  return featureFlags.isEnabled(flagId);
+}
+
+// Feature flag wrapper utility
+export function createFeatureFlagWrapper(flagId: string) {
+  return {
+    isEnabled: () => featureFlags.isEnabled(flagId),
+    shouldRender: () => shouldRenderFeature(flagId),
+    withFallback: (primaryValue: any, fallbackValue: any) => {
+      return shouldRenderFeature(flagId) ? primaryValue : fallbackValue;
+    }
   };
 }

@@ -1,6 +1,4 @@
 // CORS Helper utilities for handling cross-origin requests
-
-import React from 'react';
 import { log } from './logger';
 
 interface CORSOptions {
@@ -247,41 +245,17 @@ export const corsJSON = CORSHelper.fetchJSON.bind(CORSHelper);
 export const checkCORS = CORSHelper.checkCORS.bind(CORSHelper);
 export const fetchGitLab = CORSHelper.fetchGitLab.bind(CORSHelper);
 
-// CORS error boundary component helper
-export function withCORSErrorBoundary<T extends object>(
-  Component: React.ComponentType<T>,
-  fallback?: React.ComponentType<{ error: Error }>
-) {
-  return class CORSErrorBoundary extends React.Component<T, { error: Error | null }> {
-    state = { error: null };
-
-    static getDerivedStateFromError(error: Error) {
-      if (error.message.includes('CORS') || error.message.includes('cross-origin')) {
-        return { error };
-      }
-      throw error; // Re-throw non-CORS errors
-    }
-
-    render() {
-      if (this.state.error) {
-        const Fallback = fallback || DefaultCORSErrorFallback;
-        return <Fallback error={this.state.error} />;
-      }
-
-      return <Component {...this.props} />;
-    }
-  };
+// CORS error utility functions
+export function isCORSError(error: Error): boolean {
+  return error.message.includes('CORS') || 
+         error.message.includes('cross-origin') ||
+         error.message.includes('preflight') ||
+         error.name === 'NetworkError';
 }
 
-// Default CORS error fallback component
-function DefaultCORSErrorFallback({ error }: { error: Error }) {
-  return (
-    <div style={{ padding: '20px', textAlign: 'center', color: '#ff6b6b' }}>
-      <h3>CORS Error</h3>
-      <p>{error.message}</p>
-      <p style={{ fontSize: '0.9em', marginTop: '10px' }}>
-        Please check your browser console for more details.
-      </p>
-    </div>
-  );
+export function getCORSErrorMessage(error: Error): string {
+  if (isCORSError(error)) {
+    return `CORS Error: ${error.message}. Please check your browser console for more details.`;
+  }
+  return error.message;
 }

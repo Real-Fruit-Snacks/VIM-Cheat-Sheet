@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-1.4.1-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-1.5.0-blue.svg" alt="Version" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
