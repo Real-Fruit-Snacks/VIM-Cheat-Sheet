@@ -71,6 +71,27 @@ export default function VimHelpViewer({
     }
   }, [history, historyIndex])
 
+  useEffect(() => {
+    if (isOpen && currentFile) {
+      loadHelpFile(currentFile, initialTag)
+    }
+  }, [isOpen, currentFile, initialTag, loadHelpFile])
+
+  // Preload common help files on first open
+  useEffect(() => {
+    if (isOpen && !vimHelpCache.isPreloaded) {
+      vimHelpCache.preloadCommonFiles()
+    }
+  }, [isOpen])
+
+  // Auto-hide TOC on mobile screens when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      const isMobile = window.innerWidth < 768
+      setShowTOC(!isMobile)
+    }
+  }, [isOpen])
+
   const handleLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement
     if (target.classList.contains('vim-help-link')) {
