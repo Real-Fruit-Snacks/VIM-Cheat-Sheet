@@ -256,15 +256,21 @@ export default function VimCheatsheetEnhanced() {
   }, [])
 
   const scrollToTop = useCallback(() => {
-    mainContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+      setSelectedCommandIndex(0)
+    }
   }, [])
 
   const scrollToBottom = useCallback(() => {
-    mainContentRef.current?.scrollTo({ 
-      top: mainContentRef.current.scrollHeight, 
-      behavior: 'smooth' 
-    })
-  }, [])
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ 
+        top: mainContentRef.current.scrollHeight, 
+        behavior: 'smooth' 
+      })
+      setSelectedCommandIndex(filteredCommands.length - 1)
+    }
+  }, [filteredCommands.length])
 
   const toggleKeyboardHelp = useCallback(() => {
     setShowKeyboardHelp(prev => !prev)

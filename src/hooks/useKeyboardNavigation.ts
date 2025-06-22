@@ -65,6 +65,7 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions) {
 
       case 'g':
         if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+          e.preventDefault() // Prevent any default browser behavior
           if (e.shiftKey) {
             // Shift+G - go to bottom
             onScrollToBottom?.()
@@ -75,14 +76,13 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions) {
               window.__lastGPress = 0
             } else {
               window.__lastGPress = Date.now()
-              handled = false
             }
           }
         }
         break
 
       case 'G':
-        if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey) {
           onScrollToBottom?.()
         }
         break
