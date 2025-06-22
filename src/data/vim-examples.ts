@@ -4,6 +4,8 @@ interface ExampleState {
   cursorCol: number
   mode: 'normal' | 'insert' | 'visual' | 'command'
   description: string
+  visualEnd?: { row: number; col: number } // For visual mode selections
+  commandLine?: string // For showing commands being typed
 }
 
 interface VimCommandExample {
@@ -1923,7 +1925,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 8,
       mode: 'normal',
-      description: 'File has unsaved changes'
+      description: 'File has unsaved changes',
+      commandLine: ''
     },
     afterState: {
       text: [
@@ -1934,7 +1937,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 8,
       mode: 'normal',
-      description: 'File saved to disk successfully'
+      description: 'File saved to disk successfully',
+      commandLine: '"example.txt" 3L, 76C written'
     },
     explanation: 'Writes (saves) the current file to disk. Essential command for preserving your work.'
   },
@@ -7143,7 +7147,9 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 4,
       mode: 'visual',
-      description: 'Selected text: "quick brown" in visual mode'
+      description: 'Selected text: "quick brown" in visual mode',
+      visualEnd: { row: 1, col: 15 },
+      commandLine: '-- VISUAL --'
     },
     afterState: {
       text: [
@@ -7154,7 +7160,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 4,
       mode: 'normal',
-      description: 'Selected text deleted'
+      description: 'Selected text deleted',
+      commandLine: ''
     },
     explanation: 'In visual mode, "d" deletes the selected text. Works with character, line, or block selections. Deleted text goes to default register.'
   },
@@ -8145,19 +8152,21 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Ready to search forward'
+      description: 'Ready to search forward',
+      commandLine: ''
     },
     afterState: {
       text: [
         'Search forward in document:',
         'Find the word "example" here',
-        '/example',
-        '[Found at line 2, col 14]'
+        'Another example on this line',
+        'Last example at the end'
       ],
       cursorRow: 1,
       cursorCol: 14,
       mode: 'normal',
-      description: 'First occurrence found and highlighted'
+      description: 'First occurrence found and highlighted',
+      commandLine: '/example'
     },
     explanation: 'Searches forward for pattern. Type /pattern and press Enter. Cursor jumps to first match. Use n for next match, N for previous.'
   },
@@ -8467,19 +8476,21 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'About to record macro to register "a"'
+      description: 'About to record macro to register "a"',
+      commandLine: ''
     },
     afterState: {
       text: [
         'Record a macro:',
         'item1: TODO',
-        'recording @a',
-        '[Recording keystrokes...]'
+        'item2: TODO',
+        'item3: TODO'
       ],
       cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Recording macro to register "a"'
+      description: 'Recording macro to register "a"',
+      commandLine: 'recording @a'
     },
     explanation: 'Starts recording macro to register (a-z). Press qa to record to "a". All keystrokes recorded until pressing q again. Replay with @a.'
   },
