@@ -1591,25 +1591,25 @@ export const vimExamples: Record<string, VimCommandExample> = {
     command: 'Y',
     beforeState: {
       text: [
-        'Copy this line from cursor to end',
+        'Copy this entire line',
         'Second line here'
       ],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 10,
       mode: 'normal',
       description: 'Cursor in middle of first line'
     },
     afterState: {
       text: [
-        'Copy this line from cursor to end',
+        'Copy this entire line',
         'Second line here'
       ],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 10,
       mode: 'normal',
-      description: 'Text from cursor to end copied'
+      description: 'Entire line copied to register'
     },
-    explanation: 'Copies from cursor position to end of line. Same as y$ - useful for copying partial lines.'
+    explanation: 'Copies the entire line regardless of cursor position. Same as yy - copies the whole line, not just from cursor to end.'
   },
 
   'P': {

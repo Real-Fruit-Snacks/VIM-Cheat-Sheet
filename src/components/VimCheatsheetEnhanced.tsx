@@ -397,9 +397,12 @@ export default function VimCheatsheetEnhanced() {
             </h3>
             <div className="space-y-1">
               <button
-                onClick={() => setActiveCategory(null)}
+                onClick={() => {
+                  setActiveCategory(null)
+                  setSelectedFilter('all')
+                }}
                 className={`w-full text-left px-3 py-2 rounded transition-colors ${
-                  activeCategory === null && selectedFilter !== 'favorites'
+                  activeCategory === null && selectedFilter === 'all'
                     ? 'bg-green-600 text-white'
                     : 'text-gray-300 hover:bg-gray-800'
                 }`}
@@ -452,7 +455,10 @@ export default function VimCheatsheetEnhanced() {
                 return (
                   <button
                     key={category}
-                    onClick={() => setActiveCategory(category)}
+                    onClick={() => {
+                      setActiveCategory(category)
+                      setSelectedFilter('all')
+                    }}
                     className={`w-full text-left px-3 py-2 rounded transition-colors ${
                       activeCategory === category
                         ? 'bg-green-600 text-white'

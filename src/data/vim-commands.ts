@@ -89,7 +89,7 @@ export const vimCommands: Record<string, VimCommand[]> = {
 
   copyPasteAndRegisters: [
     { command: 'yy', description: 'Copy (yank) entire line', mode: 'normal' },
-    { command: 'Y', description: 'Copy from cursor to end of line (same as y$)', mode: 'normal' },
+    { command: 'Y', description: 'Copy entire line (same as yy)', mode: 'normal' },
     { command: 'yw', description: 'Copy word', mode: 'normal' },
     { command: 'y$', description: 'Copy from cursor to end of line', mode: 'normal' },
     { command: 'p', description: 'Paste after cursor', mode: 'normal' },
