@@ -68,7 +68,7 @@ checksums.txt
 RELEASE_NOTES.md
 
 # Root level development files (should be in dist/ only)
-/index.html
+# /index.html - REMOVED: Required for Vite build process
 
 # Analysis and development scripts
 analyze-*.js
