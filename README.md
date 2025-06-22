@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-2.2.0-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-3.0.0-blue.svg" alt="Version" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
@@ -125,6 +125,54 @@ Featuring **315 interactive examples** covering ALL commands across every catego
 ### Integrated VIM Documentation
 
 **🆕 Version 2.2.0 Feature:** Official VIM help documentation is now available directly within the app!
+
+### Advanced Performance & User Experience
+
+**🚀 Version 3.0.0 Major Release:** Revolutionary performance improvements and VIM-style navigation!
+
+#### 🏎️ Performance Optimizations
+- **46% Bundle Size Reduction** - From 400KB to 216KB main bundle
+- **Advanced Code Splitting** - Vendor libraries, icons, search utils, and data properly chunked
+- **Virtual Scrolling** - Smooth performance with large command lists
+- **Intelligent Debouncing** - 300ms debounced search for optimal performance
+- **GPU Acceleration** - Hardware-accelerated animations and transitions
+
+#### ⌨️ VIM-Style Keyboard Navigation
+- **`j/k`** - Navigate up/down through commands
+- **`/`** - Focus search (just like VIM!)
+- **`gg`** - Jump to top of list
+- **`G`** - Jump to bottom of list
+- **`?`** - Toggle keyboard shortcuts help
+- **`Esc`** - Close modals and cancel operations
+
+#### 🔍 Enhanced Search & Discovery
+- **Fuzzy Search** - Find commands even with typos using Fuse.js
+- **Smart Suggestions** - Real-time command suggestions and autocomplete
+- **Common Mistakes Detection** - "Did you mean..." suggestions for typos
+- **Related Commands** - Discover commands similar to what you're searching
+- **Command Synonyms** - Search for "delete" to find "cut", "remove", etc.
+- **Workflow Examples** - See common command combinations and workflows
+
+#### 📱 Mobile-First Design
+- **Collapsible Sidebar** - Touch-optimized navigation for mobile
+- **Swipe Gestures** - Swipe right/left to open/close sidebar
+- **Touch-Friendly Buttons** - 44px minimum touch targets
+- **Bottom Sheet Pattern** - Mobile-optimized command details
+- **Responsive Animations** - Smooth cursor movement animations
+
+#### 🎯 Advanced Features
+- **Animated Cursor Movement** - See exactly how VIM commands move the cursor
+- **Command Builder** - Build complex command sequences interactively
+- **Favorites System** - Save frequently used commands
+- **Progress Tracking** - Visual feedback for user interactions
+- **Offline Compatibility** - Works completely offline after initial load
+
+#### 🛠️ Technical Improvements
+- **React 19.1** - Latest React with optimized performance
+- **TypeScript 5.8** - Full type safety and developer experience
+- **Modern ES2015** - Optimized for modern browsers
+- **Tree Shaking** - Dead code elimination for smaller bundles
+- **Terser Optimization** - Advanced minification and compression
 
 - **Offline Access** - All VIM help files bundled with the application
 - **Context-Aware Help** - Click the help icon next to any command for detailed documentation

@@ -1,7 +1,7 @@
-import VimCheatsheet from './components/VimCheatsheet'
+import VimCheatsheetEnhanced from './components/VimCheatsheetEnhanced'
 
 function App() {
-  return <VimCheatsheet />
+  return <VimCheatsheetEnhanced />
 }
 
 export default App
