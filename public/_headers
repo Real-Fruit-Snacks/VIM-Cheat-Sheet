@@ -1,58 +1,18 @@
 /*
-  Cross-Origin-Embedder-Policy: require-corp
-  Cross-Origin-Opener-Policy: same-origin
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Access-Control-Allow-Credentials: true
-  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH
-  Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-Gitlab-Token, Range, Accept-Encoding, If-Modified-Since, Cache-Control
-  Access-Control-Expose-Headers: Content-Length, Content-Range, X-Gitlab-Token
-  Access-Control-Max-Age: 86400
-  Vary: Origin, Accept-Encoding
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: data:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://gitlab.com https://*.gitlab.io wss://*.gitlab.io; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
-  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
-  Pragma: no-cache
-
-/vim-wasm/*
-  Cross-Origin-Embedder-Policy: require-corp
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Resource-Policy: cross-origin
-  Access-Control-Allow-Origin: *
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Cache-Control: public, max-age=3600
 
 /*.js
   Content-Type: application/javascript
-  Cross-Origin-Resource-Policy: cross-origin
-  Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=31536000, immutable
-
-/*.wasm
-  Content-Type: application/wasm
-  Cross-Origin-Resource-Policy: cross-origin
-  Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
 
 /*.css
   Content-Type: text/css
-  Cross-Origin-Resource-Policy: cross-origin
-  Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=31536000, immutable
 
 /index.html
   Cache-Control: no-cache, no-store, must-revalidate
   Pragma: no-cache
   Expires: 0
-
-/service-worker.js
-  Cache-Control: no-cache, no-store, must-revalidate
-  Service-Worker-Allowed: /
-
-/*.json
-  Content-Type: application/json
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
-
-/api/*
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
-  Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With
-  Access-Control-Max-Age: 86400
