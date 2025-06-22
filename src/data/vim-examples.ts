@@ -7741,5 +7741,833 @@ export const vimExamples: Record<string, VimCommandExample> = {
       description: 'Word no longer marked as incorrect'
     },
     explanation: 'Undoes marking word as incorrect (undoes "zw" command). Word will no longer be flagged as intentionally wrong.'
+  },
+
+  ':vimdiff file1 file2': {
+    command: ':vimdiff file1 file2',
+    beforeState: {
+      text: [
+        'Starting VIM with diff mode:',
+        '$ vimdiff config.old config.new',
+        'Or from within VIM:',
+        ':vimdiff config.new'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'About to start diff mode between two files'
+    },
+    afterState: {
+      text: [
+        '|-- config.old --|        |-- config.new --|',
+        'server {                  server {',
+        '  port: 8080               port: 3000',
+        '  host: localhost          host: localhost',
+        '}                        }'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Files opened side-by-side with differences highlighted'
+    },
+    explanation: 'Starts VIM in diff mode comparing two files. Shows differences side-by-side with color highlighting. Use ]c and [c to jump between changes.'
+  },
+
+  ':diffthis': {
+    command: ':diffthis',
+    beforeState: {
+      text: [
+        'Make current window part of diff:',
+        'Already have two windows open',
+        'Run :diffthis in each window',
+        'To start comparing them'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Two windows open, not yet in diff mode'
+    },
+    afterState: {
+      text: [
+        'Window 1 [DIFF MODE]',
+        'Content being compared',
+        'Differences highlighted',
+        'Ready for comparison'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Current window now part of diff comparison'
+    },
+    explanation: 'Makes current window part of diff comparison. Run in each window you want to compare. Useful for comparing already open files.'
+  },
+
+  ':diffoff': {
+    command: ':diffoff',
+    beforeState: {
+      text: [
+        'Currently in diff mode:',
+        '~~ Line removed ~~',
+        '++ Line added ++',
+        'Exit diff mode with :diffoff'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Window showing diff highlighting'
+    },
+    afterState: {
+      text: [
+        'Normal editing mode restored:',
+        'Line removed',
+        'Line added',
+        'No more diff highlighting'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Diff mode disabled, normal view'
+    },
+    explanation: 'Turns off diff mode in current window. Removes diff highlighting and returns to normal editing. Use :diffoff! to turn off in all windows.'
+  },
+
+
+  'do': {
+    command: 'do',
+    beforeState: {
+      text: [
+        '|-- Left File --|        |-- Right File --|',
+        'old content              new content',
+        '[cursor here]            [want this text]',
+        'same line                same line'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In left window, want text from right'
+    },
+    afterState: {
+      text: [
+        '|-- Left File --|        |-- Right File --|',
+        'old content              new content',
+        'new content              new content',
+        'same line                same line'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Obtained change from other file'
+    },
+    explanation: 'Diff obtain - gets change from other file in diff mode. Replaces current change with version from other window. Opposite of dp (diff put).'
+  },
+
+  'dp': {
+    command: 'dp',
+    beforeState: {
+      text: [
+        '|-- Left File --|        |-- Right File --|',
+        'correct text             wrong text',
+        '[cursor here]            [needs update]',
+        'same line                same line'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In left window, want to push change right'
+    },
+    afterState: {
+      text: [
+        '|-- Left File --|        |-- Right File --|',
+        'correct text             wrong text',
+        'correct text             correct text',
+        'same line                same line'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Put change to other file'
+    },
+    explanation: 'Diff put - sends change to other file in diff mode. Replaces other window\'s version with current change. Opposite of do (diff obtain).'
+  },
+
+  ':diffupdate': {
+    command: ':diffupdate',
+    beforeState: {
+      text: [
+        'Files changed outside VIM:',
+        'Diff highlighting outdated',
+        'Changes not reflected',
+        'Need to refresh diff view'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Diff highlighting needs update'
+    },
+    afterState: {
+      text: [
+        'Files changed outside VIM:',
+        '++ New changes highlighted ++',
+        '~~ Updated differences shown ~~',
+        'Diff view refreshed!'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Diff highlighting updated'
+    },
+    explanation: 'Updates diff highlighting. Use when files change or after making edits to refresh the difference detection. Essential for accurate diff viewing.'
+  },
+
+  ':sp': {
+    command: ':sp',
+    beforeState: {
+      text: [
+        'Single window view:',
+        'function main() {',
+        '  console.log("hello");',
+        '  return 0;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 2,
+      mode: 'normal',
+      description: 'Single window editing file'
+    },
+    afterState: {
+      text: [
+        '--- Window 1 (top) ---',
+        'function main() {',
+        '  console.log("hello");',
+        '--- Window 2 (bottom) ---',
+        'function main() {',
+        '  console.log("hello");'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Window split horizontally, same file in both'
+    },
+    explanation: 'Splits window horizontally. Creates new window above current one showing same file. Use :sp filename to open different file.'
+  },
+
+  ':vsp': {
+    command: ':vsp',
+    beforeState: {
+      text: [
+        'Single window view:',
+        'const app = express();',
+        'app.listen(3000);',
+        'console.log("Server started");'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Single window editing file'
+    },
+    afterState: {
+      text: [
+        '|-- Window 1 --|  |-- Window 2 --|',
+        'const app =       const app =',
+        'express();        express();',
+        'app.listen(3000); app.listen(3000);'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Window split vertically, same file side-by-side'
+    },
+    explanation: 'Splits window vertically. Creates new window to the left showing same file. Use :vsp filename to open different file. Great for comparing code.'
+  },
+
+  'Ctrl-w j': {
+    command: 'Ctrl-w j',
+    beforeState: {
+      text: [
+        '--- Current Window (top) ---',
+        'File: main.js [cursor here]',
+        'function top() { }',
+        '--- Window Below ---',
+        'File: utils.js',
+        'function bottom() { }'
+      ],
+      cursorRow: 1,
+      cursorCol: 14,
+      mode: 'normal',
+      description: 'In top window, bottom window exists'
+    },
+    afterState: {
+      text: [
+        '--- Window Above ---',
+        'File: main.js',
+        'function top() { }',
+        '--- Current Window (bottom) ---',
+        'File: utils.js [cursor here]',
+        'function bottom() { }'
+      ],
+      cursorRow: 4,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Moved to window below'
+    },
+    explanation: 'Moves cursor to window below current one. Part of window navigation suite: Ctrl-w + h/j/k/l for left/down/up/right movement between windows.'
+  },
+
+  'Ctrl-w k': {
+    command: 'Ctrl-w k',
+    beforeState: {
+      text: [
+        '--- Window Above ---',
+        'File: header.h',
+        'void init();',
+        '--- Current Window (bottom) ---',
+        'File: main.c [cursor here]',
+        'int main() { }'
+      ],
+      cursorRow: 4,
+      cursorCol: 13,
+      mode: 'normal',
+      description: 'In bottom window, top window exists'
+    },
+    afterState: {
+      text: [
+        '--- Current Window (top) ---',
+        'File: header.h [cursor here]',
+        'void init();',
+        '--- Window Below ---',
+        'File: main.c',
+        'int main() { }'
+      ],
+      cursorRow: 1,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Moved to window above'
+    },
+    explanation: 'Moves cursor to window above current one. Essential for navigating between horizontal splits. Ctrl-w k goes up, Ctrl-w j goes down.'
+  },
+
+  'gx': {
+    command: 'gx',
+    beforeState: {
+      text: [
+        'Documentation and links:',
+        'Visit https://vim.org for more info',
+        'Check file:///home/user/docs.pdf',
+        'Email: user@example.com'
+      ],
+      cursorRow: 1,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'Cursor on URL'
+    },
+    afterState: {
+      text: [
+        'Documentation and links:',
+        'Visit https://vim.org for more info',
+        '[Browser opened to vim.org]',
+        'Email: user@example.com'
+      ],
+      cursorRow: 1,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'URL opened in default browser'
+    },
+    explanation: 'Opens URL under cursor in default browser. Works with http://, https://, file:// URLs. Also opens email addresses in mail client.'
+  },
+
+  'Ctrl-g': {
+    command: 'Ctrl-g',
+    beforeState: {
+      text: [
+        'Long document content...',
+        'Currently editing somewhere',
+        'In the middle of the file',
+        'Need file status info'
+      ],
+      cursorRow: 2,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'Editing file, want status'
+    },
+    afterState: {
+      text: [
+        'Long document content...',
+        'Currently editing somewhere',
+        'In the middle of the file',
+        '"document.txt" line 3 of 150 --50%-- col 11'
+      ],
+      cursorRow: 2,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'File status shown at bottom'
+    },
+    explanation: 'Shows file status: filename, current line, total lines, percentage through file, and column. Quick way to check position in file.'
+  },
+
+  'g Ctrl-g': {
+    command: 'g Ctrl-g',
+    beforeState: {
+      text: [
+        'Project file being edited',
+        'Multiple paragraphs of text',
+        'Current position unknown',
+        'Need detailed statistics'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Want detailed file statistics'
+    },
+    afterState: {
+      text: [
+        'Project file being edited',
+        'Multiple paragraphs of text',
+        'Col 16 of 27; Line 3 of 25; Word 12 of 89; Byte 156 of 512',
+        'Need detailed statistics'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Detailed position info displayed'
+    },
+    explanation: 'Shows detailed cursor position: column, line, word count, byte position. More comprehensive than Ctrl-g. Useful for precise navigation.'
+  },
+
+  '/pattern': {
+    command: '/pattern',
+    beforeState: {
+      text: [
+        'Search forward in document:',
+        'Find the word "example" here',
+        'Another example on this line',
+        'Last example at the end'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Ready to search forward'
+    },
+    afterState: {
+      text: [
+        'Search forward in document:',
+        'Find the word "example" here',
+        '/example',
+        '[Found at line 2, col 14]'
+      ],
+      cursorRow: 1,
+      cursorCol: 14,
+      mode: 'normal',
+      description: 'First occurrence found and highlighted'
+    },
+    explanation: 'Searches forward for pattern. Type /pattern and press Enter. Cursor jumps to first match. Use n for next match, N for previous.'
+  },
+
+  '?pattern': {
+    command: '?pattern',
+    beforeState: {
+      text: [
+        'First instance of word',
+        'Second instance here',
+        'Third instance below',
+        'Search backwards from here'
+      ],
+      cursorRow: 3,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Ready to search backward'
+    },
+    afterState: {
+      text: [
+        'First instance of word',
+        'Second instance here',
+        '?instance',
+        '[Found at line 2, col 7]'
+      ],
+      cursorRow: 1,
+      cursorCol: 7,
+      mode: 'normal',
+      description: 'Found previous occurrence'
+    },
+    explanation: 'Searches backward for pattern. Type ?pattern and press Enter. Cursor jumps to previous match. Use n/N to continue searching.'
+  },
+
+  ':%s/old/new/gc': {
+    command: ':%s/old/new/gc',
+    beforeState: {
+      text: [
+        'Replace old text with new',
+        'This old method is outdated',
+        'Use the old approach here',
+        'Old code needs updating'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Multiple instances of "old" to replace'
+    },
+    afterState: {
+      text: [
+        'Replace new text with new',
+        'This new method is outdated',
+        'replace with new (y/n/a/q/l/^E/^Y)?',
+        '[Asking for confirmation]'
+      ],
+      cursorRow: 0,
+      cursorCol: 8,
+      mode: 'normal',
+      description: 'Confirming each replacement'
+    },
+    explanation: 'Global search and replace with confirmation. Shows each match and asks: y=yes, n=no, a=all remaining, q=quit, l=last then quit.'
+  },
+
+  '>': {
+    command: '>',
+    beforeState: {
+      text: [
+        'if (condition) {',
+        'doSomething();',
+        'doAnother();',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines 2-3 selected in visual mode'
+    },
+    afterState: {
+      text: [
+        'if (condition) {',
+        '    doSomething();',
+        '    doAnother();',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Selected lines indented'
+    },
+    explanation: 'In visual mode, indents selected lines by one shiftwidth. Select lines with V, then press >. Repeat with . to indent more.'
+  },
+
+  '<': {
+    command: '<',
+    beforeState: {
+      text: [
+        'function test() {',
+        '        overIndented();',
+        '        tooFar();',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 8,
+      mode: 'visual',
+      description: 'Over-indented lines selected'
+    },
+    afterState: {
+      text: [
+        'function test() {',
+        '    overIndented();',
+        '    tooFar();',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Selected lines unindented'
+    },
+    explanation: 'In visual mode, unindents selected lines by one shiftwidth. Select lines with V, then press <. Essential for fixing indentation.'
+  },
+
+  '==': {
+    command: '==',
+    beforeState: {
+      text: [
+        'function example() {',
+        'let x = 1;',
+        '  if (x > 0) {',
+        '    return true;',
+        '  }',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 2,
+      mode: 'normal',
+      description: 'Cursor on poorly indented line'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        'let x = 1;',
+        '    if (x > 0) {',
+        '    return true;',
+        '  }',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Current line auto-indented correctly'
+    },
+    explanation: 'Auto-indents current line according to syntax rules. VIM analyzes surrounding code context to determine proper indentation level.'
+  },
+
+  ':b5': {
+    command: ':b5',
+    beforeState: {
+      text: [
+        'Current buffer (#2):',
+        'Editing file2.txt',
+        'Want to switch to buffer 5',
+        ':ls shows: 1 file1 2 file2 5 config.js'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In buffer 2, want buffer 5'
+    },
+    afterState: {
+      text: [
+        'Now in buffer #5:',
+        'const config = {',
+        '  port: 3000,',
+        '  host: "localhost"',
+        '};'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Switched to buffer 5 (config.js)'
+    },
+    explanation: 'Switches to buffer number 5. Use :ls to see all buffers with numbers. Quick way to jump between specific open files.'
+  },
+
+  ':bfirst': {
+    command: ':bfirst',
+    beforeState: {
+      text: [
+        'Currently in buffer #7',
+        'Many buffers open',
+        'Want to go to first buffer',
+        'Quick navigation needed'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In buffer 7, multiple buffers open'
+    },
+    afterState: {
+      text: [
+        'Now in buffer #1 (first):',
+        'README.md',
+        '# Project Documentation',
+        'This is the first file opened'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Jumped to first buffer'
+    },
+    explanation: 'Jumps to the first buffer in the buffer list. Useful for quickly returning to the first file you opened in the session.'
+  },
+
+  ':blast': {
+    command: ':blast',
+    beforeState: {
+      text: [
+        'Currently in buffer #2',
+        'Multiple files open',
+        'Want to jump to last buffer',
+        'Use :blast command'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In buffer 2, want last buffer'
+    },
+    afterState: {
+      text: [
+        'Now in buffer #9 (last):',
+        'test_results.log',
+        'All tests passed!',
+        'This was the last file opened'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Jumped to last buffer'
+    },
+    explanation: 'Jumps to the last buffer in the buffer list. Quick way to get to the most recently added buffer without knowing its number.'
+  },
+
+  '7x': {
+    command: '7x',
+    beforeState: {
+      text: [
+        'Delete multiple characters:',
+        'Remove these 7 chars>>>HERE',
+        'Text continues after'
+      ],
+      cursorRow: 1,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Cursor before 7 characters to delete'
+    },
+    afterState: {
+      text: [
+        'Delete multiple characters:',
+        'Remove these 7 charsHERE',
+        'Text continues after'
+      ],
+      cursorRow: 1,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Deleted exactly 7 characters'
+    },
+    explanation: 'Deletes 7 characters starting from cursor. Number before command repeats it. Works with most commands: 5dd deletes 5 lines, 3w moves 3 words.'
+  },
+
+  '2Ctrl-r': {
+    command: '2Ctrl-r',
+    beforeState: {
+      text: [
+        'Made multiple changes:',
+        'Original text',
+        'After undo: back to original',
+        'Want to redo twice'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Undid changes, want to redo 2 times'
+    },
+    afterState: {
+      text: [
+        'Made multiple changes:',
+        'Modified once',
+        'Modified twice',
+        'Redid 2 changes'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Redid exactly 2 changes'
+    },
+    explanation: 'Redoes 2 changes. The count (2) must be typed separately - press 2, then Ctrl-r. Each Ctrl-r redoes one undo.'
+  },
+
+  'q{letter}': {
+    command: 'q{letter}',
+    beforeState: {
+      text: [
+        'Record a macro:',
+        'item1: TODO',
+        'item2: TODO',
+        'item3: TODO'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'About to record macro to register "a"'
+    },
+    afterState: {
+      text: [
+        'Record a macro:',
+        'item1: TODO',
+        'recording @a',
+        '[Recording keystrokes...]'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Recording macro to register "a"'
+    },
+    explanation: 'Starts recording macro to register (a-z). Press qa to record to "a". All keystrokes recorded until pressing q again. Replay with @a.'
+  },
+
+  '@{letter}': {
+    command: '@{letter}',
+    beforeState: {
+      text: [
+        'Replay recorded macro:',
+        'item1: DONE',
+        'item2: TODO',
+        'item3: TODO'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Macro "a" changes TODO to DONE'
+    },
+    afterState: {
+      text: [
+        'Replay recorded macro:',
+        'item1: DONE',
+        'item2: DONE',
+        'item3: TODO'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Macro executed, TODO changed to DONE'
+    },
+    explanation: 'Plays macro from register. @a plays macro recorded in "a". Use @@ to repeat last macro. Powerful for repetitive edits.'
+  },
+
+  'Ctrl-x Ctrl-l': {
+    command: 'Ctrl-x Ctrl-l',
+    beforeState: {
+      text: [
+        'Complete entire lines:',
+        'const server = express();',
+        'const ',
+        'Type Ctrl-x Ctrl-l in insert mode'
+      ],
+      cursorRow: 2,
+      cursorCol: 6,
+      mode: 'insert',
+      description: 'In insert mode after "const "'
+    },
+    afterState: {
+      text: [
+        'Complete entire lines:',
+        'const server = express();',
+        'const server = express();',
+        '[Line completed from above]'
+      ],
+      cursorRow: 2,
+      cursorCol: 25,
+      mode: 'insert',
+      description: 'Entire line completed'
+    },
+    explanation: 'Line completion in insert mode. Completes entire lines from current file. Ctrl-n/Ctrl-p to cycle through matching lines.'
+  },
+
+  'Ctrl-x Ctrl-o': {
+    command: 'Ctrl-x Ctrl-o',
+    beforeState: {
+      text: [
+        'Smart code completion:',
+        'document.',
+        'Type Ctrl-x Ctrl-o after dot'
+      ],
+      cursorRow: 1,
+      cursorCol: 9,
+      mode: 'insert',
+      description: 'After "document." in JavaScript'
+    },
+    afterState: {
+      text: [
+        'Smart code completion:',
+        'document.getElementById',
+        '1. getElementById',
+        '2. getElementsByClassName',
+        '3. querySelector'
+      ],
+      cursorRow: 1,
+      cursorCol: 23,
+      mode: 'insert',
+      description: 'Omni-completion menu shown'
+    },
+    explanation: 'Omni-completion - smart, context-aware completion. Shows methods, properties based on language. Requires filetype plugins.'
   }
 }

@@ -10,7 +10,7 @@
   </p>
   
   <p align="center">
-    315+ Commands • 250+ Interactive Examples • Zero Setup
+    315+ Commands • 315 Interactive Examples • 100% Coverage
   </p>
   
   <p align="center">
@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-2.1.0-blue.svg" alt="Version" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
@@ -82,7 +82,7 @@ This isn't just another VIM reference—it's a **comprehensive, interactive lear
 
 - **315+ VIM Commands** - Comprehensive coverage across all VIM functionality
 - **24 Organized Categories** - Logical grouping from basic movement to advanced features
-- **Interactive Examples** - Animated demonstrations for movement commands
+- **Interactive Examples** - Animated demonstrations for EVERY single command
 - **Smart Search** - Find commands by name, description, mode, or example text
 - **Advanced Filtering** - Filter by difficulty level, frequency, or category
 - **Favorites System** - Save frequently used commands for quick access
@@ -98,7 +98,9 @@ The standout feature: **live command demonstrations** that show:
 - Realistic text scenarios for better understanding
 - Step-by-step explanations of what each command does
 
-Currently featuring **250+ interactive examples** across multiple categories including:
+**🎉 NEW: 100% Coverage Achieved!** Every single VIM command now has an interactive example.
+
+Featuring **315 interactive examples** covering ALL commands across every category:
 - **Basic Movement** (`h`, `j`, `k`, `l`, `w`, `b`, `e`, `0`, `^`, `$`, `%`, `(`, `)`)
 - **Editing Commands** (`dd`, `dw`, `cw`, `yy`, `p`, `x`)
 - **Insert Mode** (`i`, `a`, `o`, `A`, `I`, `O`)
@@ -165,7 +167,7 @@ Each example shows:
 - `da(` - Delete around parentheses
 - `di"` - Delete inside quotes
 
-**And many more across 25+ different categories!**
+**And every other command in all 24 categories!**
 
 ## Command Categories
 
@@ -260,7 +262,7 @@ We welcome contributions to make this the best VIM reference available!
 
 ### Ways to Contribute
 
-- **Add Command Examples** - Contribute interactive examples for more categories
+- **Improve Command Examples** - Enhance existing interactive examples
 - **Improve Command Accuracy** - Help us ensure 100% VIM compatibility
 - **Enhance UI/UX** - Improve the interface and user experience
 - **Fix Issues** - Report bugs and submit fixes
