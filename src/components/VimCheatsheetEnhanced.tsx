@@ -31,7 +31,7 @@ export default function VimCheatsheetEnhanced() {
   const [helpFile, setHelpFile] = useState<string>('index.txt')
   const [helpTag, setHelpTag] = useState<string | undefined>(undefined)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false)
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(true)
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCommandIndex, setSelectedCommandIndex] = useState(0)
 
