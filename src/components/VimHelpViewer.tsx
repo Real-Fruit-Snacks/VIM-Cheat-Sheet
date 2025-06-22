@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { ChevronLeft, ChevronRight, X, Home, Search } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { ChevronLeft, ChevronRight, X, Home, Search, Menu, PanelLeftClose } from 'lucide-react'
 import { vimHelpCache, type ParsedHelpContent } from '../utils/vimHelpParser'
 
 interface VimHelpViewerProps {
@@ -22,6 +22,7 @@ export default function VimHelpViewer({
   const [history, setHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [searchTerm, setSearchTerm] = useState('')
+  const [showTOC, setShowTOC] = useState(true)
   const contentRef = useRef<HTMLDivElement>(null)
 
   // Common help files for quick access
@@ -36,20 +37,7 @@ export default function VimHelpViewer({
     { name: 'editing.txt', label: 'Files' },
   ]
 
-  useEffect(() => {
-    if (isOpen && currentFile) {
-      loadHelpFile(currentFile, initialTag)
-    }
-  }, [isOpen, currentFile, initialTag])
-
-  // Preload common help files on first open
-  useEffect(() => {
-    if (isOpen && !vimHelpCache.isPreloaded) {
-      vimHelpCache.preloadCommonFiles()
-    }
-  }, [isOpen])
-
-  const loadHelpFile = async (filename: string, tag?: string) => {
+  const loadHelpFile = useCallback(async (filename: string, tag?: string) => {
     setIsLoading(true)
     setError(null)
     
@@ -81,7 +69,7 @@ export default function VimHelpViewer({
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [history, historyIndex])
 
   const handleLinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement
@@ -155,6 +143,13 @@ export default function VimHelpViewer({
               >
                 <Home className="h-4 w-4" />
               </button>
+              <button
+                onClick={() => setShowTOC(!showTOC)}
+                className="p-1 text-gray-400 hover:text-white"
+                title={showTOC ? "Hide table of contents" : "Show table of contents"}
+              >
+                {showTOC ? <PanelLeftClose className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
             </div>
           </div>
           <button
@@ -199,9 +194,18 @@ export default function VimHelpViewer({
         {/* Content */}
         <div className="flex-1 overflow-hidden flex">
           {/* Table of Contents */}
-          {helpContent && helpContent.sections.length > 0 && (
-            <div className="w-64 border-r border-gray-700 overflow-y-auto p-4">
-              <h4 className="text-sm font-semibold text-gray-400 mb-2">Table of Contents</h4>
+          {showTOC && helpContent && helpContent.sections.length > 0 && (
+            <div className="w-64 md:w-64 sm:w-56 border-r border-gray-700 overflow-y-auto p-4 bg-gray-850">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-semibold text-gray-400">Table of Contents</h4>
+                <button
+                  onClick={() => setShowTOC(false)}
+                  className="p-1 text-gray-500 hover:text-gray-300 md:hidden"
+                  title="Hide table of contents"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
               <nav className="space-y-1">
                 {helpContent.sections.map(section => (
                   <a
@@ -215,6 +219,10 @@ export default function VimHelpViewer({
                     onClick={(e) => {
                       e.preventDefault()
                       document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })
+                      // Auto-hide TOC on mobile after navigation
+                      if (window.innerWidth < 768) {
+                        setShowTOC(false)
+                      }
                     }}
                   >
                     {section.title}
@@ -227,9 +235,19 @@ export default function VimHelpViewer({
           {/* Main Content */}
           <div 
             ref={contentRef}
-            className="flex-1 overflow-y-auto p-6"
+            className="flex-1 overflow-y-auto p-6 relative"
             onClick={handleLinkClick}
           >
+            {/* Floating TOC Toggle for Mobile */}
+            {!showTOC && helpContent && helpContent.sections.length > 0 && (
+              <button
+                onClick={() => setShowTOC(true)}
+                className="fixed bottom-6 right-6 p-3 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg z-10 md:hidden transition-colors"
+                title="Show table of contents"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            )}
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-400"></div>
