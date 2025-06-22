@@ -33,8 +33,8 @@ const MobileSidebar = forwardRef<HTMLDivElement, MobileSidebarProps>(
         <div
           ref={ref}
           className={`
-            fixed md:relative
-            top-0 left-0 h-full
+            fixed md:sticky
+            top-0 left-0 h-screen md:h-screen
             bg-gray-900 
             transition-transform duration-300 ease-in-out
             z-40 md:z-auto
@@ -54,7 +54,7 @@ const MobileSidebar = forwardRef<HTMLDivElement, MobileSidebarProps>(
           </div>
 
           {/* Content */}
-          <div className="h-full overflow-y-auto">
+          <div className="h-full overflow-y-auto md:h-[calc(100vh-0px)] custom-scrollbar">
             {children}
           </div>
         </div>
