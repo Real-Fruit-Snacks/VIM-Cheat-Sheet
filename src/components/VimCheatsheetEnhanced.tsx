@@ -571,39 +571,53 @@ export default function VimCheatsheetEnhanced() {
               ref={commandListRef}
               className="space-y-8"
             >
-              {Object.entries(groupedCommands).map(([category, commands]) => (
-                <div key={category}>
-                  <h2 className="text-2xl font-semibold text-white mb-4 capitalize">
-                    {category.replace(/([A-Z])/g, ' $1').trim()}
-                  </h2>
-                  
-                  {/* Use Virtual List for large command lists */}
-                  {commands.length > 20 ? (
-                    <VirtualCommandList
-                      commands={commands}
-                      height={600}
-                      onCopyCommand={copyCommand}
-                      onToggleFavorite={toggleFavorite}
-                      onAddToBuilder={addToCommandBuilder}
-                      onToggleExample={toggleExample}
-                      onOpenHelp={openHelpViewer}
-                      favorites={favorites}
-                      copiedCommand={copiedCommand}
-                      showExamples={showExamples}
-                      hasExample={hasExample}
-                    />
+              {Object.entries(groupedCommands).map(([category, commands]) => {
+                // Calculate the selected index within this category
+                let categorySelectedIndex: number | undefined
+                const selectedCmd = filteredCommands[selectedCommandIndex]
+                const indexInCategory = commands.findIndex(cmd => cmd.command === selectedCmd?.command)
+                if (indexInCategory !== -1) {
+                  categorySelectedIndex = indexInCategory
+                }
+
+                return (
+                  <div key={category}>
+                    <h2 className="text-2xl font-semibold text-white mb-4 capitalize">
+                      {category.replace(/([A-Z])/g, ' $1').trim()}
+                    </h2>
+                    
+                    {/* Use Virtual List for large command lists */}
+                    {commands.length > 20 ? (
+                      <VirtualCommandList
+                        commands={commands}
+                        height={600}
+                        onCopyCommand={copyCommand}
+                        onToggleFavorite={toggleFavorite}
+                        onAddToBuilder={addToCommandBuilder}
+                        onToggleExample={toggleExample}
+                        onOpenHelp={openHelpViewer}
+                        favorites={favorites}
+                        copiedCommand={copiedCommand}
+                        showExamples={showExamples}
+                        hasExample={hasExample}
+                        selectedIndex={categorySelectedIndex}
+                      />
                   ) : (
                     <div className="space-y-4">
-                      {commands.map((cmd, index) => (
-                        <div key={cmd.command}>
-                          <div
-                            className={`
-                              bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 
-                              transition-colors cursor-pointer group
-                              ${index === selectedCommandIndex ? 'ring-2 ring-green-500' : ''}
-                            `}
-                            onClick={() => addToCommandBuilder(cmd.command)}
-                          >
+                      {commands.map((cmd, index) => {
+                        // Check if this command is selected
+                        const isSelected = categorySelectedIndex === index
+                        
+                        return (
+                          <div key={cmd.command}>
+                            <div
+                              className={`
+                                bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 
+                                transition-colors cursor-pointer group
+                                ${isSelected ? 'ring-2 ring-green-500' : ''}
+                              `}
+                              onClick={() => addToCommandBuilder(cmd.command)}
+                            >
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center space-x-3">
                                 <code className="text-green-400 font-mono text-base font-semibold">
@@ -717,11 +731,13 @@ export default function VimCheatsheetEnhanced() {
                             </div>
                           )}
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>

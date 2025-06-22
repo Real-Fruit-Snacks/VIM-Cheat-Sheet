@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useRef, useEffect } from 'react'
 import { FixedSizeList as List } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { Heart, Copy, HelpCircle, PlayCircle } from 'lucide-react'
@@ -16,6 +16,7 @@ interface VirtualCommandListProps {
   copiedCommand: string | null
   showExamples: Set<string>
   hasExample: (command: string) => boolean
+  selectedIndex?: number
 }
 
 interface CommandRowProps {
@@ -32,6 +33,7 @@ interface CommandRowProps {
     copiedCommand: string | null
     showExamples: Set<string>
     hasExample: (command: string) => boolean
+    selectedIndex?: number
   }
 }
 
@@ -43,11 +45,14 @@ const CommandRow = memo(({ index, style, data }: CommandRowProps) => {
   const isCopied = data.copiedCommand === cmd.command
   const hasExample = data.hasExample(cmd.command)
   const showExample = data.showExamples.has(cmd.command)
+  const isSelected = data.selectedIndex === index
 
   return (
     <div style={style} className="px-4">
       <div
-        className="bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer group"
+        className={`bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer group ${
+          isSelected ? 'ring-2 ring-green-500' : ''
+        }`}
         onClick={() => data.onAddToBuilder(cmd.command)}
       >
         <div className="flex items-start justify-between mb-2">
@@ -172,10 +177,12 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
   favorites,
   copiedCommand,
   showExamples,
-  hasExample
+  hasExample,
+  selectedIndex
 }) => {
   const itemCount = commands.length
   const itemSize = 180 // Approximate height of each command card
+  const listRef = useRef<List>(null)
 
   const isItemLoaded = useCallback((index: number) => {
     return index < commands.length
@@ -185,6 +192,13 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
     // In this case, all items are already loaded
     return Promise.resolve()
   }, [])
+
+  // Scroll to selected index when it changes
+  useEffect(() => {
+    if (selectedIndex !== undefined && listRef.current) {
+      listRef.current.scrollToItem(selectedIndex, 'smart')
+    }
+  }, [selectedIndex])
 
   const itemData = {
     commands,
@@ -196,7 +210,8 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
     favorites,
     copiedCommand,
     showExamples,
-    hasExample
+    hasExample,
+    selectedIndex
   }
 
   return (
@@ -207,7 +222,11 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
     >
       {({ onItemsRendered, ref }) => (
         <List
-          ref={ref}
+          ref={(el) => {
+            // Set both refs
+            listRef.current = el
+            if (ref) ref(el)
+          }}
           height={height}
           width="100%"
           itemCount={itemCount}
