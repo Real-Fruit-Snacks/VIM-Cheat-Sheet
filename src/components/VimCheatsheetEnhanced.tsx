@@ -622,8 +622,8 @@ export default function VimCheatsheetEnhanced() {
                       {category.replace(/([A-Z])/g, ' $1').trim()}
                     </h2>
                     
-                    {/* Use Virtual List for large command lists */}
-                    {commands.length > 20 ? (
+                    {/* Use Virtual List for very large command lists */}
+                    {commands.length > 100 ? (
                       <VirtualCommandList
                         commands={commands}
                         height={600}
