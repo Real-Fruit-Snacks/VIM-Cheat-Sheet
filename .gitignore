@@ -62,9 +62,19 @@ vim-gitlab-offline-*/
 # Release artifacts
 *.tar.gz
 *.zip
+vim-cheatsheet-*.zip
 release-checksums.txt
 checksums.txt
 RELEASE_NOTES.md
+
+# Root level development files (should be in dist/ only)
+/index.html
+
+# Analysis and development scripts
+analyze-*.js
+analyze-*.cjs
+debug-*.js
+debug-*.cjs
 
 # Editor directories and files
 .vscode/*

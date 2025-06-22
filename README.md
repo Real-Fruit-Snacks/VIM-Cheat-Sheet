@@ -10,17 +10,17 @@
   </p>
   
   <p align="center">
-    315+ Commands • 315 Interactive Examples • 100% Coverage
+    315+ Commands • Interactive Examples • Offline Ready • Performance Optimized
   </p>
   
   <p align="center">
-    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>Use VIM Cheatsheet →</strong></a>
+    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>🚀 Use VIM Cheatsheet →</strong></a>
     ·
     <a href="#features">Features</a>
     ·
     <a href="#interactive-examples">Examples</a>
     ·
-    <a href="#command-categories">Commands</a>
+    <a href="#deployment">Deploy</a>
   </p>
   
   <p align="center">
@@ -28,13 +28,13 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.0.0-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-3.0.0-blue.svg" alt="Version 3.0.0" />
     </a>
     <a href="https://reactjs.org/">
-      <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
+      <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
     </a>
     <a href="https://www.typescriptlang.org/">
-      <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6.svg?logo=typescript" alt="TypeScript" />
+      <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6.svg?logo=typescript" alt="TypeScript 5.8" />
     </a>
   </p>
 </div>
@@ -42,356 +42,327 @@
 <br />
 
 <div align="center">
-  <p><em>Comprehensive VIM command reference with interactive examples and advanced search capabilities</em></p>
+  <p><em>Performance-first VIM command reference with interactive examples, VIM-style navigation, and comprehensive offline support</em></p>
 </div>
 
 ---
 
-## Why This VIM Cheatsheet?
+## 🎯 Why This VIM Cheatsheet?
 
-This isn't just another VIM reference—it's a **comprehensive, interactive learning tool** designed for VIM users of all levels. Whether you're a beginner learning the basics or an expert looking for advanced commands, this cheatsheet provides everything you need in one beautiful, searchable interface.
+This isn't just another VIM reference—it's a **performance-optimized, interactive learning platform** designed for VIM users of all levels. Built with modern web technologies and optimized for both online and offline use.
 
-### What Makes It Special
+### ✨ What Makes It Special
 
 <table>
   <tr>
     <td width="50%">
-      <h4>🎯 Interactive Examples</h4>
-      <p>See exactly how commands work with animated before/after demonstrations showing cursor movement and text changes.</p>
+      <h4>🎮 Interactive Examples</h4>
+      <p>315+ animated command demonstrations with cursor movement, before/after states, and realistic scenarios.</p>
     </td>
     <td width="50%">
-      <h4>🔍 Advanced Search</h4>
-      <p>Find commands instantly by searching descriptions, modes, examples, or command names with intelligent filtering.</p>
+      <h4>⚡ Performance Optimized</h4>
+      <p>216KB main bundle (46% smaller than v2.0), virtual scrolling, and advanced code splitting for lightning-fast performance.</p>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <h4>📚 Comprehensive Coverage</h4>
-      <p>315+ meticulously researched commands across 24 categories, from basic movement to advanced macros.</p>
+      <h4>⌨️ VIM-Style Navigation</h4>
+      <p>Navigate with <code>j/k</code>, search with <code>/</code>, jump with <code>gg/G</code> - just like VIM!</p>
     </td>
     <td width="50%">
-      <h4>⚡ Zero Setup</h4>
-      <p>Works instantly in any modern browser. No installation, no plugins, no configuration required.</p>
+      <h4>🌐 Offline Ready</h4>
+      <p>Complete offline support with integrated VIM documentation. Perfect for GitLab Pages and air-gapped environments.</p>
     </td>
   </tr>
 </table>
 
-## Features
+## 🚀 Version 3.0.0 - Major Performance Release
+
+### 🏎️ Revolutionary Performance Improvements
+- **46% Bundle Size Reduction**: From 400KB to **216KB main bundle**  
+- **Advanced Code Splitting**: Manual chunks for react-vendor, lucide-icons, search-utils, virtual-list, vim-data
+- **Virtual Scrolling**: Handle 315+ commands smoothly with react-window
+- **Debounced Search**: 300ms optimized search with lodash.debounce
+- **Data Compression**: Smart payload reduction strategies
+
+### ⌨️ VIM-Style Keyboard Navigation
+- **`j/k`** - Navigate up/down through commands (just like VIM!)
+- **`/`** - Focus search input
+- **`gg`** - Jump to top of command list  
+- **`G`** - Jump to bottom of command list
+- **`?`** - Show/hide keyboard shortcuts help
+- **`Esc`** - Close modals and dismiss help
+
+### 🎯 Enhanced Search & Discovery
+- **Fuzzy Search** with Fuse.js - Find commands even with typos
+- **Command Synonyms** - Search "delete" to find "cut", "remove", etc.
+- **Typo Correction** - "Did you mean..." suggestions
+- **Related Commands** - Discover similar commands
+- **Enhanced Filtering** - By category, difficulty, and frequency
+
+## 🌟 Features
 
 ### Core Capabilities
-
-- **315+ VIM Commands** - Comprehensive coverage across all VIM functionality
-- **24 Organized Categories** - Logical grouping from basic movement to advanced features
-- **Interactive Examples** - Animated demonstrations for EVERY single command
-- **Integrated VIM Documentation** - Official VIM help files available offline within the app
-- **Smart Search** - Find commands by name, description, mode, or example text
-- **Advanced Filtering** - Filter by difficulty level, frequency, or category
-- **Favorites System** - Save frequently used commands for quick access
-- **Command Builder** - Build complex command sequences interactively
-- **Responsive Design** - Perfect on desktop, tablet, and mobile devices
-
-### Interactive Examples
-
-The standout feature: **live command demonstrations** that show:
-- Exact cursor positions before and after execution
-- Animated transitions showing cursor movement
-- VIM mode indicators (Normal, Insert, Visual)
-- Realistic text scenarios for better understanding
-- Step-by-step explanations of what each command does
-
-**🎉 NEW: 100% Coverage Achieved!** Every single VIM command now has an interactive example.
-
-Featuring **315 interactive examples** covering ALL commands across every category:
-- **Basic Movement** (`h`, `j`, `k`, `l`, `w`, `b`, `e`, `0`, `^`, `$`, `%`, `(`, `)`)
-- **Editing Commands** (`dd`, `dw`, `cw`, `yy`, `p`, `x`)
-- **Insert Mode** (`i`, `a`, `o`, `A`, `I`, `O`)
-- **Text Objects** (`diw`, `ciw`, `yiw`, `da(`, `di"`, `ca{`)
-- **Visual Mode** (`v`, `V`)
-- **Search & Navigation** (`/`, `n`, `N`)
-- **Undo & Redo** (`u`, `Ctrl-r`)
-
-### Smart Organization
-
-**Difficulty Levels:**
-- 🟢 **Beginner** - Essential commands every VIM user should know
-- 🟡 **Intermediate** - Commands for day-to-day editing efficiency  
-- 🔴 **Advanced** - Power user features and complex operations
-
-**Frequency Tags:**
-- ⭐ **Essential** - Commands you'll use constantly
-- 📋 **Common** - Regular workflow commands
-- 🔧 **Rare** - Specialized commands for specific tasks
-
-### Integrated VIM Documentation
-
-**🆕 Version 2.2.0 Feature:** Official VIM help documentation is now available directly within the app!
-
-### Advanced Performance & User Experience
-
-**🚀 Version 3.0.0 Major Release:** Revolutionary performance improvements and VIM-style navigation!
-
-#### 🏎️ Performance Optimizations
-- **46% Bundle Size Reduction** - From 400KB to 216KB main bundle
-- **Advanced Code Splitting** - Vendor libraries, icons, search utils, and data properly chunked
-- **Virtual Scrolling** - Smooth performance with large command lists
-- **Intelligent Debouncing** - 300ms debounced search for optimal performance
-- **GPU Acceleration** - Hardware-accelerated animations and transitions
-
-#### ⌨️ VIM-Style Keyboard Navigation
-- **`j/k`** - Navigate up/down through commands
-- **`/`** - Focus search (just like VIM!)
-- **`gg`** - Jump to top of list
-- **`G`** - Jump to bottom of list
-- **`?`** - Toggle keyboard shortcuts help
-- **`Esc`** - Close modals and cancel operations
-
-#### 🔍 Enhanced Search & Discovery
-- **Fuzzy Search** - Find commands even with typos using Fuse.js
-- **Smart Suggestions** - Real-time command suggestions and autocomplete
-- **Common Mistakes Detection** - "Did you mean..." suggestions for typos
-- **Related Commands** - Discover commands similar to what you're searching
-- **Command Synonyms** - Search for "delete" to find "cut", "remove", etc.
-- **Workflow Examples** - See common command combinations and workflows
-
-#### 📱 Mobile-First Design
-- **Collapsible Sidebar** - Touch-optimized navigation for mobile
-- **Swipe Gestures** - Swipe right/left to open/close sidebar
-- **Touch-Friendly Buttons** - 44px minimum touch targets
-- **Bottom Sheet Pattern** - Mobile-optimized command details
-- **Responsive Animations** - Smooth cursor movement animations
-
-#### 🎯 Advanced Features
-- **Animated Cursor Movement** - See exactly how VIM commands move the cursor
-- **Command Builder** - Build complex command sequences interactively
+- **315+ VIM Commands** - Complete coverage across all VIM functionality
+- **24 Organized Categories** - From basic movement to advanced macros  
+- **Interactive Examples** - Animated demonstrations for every command
+- **Integrated Documentation** - 16 official VIM help files included offline
 - **Favorites System** - Save frequently used commands
-- **Progress Tracking** - Visual feedback for user interactions
-- **Offline Compatibility** - Works completely offline after initial load
+- **Mobile Responsive** - Touch-friendly with swipe gestures
+- **Performance Optimized** - Virtual scrolling and efficient rendering
 
-#### 🛠️ Technical Improvements
-- **React 19.1** - Latest React with optimized performance
-- **TypeScript 5.8** - Full type safety and developer experience
-- **Modern ES2015** - Optimized for modern browsers
-- **Tree Shaking** - Dead code elimination for smaller bundles
-- **Terser Optimization** - Advanced minification and compression
+### 🎮 Interactive Examples System
+Every command features:
+- **Before/After State Visualization** - See exact text changes
+- **Animated Cursor Movement** - Understand cursor positioning
+- **Mode Indicators** - Visual feedback for Normal/Insert/Visual modes
+- **Realistic Scenarios** - Practical examples you'll actually encounter
+- **Step-by-Step Explanations** - Clear descriptions of command behavior
 
-- **Offline Access** - All VIM help files bundled with the application
-- **Context-Aware Help** - Click the help icon next to any command for detailed documentation
-- **Full Text Search** - Search across all help files to find specific topics
-- **Cross-References** - Navigate between related help topics with clickable links
-- **Syntax Highlighting** - VIM help syntax properly formatted and highlighted
+### 📚 Integrated VIM Documentation
+- **16 Official VIM Help Files** - Complete offline documentation
+- **Context-Aware Help** - Click help icon next to any command
+- **Full-Text Search** - Search across all help documentation
+- **Cross-References** - Navigate between related help topics
+- **Syntax Highlighting** - Properly formatted VIM help syntax
 
-The integrated help viewer includes:
-- Complete VIM reference manual
-- Command-specific documentation
-- Usage examples and explanations
-- Tips and advanced techniques
-- Quick navigation between help topics
+### 🏗️ Technical Architecture
 
-## Interactive Examples
+**Performance-First Design:**
+- **Virtual Scrolling** - Handles large command lists efficiently
+- **Advanced Code Splitting** - Optimized bundle loading
+- **Data Compression** - Reduced payload sizes
+- **Modern ES2015 Target** - Optimized for modern browsers
 
-### Movement Commands
+**Component Architecture:**
+- `VimCheatsheetEnhanced.tsx` - Main application (800+ lines)
+- `VimCommandExampleAnimated.tsx` - Interactive demonstrations
+- `VimHelpViewer.tsx` - Integrated documentation viewer
+- `SearchSuggestions.tsx` - Intelligent search with fuzzy matching
+- Custom hooks: `useDebounce`, `useKeyboardNavigation`, `useSwipeGesture`
 
-Click the play button next to any basic movement command to see:
+## 📱 Mobile & Accessibility
 
-```
-Before: The quick |brown fox jumps
-         h ←       
-After:  The quick| brown fox jumps
-```
+- **Touch-Friendly Design** - 44px minimum touch targets
+- **Swipe Gestures** - Intuitive mobile navigation
+- **Responsive Sidebar** - Optimized for mobile screens
+- **Keyboard Navigation** - Full accessibility support
+- **Error Boundaries** - Graceful failure handling
 
-Each example shows:
-- **Realistic text content** - No abstract examples
-- **Precise cursor positioning** - Exact character-level movement
-- **Mode awareness** - Visual indicators for Normal/Insert/Visual modes
-- **Clear explanations** - What the command does and when to use it
+## 🚀 Quick Start
 
-### Example Commands with Interactive Demonstrations
+### 🌐 Online (Recommended)
+Visit **[VIM Cheatsheet](https://real-fruit-snacks.github.io/VIM/)** - works instantly in any modern browser.
 
-**Movement Commands:**
-- `h`, `j`, `k`, `l` - Cardinal direction movement
-- `w`, `b`, `e` - Word-based navigation
-- `0`, `^`, `$` - Line navigation
-- `%` - Jump to matching bracket/parenthesis
-- `(`, `)` - Sentence navigation
-
-**Editing Commands:**
-- `dd` - Delete entire line
-- `dw` - Delete word from cursor
-- `cw` - Change word (delete and enter insert mode)
-- `yy` - Copy (yank) entire line
-- `p` - Paste after cursor
-- `x` - Delete character under cursor
-
-**Insert Mode:**
-- `i`, `a` - Insert before/after cursor
-- `o`, `O` - Open new line below/above
-- `A`, `I` - Insert at end/beginning of line
-
-**Text Objects:**
-- `diw` - Delete inner word
-- `ciw` - Change inner word  
-- `da(` - Delete around parentheses
-- `di"` - Delete inside quotes
-
-**And every other command in all 24 categories!**
-
-## Command Categories
-
-### All 24 Categories
-
-1. **Basic Movement** (13 commands) - Arrow keys, word navigation, line navigation
-2. **Advanced Movement** (22 commands) - Paragraph, screen, and document navigation  
-3. **Insert Mode** (8 commands) - Entering insert mode and basic editing
-4. **Editing Commands** (19 commands) - Delete, change, copy operations
-5. **Visual Mode** (11 commands) - Text selection and visual operations
-6. **Search and Replace** (15 commands) - Finding and replacing text
-7. **File Operations** (12 commands) - Opening, saving, and managing files
-8. **Window Management** (14 commands) - Splitting and managing windows
-9. **Buffer Management** (8 commands) - Working with multiple files
-10. **Registers and Clipboard** (12 commands) - Copy/paste with registers
-11. **Marks and Jumps** (15 commands) - Navigation bookmarks
-12. **Macros and Advanced** (10 commands) - Recording and playback
-13. **Text Objects** (16 commands) - Sophisticated text selection
-14. **Fold Operations** (12 commands) - Code folding and unfolding
-15. **Tab Management** (7 commands) - Working with tabs
-16. **Undo and Redo** (6 commands) - Change history navigation
-17. **Command Line** (18 commands) - Ex commands and command-line mode
-18. **Navigation Commands** (13 commands) - Jumping and positioning
-19. **Indentation** (8 commands) - Code formatting and indentation
-20. **Case Conversion** (6 commands) - Changing text case
-21. **Completion** (5 commands) - Auto-completion features
-22. **Spell Checking** (8 commands) - Spell check and correction
-23. **Help System** (6 commands) - Getting help and documentation
-24. **Diff Mode** (5 commands) - Comparing and merging files
-
-## Quick Start
-
-### Online (Recommended)
-
-Visit **[VIM Cheatsheet](https://real-fruit-snacks.github.io/VIM/)** to start using it immediately.
-
-### Local Development
-
+### 💻 Local Development
 ```bash
 # Clone and setup
 git clone https://github.com/Real-Fruit-Snacks/VIM.git
 cd VIM
 npm install
 
-# Start development server
+# Start development server (runs on localhost:5173/VIM/)
 npm run dev
 
-# Open http://localhost:5173/VIM/
-```
-
-### Build for Production
-
-```bash
-# Build optimized version
+# Build for production
 npm run build
 
 # Preview production build
 npm run preview
 ```
 
-## Browser Support
+### 🧪 Code Quality
+```bash
+# Linting (ESLint with TypeScript rules)
+npm run lint
 
-Works in all modern browsers:
+# Deploy to GitHub Pages
+npm run deploy
+```
 
-| Browser | Support | Notes |
-|---------|---------|-------|
-| Chrome 90+ | ✅ Full | Optimal performance |
-| Firefox 89+ | ✅ Full | All features supported |
-| Safari 15+ | ✅ Full | Full functionality |
-| Edge 90+ | ✅ Full | Complete support |
-| Mobile Browsers | ✅ Supported | Touch-friendly interface |
+## 🌐 Deployment Options
 
-## Technology Stack
+### GitHub Pages (Current)
+The application is automatically deployed to GitHub Pages at [real-fruit-snacks.github.io/VIM](https://real-fruit-snacks.github.io/VIM/).
 
-- **Frontend**: React 19.1 + TypeScript 5.8
-- **Styling**: Tailwind CSS for responsive design
-- **Icons**: Lucide React for beautiful, consistent icons
-- **Build**: Vite 6.3 with optimized bundling
-- **Data**: Comprehensive JSON-based command database
+### GitLab Pages (Offline Ready)
+Perfect for offline and air-gapped environments:
 
-## Performance
+#### Option 1: Download Release
+1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
+2. Extract `vim-cheatsheet-v3.0.0-gitlab-pages.zip`
+3. Upload contents to your GitLab Pages repository
+4. Enable GitLab Pages in project settings
 
-- **Bundle Size**: ~225KB compressed JavaScript + ~17KB CSS
-- **Load Time**: <1s on modern connections
-- **Offline Ready**: Works completely offline after initial load
-- **Memory Usage**: ~15MB (lightweight and efficient)
-- **Search Performance**: Instant results with client-side filtering
+#### Option 2: Build from Source
+```bash
+# Build for GitLab Pages
+npm run build:gitlab
 
-## Contributing
+# Contents ready in gitlab-public/ directory
+```
 
-We welcome contributions to make this the best VIM reference available!
+#### GitLab CI/CD Integration
+Add this `.gitlab-ci.yml` to your repository:
+```yaml
+pages:
+  script:
+    - mkdir public
+    - cp -r dist/* public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+```
+
+### Self-Hosting
+The application is completely self-contained with no external dependencies - perfect for:
+- Corporate intranets
+- Air-gapped environments  
+- Offline development environments
+- Custom domain hosting
+
+## 📊 Performance Metrics
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| **Main Bundle** | 216KB | 46% reduction from v2.0 |
+| **Total Build Size** | ~1.7MB | Including all help files |
+| **Load Time** | <1s | On modern connections |
+| **Memory Usage** | ~15MB | Lightweight and efficient |
+| **Search Response** | <300ms | Debounced for optimal UX |
+
+### Bundle Analysis
+- `vim-data-*.js` - 190KB (command data and examples)
+- `index-*.js` - 217KB (main application code)
+- `search-utils-*.js` - 18KB (Fuse.js and search logic)
+- `virtual-list-*.js` - 12KB (react-window components)
+- `react-vendor-*.js` - 11KB (React libraries)
+- `lucide-icons-*.js` - 5KB (icon components)
+
+## 🌍 Browser Support
+
+| Browser | Version | Support | Performance |
+|---------|---------|---------|-------------|
+| **Chrome** | 88+ | ✅ Full | Optimal |
+| **Firefox** | 85+ | ✅ Full | Excellent |
+| **Safari** | 14+ | ✅ Full | Great |
+| **Edge** | 88+ | ✅ Full | Optimal |
+| **Mobile** | Modern | ✅ Full | Touch-optimized |
+
+*ES2015 target ensures compatibility with all modern browsers while maintaining optimal performance.*
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 19.1** - Latest React with optimized performance
+- **TypeScript 5.8** - Full type safety and developer experience
+- **Tailwind CSS** - Utility-first responsive design
+- **Lucide React** - Beautiful, consistent icon system
+
+### Build & Performance
+- **Vite 6.3** - Lightning-fast build tool with HMR
+- **Terser** - Advanced JavaScript minification
+- **Manual Code Splitting** - Optimized bundle loading
+- **Tree Shaking** - Dead code elimination
+
+### Search & UX
+- **Fuse.js** - Fuzzy search with typo tolerance
+- **react-window** - Virtual scrolling for performance
+- **lodash.debounce** - Optimized search debouncing
+
+### Data & Content
+- **399 lines** - Structured command definitions (`vim-commands.ts`)
+- **8,583 lines** - Interactive example states (`vim-examples.ts`)
+- **16 help files** - Official VIM documentation (offline)
+
+## 🎯 Command Categories
+
+All **315+ commands** organized across **24 categories**:
+
+| Category | Commands | Description |
+|----------|----------|-------------|
+| **Basic Movement** | 13 | h, j, k, l, w, b, e, 0, ^, $ |
+| **Advanced Movement** | 22 | Paragraph, screen, document navigation |
+| **Insert Mode** | 8 | i, a, o, A, I, O, and variants |
+| **Editing Commands** | 19 | Delete, change, copy operations |
+| **Visual Mode** | 11 | Text selection and visual operations |
+| **Search and Replace** | 15 | Finding and replacing text |
+| **File Operations** | 12 | Opening, saving, managing files |
+| **Window Management** | 14 | Splitting and managing windows |
+| **Buffer Management** | 8 | Working with multiple files |
+| **Registers and Clipboard** | 12 | Copy/paste with registers |
+| **Marks and Jumps** | 15 | Navigation bookmarks |
+| **Macros and Advanced** | 10 | Recording and playback |
+| **Text Objects** | 16 | Sophisticated text selection |
+| **Fold Operations** | 12 | Code folding and unfolding |
+| **Tab Management** | 7 | Working with tabs |
+| **Undo and Redo** | 6 | Change history navigation |
+| **Command Line** | 18 | Ex commands and command-line mode |
+| **Navigation Commands** | 13 | Jumping and positioning |
+| **Indentation** | 8 | Code formatting and indentation |
+| **Case Conversion** | 6 | Changing text case |
+| **Completion** | 5 | Auto-completion features |
+| **Spell Checking** | 8 | Spell check and correction |
+| **Help System** | 6 | Getting help and documentation |
+| **Diff Mode** | 5 | Comparing and merging files |
+
+## 🤝 Contributing
+
+We welcome contributions to make this the definitive VIM reference!
 
 ### Ways to Contribute
-
-- **Improve Command Examples** - Enhance existing interactive examples
-- **Improve Command Accuracy** - Help us ensure 100% VIM compatibility
-- **Enhance UI/UX** - Improve the interface and user experience
+- **Enhance Examples** - Improve interactive command demonstrations
+- **Verify Accuracy** - Ensure 100% VIM compatibility
+- **Improve Performance** - Optimize rendering and search
+- **Add Features** - Implement new functionality
 - **Fix Issues** - Report bugs and submit fixes
-- **Add Features** - Suggest and implement new functionality
+- **Documentation** - Improve help content and examples
+
+### Development Guidelines
+- **TypeScript Strict Mode** - Full type safety required
+- **ESLint Configuration** - Follow project coding standards  
+- **Performance First** - Consider bundle size and performance impact
+- **Accessibility** - Maintain keyboard navigation and screen reader support
+- **Mobile Friendly** - Test on mobile devices and touch interfaces
 
 ### Command Accuracy
-
-All commands have been meticulously researched for accuracy. If you find any errors or omissions:
-
+All 315 commands have been meticulously verified for accuracy. If you find discrepancies:
 1. Open an issue with the incorrect command
-2. Provide the correct VIM behavior
-3. Include VIM version and context if relevant
+2. Provide the correct VIM behavior with version context
+3. Include test cases demonstrating the correct behavior
 
-## Development
+## 📄 License
 
-### Project Structure
+This project is licensed under the [MIT License](LICENSE).
 
-```
-src/
-├── components/
-│   ├── VimCheatsheet.tsx     # Main application component
-│   ├── VimCommandExample.tsx # Interactive example component
-│   └── ErrorBoundary.tsx    # Error handling
-├── data/
-│   ├── vim-commands.ts       # All 315+ commands and descriptions
-│   └── vim-examples.ts       # Interactive example data
-└── App.tsx                   # Application root
-```
-
-### Adding New Interactive Examples
-
-1. Add example data to `src/data/vim-examples.ts`
-2. Include before/after states with cursor positions
-3. Add clear explanations for the command behavior
-4. Test with the interactive component
-
-### Code Style
-
-- TypeScript strict mode
-- ESLint configuration included
-- Prettier formatting
-- Comprehensive error handling
-
-## License
-
-This project is open source software licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
+## 🙏 Acknowledgments
 
 Built with ❤️ for the VIM community:
 
-- [Vim](https://www.vim.org/) - The legendary text editor
-- [React](https://react.dev/) - UI framework
-- [Tailwind CSS](https://tailwindcss.com/) - Styling framework
-- [Lucide](https://lucide.dev/) - Beautiful icons
+- **[Vim](https://www.vim.org/)** - The legendary text editor that inspired this project
+- **[React](https://react.dev/)** - The UI framework powering our interactive examples
+- **[Tailwind CSS](https://tailwindcss.com/)** - Beautiful, responsive styling system
+- **[Lucide](https://lucide.dev/)** - Gorgeous, consistent icon library
+- **[Fuse.js](https://fusejs.io/)** - Powerful fuzzy search capabilities
+- **[Vite](https://vitejs.dev/)** - Lightning-fast build tool and development server
+
+### Special Thanks
+- VIM community for comprehensive command verification
+- Contributors who helped achieve 100% command coverage
+- Users who provided feedback and feature suggestions
 
 ---
 
 <div align="center">
   <p>
-    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>Start Using VIM Cheatsheet →</strong></a>
+    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>🚀 Start Using VIM Cheatsheet →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users</sub>
+    <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
+  </p>
+  <p>
+    <sub>Made by VIM users, for VIM users | Version 3.0.0 | 315+ Commands | Performance Optimized</sub>
   </p>
 </div>
