@@ -346,15 +346,22 @@ export default function VimCheatsheet() {
                         className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-all duration-200 hover:shadow-lg"
                       >
                         <div className="flex items-start justify-between mb-3">
-                          <code 
-                            className="bg-gray-900 text-green-300 px-3 py-1 rounded font-mono text-sm cursor-pointer hover:bg-gray-700 transition-colors"
-                            onClick={() => addToCommandBuilder(cmd.command)}
-                            title="Click to add to command builder"
-                          >
-                            {cmd.command}
-                          </code>
+                          <div className="flex items-center space-x-2">
+                            <code 
+                              className="bg-gray-900 text-green-300 px-3 py-1 rounded font-mono text-sm cursor-pointer hover:bg-gray-700 transition-colors"
+                              onClick={() => addToCommandBuilder(cmd.command)}
+                              title="Click to add to command builder"
+                            >
+                              {cmd.command}
+                            </code>
+                            {vimExamples[cmd.command] && (
+                              <span className="text-xs text-blue-400 font-semibold" title="Interactive example available">
+                                ▶
+                              </span>
+                            )}
+                          </div>
                           <div className="flex items-center space-x-1">
-                            {cmd.category === 'basicMovement' && vimExamples[cmd.command] && (
+                            {vimExamples[cmd.command] && (
                               <button
                                 onClick={() => toggleExample(cmd.command)}
                                 className={`p-1 transition-colors ${
@@ -428,8 +435,8 @@ export default function VimCheatsheet() {
                           </div>
                         )}
 
-                        {/* Interactive Example for Basic Movement Commands */}
-                        {cmd.category === 'basicMovement' && showExamples.has(cmd.command) && vimExamples[cmd.command] && (
+                        {/* Interactive Examples */}
+                        {showExamples.has(cmd.command) && vimExamples[cmd.command] && (
                           <VimCommandExample
                             command={vimExamples[cmd.command].command}
                             beforeState={vimExamples[cmd.command].beforeState}

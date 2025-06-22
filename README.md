@@ -98,7 +98,14 @@ The standout feature: **live command demonstrations** that show:
 - Realistic text scenarios for better understanding
 - Step-by-step explanations of what each command does
 
-Currently featuring interactive examples for all basic movement commands (`h`, `j`, `k`, `l`, `w`, `b`, `e`, `0`, `^`, `$`, `%`, `(`, `)`) with more categories planned.
+Currently featuring **30+ interactive examples** across multiple categories including:
+- **Basic Movement** (`h`, `j`, `k`, `l`, `w`, `b`, `e`, `0`, `^`, `$`, `%`, `(`, `)`)
+- **Editing Commands** (`dd`, `dw`, `cw`, `yy`, `p`, `x`)
+- **Insert Mode** (`i`, `a`, `o`, `A`, `I`, `O`)
+- **Text Objects** (`diw`, `ciw`, `yiw`, `da(`, `di"`, `ca{`)
+- **Visual Mode** (`v`, `V`)
+- **Search & Navigation** (`/`, `n`, `N`)
+- **Undo & Redo** (`u`, `Ctrl-r`)
 
 ### Smart Organization
 
@@ -132,19 +139,33 @@ Each example shows:
 
 ### Example Commands with Interactive Demonstrations
 
-- `h` - Move cursor left one character
-- `j` - Move cursor down one line  
-- `k` - Move cursor up one line
-- `l` - Move cursor right one character
-- `w` - Move to beginning of next word
-- `b` - Move to beginning of previous word
-- `e` - Move to end of current word
-- `0` - Move to beginning of line
-- `^` - Move to first non-blank character
-- `$` - Move to end of line
+**Movement Commands:**
+- `h`, `j`, `k`, `l` - Cardinal direction movement
+- `w`, `b`, `e` - Word-based navigation
+- `0`, `^`, `$` - Line navigation
 - `%` - Jump to matching bracket/parenthesis
-- `(` - Move to beginning of sentence
-- `)` - Move to beginning of next sentence
+- `(`, `)` - Sentence navigation
+
+**Editing Commands:**
+- `dd` - Delete entire line
+- `dw` - Delete word from cursor
+- `cw` - Change word (delete and enter insert mode)
+- `yy` - Copy (yank) entire line
+- `p` - Paste after cursor
+- `x` - Delete character under cursor
+
+**Insert Mode:**
+- `i`, `a` - Insert before/after cursor
+- `o`, `O` - Open new line below/above
+- `A`, `I` - Insert at end/beginning of line
+
+**Text Objects:**
+- `diw` - Delete inner word
+- `ciw` - Change inner word  
+- `da(` - Delete around parentheses
+- `di"` - Delete inside quotes
+
+**And many more across 7 different categories!**
 
 ## Command Categories
 
