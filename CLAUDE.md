@@ -1,8 +1,10 @@
-# VIM Editor - Architecture & Development Guide
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-VIMora is a comprehensive VIM editor that runs in the browser with a sophisticated dual-implementation architecture. The project provides a complete VIM experience using either native vim.wasm or Monaco Editor fallback, with extensive resilience systems, error recovery, and detailed logging.
+VIM-Cheatsheet is a comprehensive, interactive VIM command reference application. The project was transformed from a VIM editor (VIMora) into the ultimate VIM cheatsheet - a searchable, filterable, and interactive guide to VIM commands with 300+ commands across 14 categories.
 
 ## Quick Commands
 
@@ -17,287 +19,192 @@ npm run preview         # Preview production build
 npm run deploy          # Deploy to GitHub Pages
 npm run build:gitlab    # Build for GitLab Pages deployment
 npm run predeploy       # Alias for build command
-
-# Testing
-node test-browser-compatibility.js  # Run comprehensive browser compatibility tests
 ```
 
-## Architecture Overview
+## Core Architecture
 
-### Core Philosophy: Progressive Enhancement with Resilience
+### Main Application Structure
 
-The application follows a "no-fail" philosophy - it must work regardless of browser limitations, network issues, or unexpected errors. This is achieved through:
-
-1. **Dual Editor System**: Native vim.wasm with Monaco fallback
-2. **Ultra-Early Browser Detection**: Capabilities detected before any heavy resources load
-3. **Comprehensive Error Recovery**: Automated recovery strategies for all failure scenarios
-4. **Extensive Logging**: Complete transparency into all operations
-
-### High-Level Architecture
+The application is a single-page React application with a clean, focused architecture:
 
 ```
-VIMora Application
-├── Ultra-Early Detection Phase (before React)
-│   ├── Browser capability detection
-│   ├── Feature flag evaluation
-│   └── Implementation selection
-├── Editor Loading Phase
-│   ├── vim.wasm (preferred) OR Monaco Editor (fallback)
-│   ├── Service worker registration
-│   └── Resource loading with retries
-├── Runtime Phase
-│   ├── User interaction tracking
-│   ├── Real-time error monitoring
-│   ├── Memory/storage management
-│   └── Network request interception
-└── Recovery Phase (when errors occur)
-    ├── Automated recovery strategies
-    ├── Fallback implementations
-    └── User-facing error handling
+VIM-Cheatsheet
+├── Main Interface (VimCheatsheet.tsx)
+│   ├── Sidebar Navigation
+│   │   ├── Search functionality
+│   │   ├── Category filters
+│   │   ├── Difficulty & frequency filters
+│   │   └── Command builder
+│   └── Command Display Grid
+│       ├── Command cards with copy functionality
+│       ├── Favorites system
+│       └── Interactive command builder
+├── Data Layer
+│   ├── vim-commands.ts (300+ commands in 14 categories)
+│   └── key-bindings.ts (interactive key combinations)
+└── Utilities
+    ├── Local storage persistence
+    ├── Command filtering & search
+    └── Copy-to-clipboard functionality
 ```
 
-## Key Components
+### Key Components
 
-### 1. Editor System (`src/components/VimEditorHybrid.tsx`)
+#### 1. VimCheatsheet Component (`src/components/VimCheatsheet.tsx`)
 
-The core editor component that orchestrates between vim.wasm and Monaco Editor:
+The main application component that handles:
+- **State Management**: Search, filters, favorites, command builder
+- **Data Processing**: Command enhancement with difficulty/frequency levels
+- **User Interactions**: Copy commands, favorites, search filtering
+- **Local Storage**: Persistent favorites across sessions
 
-- **Primary**: vim.wasm for authentic VIM experience
-- **Fallback**: Monaco Editor with monaco-vim for compatibility
-- **Decision Point**: Based on SharedArrayBuffer support and other browser capabilities
+#### 2. Data Structure (`src/data/vim-commands.ts`)
 
-**Critical Files:**
-- `src/utils/vim-loader.ts` - vim.wasm loading logic
-- `src/utils/dynamic-editor-loader.ts` - Dynamic editor selection
-- `src/utils/monaco-environment-configurator.ts` - Monaco setup
+Comprehensive VIM command database with 14 categories:
+- `basicMovement`, `documentNavigation`, `scrolling`, `basicEditing`
+- `copyPasteAndRegisters`, `searchAndReplace`, `advancedSearchReplace`
+- `visualMode`, `textObjects`, `marksAndJumps`, `indentationAndFormatting`
+- `numbersAndCounts`, `macrosAndAdvanced`, `fileOperations`
 
-### 2. Browser Compatibility System
+Each command includes:
+```typescript
+interface VimCommand {
+  command: string      // The VIM command syntax
+  description: string  // Human-readable description
+  mode?: string       // VIM mode (normal, insert, visual, etc.)
+  example?: string    // Usage example or context
+}
+```
 
-**Ultra-Early Detection** (`src/utils/early-browser-detection.ts`):
-- Runs before React initialization
-- Detects SharedArrayBuffer, COOP/COEP headers, service worker support
-- Sets global flags that influence entire application behavior
+#### 3. Enhanced Features
 
-**Runtime Detection** (`src/utils/browser-capabilities.ts`):
-- Continuous monitoring of browser capabilities
-- Feature flag evaluation
-- Dynamic capability updates
+**Smart Classification System**:
+- **Difficulty Levels**: Commands automatically classified as beginner/intermediate/advanced
+- **Frequency Indicators**: Essential/common/rare based on typical usage patterns
+- **Mode Awareness**: Commands tagged with appropriate VIM modes
 
-### 3. Resilience & Error Recovery
+**Interactive Features**:
+- **Advanced Search**: Full-text search across commands, descriptions, examples
+- **Multi-level Filtering**: By category, difficulty, frequency, and mode
+- **Command Builder**: Click commands to compose complex sequences
+- **Favorites System**: Bookmark frequently used commands with localStorage persistence
+- **Copy Functionality**: One-click copying with visual feedback
 
-**Error Recovery System** (`src/utils/errorRecovery.ts`):
-- Global error handlers for JavaScript errors, promise rejections
-- Memory pressure monitoring
-- Network connectivity tracking
-- Automated recovery strategies:
-  - Network retry with backoff
-  - WebAssembly fallback to Monaco
-  - Memory cleanup
-  - Storage quota management
-  - Cache clearing
+### Technology Stack
 
-**Resource Loading** (`src/utils/resourceLoader.ts`):
-- Retry logic for script/CSS loading
-- CDN fallback support
-- Timeout handling
-- Progress tracking
-
-### 4. Service Workers
-
-**Offline Support** (`public/offline-service-worker.js`):
-- Caching strategies for different resource types
-- Network-first for dynamic content
-- Cache-first for static assets
-- Offline functionality
-
-**CORS Helper** (`public/cors-service-worker.js`):
-- Cross-origin request handling
-- CORS preflight optimization
-- GitLab Pages compatibility
-
-### 5. Comprehensive Logging System
-
-**Unified Logger** (`src/utils/logger.ts`):
-- Color-coded console output
-- Module-based filtering
-- Interactive console commands via `vimLog` global
-- Export capabilities for debugging
-
-**Specialized Loggers:**
-- `src/utils/networkLogger.ts` - All network requests
-- `src/utils/actionTracker.ts` - User interactions
-- `src/utils/editorLogger.ts` - Editor-specific operations
-- `src/utils/storageLogger.ts` - Storage operations
+- **Frontend**: React 19.1 + TypeScript
+- **Icons**: Lucide React for consistent iconography
+- **Styling**: Tailwind CSS for responsive design
+- **Build**: Vite 6.3 with optimized chunking
+- **Deployment**: GitHub Pages with automated CI/CD
 
 ## Development Patterns
 
-### Error Handling
+### Component Structure
 
-All async operations should use the error recovery system:
+The main component follows React best practices:
+```typescript
+// State management with hooks
+const [searchTerm, setSearchTerm] = useState('')
+const [favorites, setFavorites] = useState<Set<string>>(new Set())
+
+// Memoized data processing for performance
+const enhancedCommands = useMemo(() => {
+  // Process raw commands with difficulty/frequency
+}, [])
+
+// Local storage integration
+useEffect(() => {
+  const saved = localStorage.getItem('vim-cheatsheet-favorites')
+  if (saved) setFavorites(new Set(JSON.parse(saved)))
+}, [])
+```
+
+### Data Enhancement
+
+Commands are enhanced at runtime with:
+```typescript
+function getDifficultyLevel(command: string, category: string): 'beginner' | 'intermediate' | 'advanced'
+function getFrequencyLevel(command: string): 'essential' | 'common' | 'rare'
+```
+
+### Filtering Logic
+
+Complex filtering combines multiple criteria:
+- Text search across command, description, mode, example
+- Category filtering (single category or all)
+- Difficulty/frequency filtering
+- Sorting by alphabetical, difficulty, frequency, or category
+
+## Configuration Files
+
+### `vite.config.ts` - Build Configuration
+- Base path: `/VIM/` for GitHub/GitLab Pages deployment
+- Optimized chunk splitting for React vendor code
+- Clean, minimal configuration for static site
+
+### `public/_headers` - Security Headers
+Simplified headers for static content:
+- Content security policy for safe inline scripts/styles
+- Caching strategies for optimal performance
+- Basic security headers (nosniff, referrer policy)
+
+### `package.json` - Project Metadata
+- Name: "VIM-Cheatsheet" 
+- Version: "2.0.0"
+- Clean dependency list focused on React, TypeScript, Tailwind
+
+## Data Management
+
+### Command Data Structure
+
+The `vimCommands` object in `src/data/vim-commands.ts` contains:
+- 14 main categories of VIM commands
+- 300+ individual commands with descriptions
+- Mode indicators and usage examples
+- Consistent formatting and organization
+
+### Local Storage Usage
 
 ```typescript
-import { errorRecovery } from './utils/errorRecovery';
+// Favorites persistence
+localStorage.setItem('vim-cheatsheet-favorites', JSON.stringify(Array.from(favorites)))
 
-try {
-  await riskyOperation();
-} catch (error) {
-  errorRecovery.reportError(error, {
-    component: 'ComponentName',
-    action: 'operation-name'
-  });
-}
+// Loading saved preferences
+const savedFavorites = localStorage.getItem('vim-cheatsheet-favorites')
 ```
 
-### Logging
+## Deployment Architecture
 
-Use the unified logging system:
+### GitHub Pages Deployment
+- Automated via GitHub Actions on push to main
+- Clean build without legacy editor dependencies
+- Optimized static assets with proper caching headers
 
-```typescript
-import { log } from './utils/logger';
-
-log.info('ModuleName', 'Operation completed', { data: 'details' });
-log.error('ModuleName', 'Operation failed', error, { context: 'additional info' });
-```
-
-### Browser Compatibility Checks
-
-Check capabilities before using advanced features:
-
-```typescript
-import { useBrowserCapabilities } from './contexts/BrowserCapabilitiesContext';
-
-const capabilities = useBrowserCapabilities();
-if (capabilities.supportsSharedArrayBuffer) {
-  // Use vim.wasm
-} else {
-  // Use Monaco fallback
-}
-```
-
-## Critical Configuration Files
-
-### `public/_headers` - CORS & Security Headers
-Critical for GitLab Pages deployment. Sets COOP/COEP headers required for SharedArrayBuffer:
-
-```
-/*
-  Cross-Origin-Embedder-Policy: require-corp
-  Cross-Origin-Opener-Policy: same-origin
-  Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH
-```
-
-### `vite.config.ts` - Build & Development Configuration
-- Base path: `/VIM/` for GitHub/GitLab Pages
-- Proxy configuration for CORS avoidance
-- Chunk splitting for optimal loading
-- Development server headers
-
-### Service Worker Registration
-Service workers are conditionally registered based on:
-- Browser compatibility
-- Environment (not in development by default)
-- User consent/preferences
-
-## Testing & Quality Assurance
-
-### Browser Compatibility Testing
-`test-browser-compatibility.js` provides comprehensive testing:
-- Normal browser mode
-- Private/incognito mode
-- Artificially restricted mode (simulates limited browsers)
-- Automated screenshots and metrics collection
-- Fallback system verification
-
-### Error Scenario Testing
-The application includes multiple ways to test error scenarios:
-- Memory pressure simulation
-- Network failure simulation
-- WebAssembly loading failures
-- Storage quota exhaustion
-
-## Deployment Considerations
-
-### GitHub Pages
-Standard deployment with GitHub Actions via `npm run deploy`.
-
-### GitLab Pages
-Requires special handling:
-- Use `npm run build:gitlab` 
-- Ensure `_headers` file is in the root of the deployed content
-- May require pre-built releases for air-gapped environments
-
-### Custom Servers
-Ensure server supports:
-- Proper MIME types for `.wasm` files
-- COOP/COEP headers for SharedArrayBuffer
-- Service worker registration
-
-## Debugging & Monitoring
-
-### Console Commands
-The application exposes several debugging interfaces:
-
-```javascript
-// Logging
-vimLog.show()           // View recent logs
-vimLog.filter("error")  // Filter logs
-vimLog.enableAll()      // Enable all modules
-
-// User Actions
-vimDebug.actions()      // Recent user actions
-vimDebug.exportActions() // Download action history
-
-// Network
-vimNetwork.stats()      // Network statistics
-vimNetwork.slow()       // Slow requests
-
-// System Health
-resilience.diagnose()   // Full system diagnostic
-resilience.health()     // Health check
-```
-
-### Performance Monitoring
-- Memory usage monitoring with warnings at 70% and errors at 90%
-- Network request timing
-- Editor render performance
-- Resource loading metrics
-
-## Common Issues & Solutions
-
-### CORS Issues
-1. Check `_headers` file deployment
-2. Verify service worker registration
-3. Use proxy configuration in development
-4. Check browser console for CORS-specific logs
-
-### vim.wasm Loading Failures
-1. Check SharedArrayBuffer availability
-2. Verify COOP/COEP headers
-3. Monitor error recovery system logs
-4. Ensure Monaco fallback activates
-
-### Memory Issues
-1. Monitor `resilience.memory()` output
-2. Check for memory leaks in user actions
-3. Verify garbage collection triggers
-4. Review storage usage patterns
+### Build Process
+1. TypeScript compilation with strict checking
+2. Vite build with React vendor chunking
+3. Static asset optimization
+4. Header configuration for security and performance
 
 ## Code Style & Conventions
 
-- TypeScript strict mode enabled
-- React 19.1 with hooks
-- Tailwind CSS for styling
-- ESLint configuration
-- Monospace font throughout for editor authenticity
-- No comments in code unless explicitly requested
-- Prefer editing existing files over creating new ones
+- **TypeScript**: Strict mode enabled with full type safety
+- **React**: Modern hooks-based components
+- **Styling**: Tailwind CSS with responsive design patterns
+- **Icons**: Lucide React for consistent UI elements
+- **No Comments**: Code should be self-documenting unless explicitly requested
+- **Prefer Editing**: Always edit existing files rather than creating new ones when possible
 
 ## Important Notes
 
-1. **Service Worker Scope**: Service workers are registered at root scope for maximum coverage
-2. **Memory Management**: The application actively monitors and manages memory usage
-3. **Offline Capability**: Full functionality after initial load, even offline  
-4. **Privacy**: All data stays in browser - no external tracking or analytics
-5. **Progressive Enhancement**: Works on any modern browser with graceful degradation
+1. **Static Application**: This is a pure frontend application with no backend dependencies
+2. **Client-Side Only**: All data processing and storage happens in the browser
+3. **Performance Optimized**: Memoized computations and efficient React patterns
+4. **Responsive Design**: Works across desktop, tablet, and mobile devices
+5. **Accessibility**: Keyboard navigation and screen reader friendly
+6. **No Analytics**: Privacy-focused with no external tracking
 
-This architecture ensures VIMora provides a reliable, authentic VIM experience regardless of environmental constraints while maintaining transparency through comprehensive logging and monitoring systems.
+## Legacy Note
+
+This application was previously a full VIM editor (VIMora) with vim.wasm and Monaco Editor integration. The transformation to a static cheatsheet removed all editor functionality in favor of a focused, fast, and universally compatible command reference tool.
