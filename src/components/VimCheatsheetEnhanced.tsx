@@ -40,6 +40,7 @@ export default function VimCheatsheetEnhanced() {
   const mainContentRef = useRef<HTMLDivElement>(null)
   const sidebarRef = useRef<HTMLDivElement>(null)
   const commandListRef = useRef<HTMLDivElement>(null)
+  const commandElementsRef = useRef<Map<string, HTMLDivElement>>(new Map())
 
   // Debounced search term
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
@@ -289,6 +290,27 @@ export default function VimCheatsheetEnhanced() {
     onSwipeRight: () => setIsSidebarOpen(true),
     onSwipeLeft: () => setIsSidebarOpen(false),
   })
+
+  // Scroll selected command into view
+  useEffect(() => {
+    if (filteredCommands.length > 0 && selectedCommandIndex >= 0 && selectedCommandIndex < filteredCommands.length) {
+      const selectedCommand = filteredCommands[selectedCommandIndex]
+      const element = commandElementsRef.current.get(selectedCommand.command)
+      
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'instant',
+          block: 'center',
+          inline: 'nearest'
+        })
+      }
+    }
+  }, [selectedCommandIndex, filteredCommands])
+
+  // Clean up command element refs when commands change
+  useEffect(() => {
+    commandElementsRef.current.clear()
+  }, [filteredCommands])
 
   // Check if command has example
   const hasExample = (command: string): boolean => {
@@ -574,10 +596,18 @@ export default function VimCheatsheetEnhanced() {
               {Object.entries(groupedCommands).map(([category, commands]) => {
                 // Calculate the selected index within this category
                 let categorySelectedIndex: number | undefined
-                const selectedCmd = filteredCommands[selectedCommandIndex]
-                const indexInCategory = commands.findIndex(cmd => cmd.command === selectedCmd?.command)
-                if (indexInCategory !== -1) {
-                  categorySelectedIndex = indexInCategory
+                let startIndex = 0
+                
+                // Find the starting index for this category in the filtered commands
+                for (const [cat, cmds] of Object.entries(groupedCommands)) {
+                  if (cat === category) {
+                    // Check if the selected index falls within this category's range
+                    if (selectedCommandIndex >= startIndex && selectedCommandIndex < startIndex + cmds.length) {
+                      categorySelectedIndex = selectedCommandIndex - startIndex
+                    }
+                    break
+                  }
+                  startIndex += cmds.length
                 }
 
                 return (
@@ -611,6 +641,11 @@ export default function VimCheatsheetEnhanced() {
                         return (
                           <div key={cmd.command}>
                             <div
+                              ref={(el) => {
+                                if (el) {
+                                  commandElementsRef.current.set(cmd.command, el)
+                                }
+                              }}
                               className={`
                                 bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 
                                 transition-colors cursor-pointer group
