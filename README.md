@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.1.0-blue.svg" alt="Version 3.1.0" />
+      <img src="https://img.shields.io/badge/version-3.1.1-blue.svg" alt="Version 3.1.1" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -75,6 +75,20 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
     </td>
   </tr>
 </table>
+
+## 🚀 Version 3.1.1 - Build Fix & Deployment Stability
+
+### 🔧 Critical Build Fix
+- **GitHub Actions Fix**: Resolved "Could not resolve entry module index.html" build error
+- **Index.html Tracking**: Added essential Vite entry point to repository (was incorrectly gitignored)
+- **CI/CD Stability**: Ensures consistent builds across development and deployment environments
+- **Deployment Reliability**: Guarantees working GitLab Pages packages for all users
+
+### 🎯 Enhanced Deployment Experience
+- **Verified Build Process**: All deployment packages now build successfully
+- **Updated Documentation**: Clear deployment instructions with verified steps
+- **GitLab Pages Ready**: Complete offline package with all dependencies included
+- **Zero-Error Builds**: TypeScript strict mode compliance maintained
 
 ## 🚀 Version 3.1.0 - Mobile UX & Code Quality Release
 
@@ -209,7 +223,7 @@ Perfect for offline and air-gapped environments:
 
 #### Option 1: Download Release
 1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-2. Extract `vim-cheatsheet-v3.1.0-gitlab-pages.zip`
+2. Extract `vim-cheatsheet-v3.1.1-gitlab-pages.zip`
 3. Upload contents to your GitLab Pages repository
 4. Enable GitLab Pages in project settings
 
@@ -382,6 +396,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.1.0 | 315+ Commands | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.1.1 | 315+ Commands | Performance Optimized</sub>
   </p>
 </div>
