@@ -1,8 +1,9 @@
 {
-  "name": "VIM",
+  "name": "VIM-Cheatsheet",
   "private": true,
-  "version": "1.5.0",
+  "version": "2.0.0",
   "type": "module",
+  "description": "The ultimate VIM cheatsheet - comprehensive, searchable, and interactive",
   "homepage": "https://Real-Fruit-Snacks.github.io/VIM",
   "scripts": {
     "dev": "vite",
@@ -17,13 +18,10 @@
     "@types/node": "^22.15.29",
     "autoprefixer": "^10.4.21",
     "lucide-react": "^0.511.0",
-    "monaco-editor": "^0.52.2",
-    "monaco-vim": "^0.4.2",
     "postcss": "^8.5.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^3.4.17",
-    "vim-wasm": "^0.0.13"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

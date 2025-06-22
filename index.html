@@ -6,78 +6,8 @@
     <link rel="alternate icon" href="/favicon-detailed.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon-detailed.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VIM - Interactive VIM Learning Platform</title>
-    
-    <!-- Ultra-early browser detection (runs before any module loads) -->
-    <script>
-      (function() {
-        'use strict';
-        
-        // Start performance tracking
-        performance.mark('browser-detection-start');
-        
-        // Detect capabilities at the earliest possible moment
-        const hasWebAssembly = typeof WebAssembly !== 'undefined' && 
-          typeof WebAssembly.instantiate === 'function';
-        const hasSharedArrayBuffer = typeof SharedArrayBuffer !== 'undefined';
-        const isSecureContext = window.isSecureContext || false;
-        const hasServiceWorker = 'serviceWorker' in navigator;
-        
-        // Detect browser type
-        const ua = navigator.userAgent.toLowerCase();
-        let browserName = 'Unknown';
-        if (ua.includes('firefox')) {
-          browserName = 'Firefox';
-        } else if (ua.includes('safari') && !ua.includes('chrome')) {
-          browserName = 'Safari';
-        } else if (ua.includes('edg')) {
-          browserName = 'Edge';
-        } else if (ua.includes('chrome')) {
-          browserName = 'Chrome';
-        }
-        
-        // Store capabilities globally
-        const capabilities = {
-          hasWebAssembly,
-          hasSharedArrayBuffer,
-          isSecureContext,
-          hasServiceWorker,
-          browserName,
-          detectedAt: 'ultra-early',
-          timestamp: Date.now()
-        };
-        
-        window.__browserCapabilities = capabilities;
-        window.__canUseVimWasm = hasWebAssembly && hasSharedArrayBuffer && isSecureContext;
-        
-        // Log decision
-        console.log('[Ultra-Early Detection] Browser capabilities:', capabilities);
-        console.log('[Ultra-Early Detection] Decision:', window.__canUseVimWasm ? 'Will load vim.wasm' : 'Will use Monaco fallback');
-        
-        // Mark detection complete
-        performance.mark('browser-detection-end');
-        performance.measure('browser-detection', 'browser-detection-start', 'browser-detection-end');
-        
-        // Store in sessionStorage for persistence
-        try {
-          sessionStorage.setItem('vim-browser-capabilities', JSON.stringify(capabilities));
-        } catch (e) {
-          // Ignore storage errors
-        }
-      })();
-    </script>
-    
-    <!-- Conditionally load service worker (only if needed for vim.wasm) -->
-    <script>
-      (function() {
-        if (window.__canUseVimWasm && window.__browserCapabilities.hasServiceWorker && !window.crossOriginIsolated) {
-          const script = document.createElement('script');
-          script.src = '/VIM/coi-serviceworker.js'; // Use proper base path
-          document.head.appendChild(script);
-          console.log('[Conditional Load] Loading COOP/COEP service worker');
-        }
-      })();
-    </script>
+    <title>VIM Cheatsheet - The Ultimate VIM Command Reference</title>
+    <meta name="description" content="The most comprehensive, searchable, and interactive VIM cheatsheet. Find VIM commands quickly with advanced filtering and search." />
   </head>
   <body>
     <div id="root">
@@ -106,43 +36,11 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
           "></div>
-          <div style="font-size: 14px;">Initializing VIM Editor...</div>
-          <div id="early-status" style="font-size: 12px; margin-top: 8px; opacity: 0.7;"></div>
+          <div style="font-size: 14px;">Loading VIM Cheatsheet...</div>
+          <div style="font-size: 12px; margin-top: 8px; opacity: 0.7;">The ultimate command reference</div>
         </div>
       </div>
-      
-      <!-- Update status based on early detection -->
-      <script>
-        document.getElementById('early-status').textContent = 
-          window.__canUseVimWasm ? 'Loading full VIM experience...' : 'Loading VIM emulation...';
-      </script>
     </div>
-    
-    <!-- Conditionally load vim-wasm wrapper based on early detection -->
-    <script type="module">
-      (function() {
-        if (window.__canUseVimWasm) {
-          // Only load vim-wasm wrapper if browser supports it
-          console.log('[Conditional Load] Loading vim-wasm wrapper...');
-          const script = document.createElement('script');
-          script.type = 'module';
-          script.src = '/VIM/vim-wasm-wrapper.js'; // Use proper base path
-          script.onload = () => {
-            console.log('[Conditional Load] vim-wasm wrapper loaded successfully');
-          };
-          script.onerror = (err) => {
-            console.error('[Conditional Load] Failed to load vim-wasm:', err);
-            window.__vimWasmLoadError = err;
-            window.__skipVimWasmLoad = true;
-          };
-          document.head.appendChild(script);
-        } else {
-          // Signal that vim-wasm was intentionally skipped
-          window.__skipVimWasmLoad = true;
-          console.log('[Conditional Load] Skipping vim-wasm (browser incompatible)');
-        }
-      })();
-    </script>
     
     <!-- Main app entry point -->
     <script type="module" src="/src/main.tsx"></script>
