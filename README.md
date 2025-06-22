@@ -10,7 +10,7 @@
   </p>
   
   <p align="center">
-    315+ Commands • Interactive Examples • Zero Setup
+    315+ Commands • 250+ Interactive Examples • Zero Setup
   </p>
   
   <p align="center">
@@ -98,7 +98,7 @@ The standout feature: **live command demonstrations** that show:
 - Realistic text scenarios for better understanding
 - Step-by-step explanations of what each command does
 
-Currently featuring **30+ interactive examples** across multiple categories including:
+Currently featuring **250+ interactive examples** across multiple categories including:
 - **Basic Movement** (`h`, `j`, `k`, `l`, `w`, `b`, `e`, `0`, `^`, `$`, `%`, `(`, `)`)
 - **Editing Commands** (`dd`, `dw`, `cw`, `yy`, `p`, `x`)
 - **Insert Mode** (`i`, `a`, `o`, `A`, `I`, `O`)
@@ -165,7 +165,7 @@ Each example shows:
 - `da(` - Delete around parentheses
 - `di"` - Delete inside quotes
 
-**And many more across 7 different categories!**
+**And many more across 25+ different categories!**
 
 ## Command Categories
 
