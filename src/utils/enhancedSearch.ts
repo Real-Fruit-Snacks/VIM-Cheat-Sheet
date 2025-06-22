@@ -5,6 +5,9 @@
 import Fuse from 'fuse.js'
 import type { ExpandedCommand } from './dataCompression'
 
+type CommandWithCategory = ExpandedCommand & { category: string }
+type FuseResult<T = CommandWithCategory> = { item: T; refIndex: number; score?: number }
+
 // Command synonyms for better search
 export const COMMAND_SYNONYMS: Record<string, string[]> = {
   'delete': ['remove', 'cut', 'erase'],
@@ -123,8 +126,8 @@ export interface SearchOptions {
 }
 
 export class EnhancedSearch {
-  private fuse: Fuse<any>
-  private allCommands: ExpandedCommand[]
+  private fuse: Fuse<CommandWithCategory>
+  private allCommands: CommandWithCategory[]
   
   constructor(commands: Record<string, ExpandedCommand[]>) {
     // Flatten all commands with category info
@@ -153,7 +156,7 @@ export class EnhancedSearch {
     this.fuse = new Fuse(this.allCommands, options)
   }
   
-  search(query: string): any[] {
+  search(query: string): CommandWithCategory[] {
     if (!query.trim()) return this.allCommands
     
     // Check for common mistakes first
@@ -169,7 +172,7 @@ export class EnhancedSearch {
     const expandedQueries = this.expandQueryWithSynonyms(query)
     
     // Perform fuzzy search
-    let results: any[] = []
+    let results: FuseResult<CommandWithCategory>[] = []
     for (const q of expandedQueries) {
       const searchResults = this.fuse.search(q)
       results = results.concat(searchResults)
@@ -197,7 +200,7 @@ export class EnhancedSearch {
     return [...new Set(queries)]
   }
   
-  private deduplicateResults(results: any[]): any[] {
+  private deduplicateResults(results: FuseResult<CommandWithCategory>[]): FuseResult<CommandWithCategory>[] {
     const seen = new Set<string>()
     return results.filter(result => {
       const key = result.item.command

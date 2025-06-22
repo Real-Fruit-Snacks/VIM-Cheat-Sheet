@@ -247,7 +247,7 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
           {Array.from({ length: Math.max(0, 6 - currentState.text.length) }, (_, i) => (
             <div key={`empty-${i}`} className="flex">
               <span className="text-gray-600 mr-4 select-none w-8 text-right">~</span>
-              <div className="text-gray-600">​</div>
+              <div className="text-gray-600"></div>
             </div>
           ))}
         </div>

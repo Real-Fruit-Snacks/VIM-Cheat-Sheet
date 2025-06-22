@@ -78,8 +78,8 @@ export function expandCommand(cmd: CompressedCommand): ExpandedCommand {
   
   if (cmd.m) expanded.mode = MODE_MAP[cmd.m] || cmd.m
   if (cmd.e) expanded.example = cmd.e
-  if (cmd.df) expanded.difficulty = DIFFICULTY_MAP[cmd.df] as any
-  if (cmd.f) expanded.frequency = FREQUENCY_MAP[cmd.f] as any
+  if (cmd.df) expanded.difficulty = DIFFICULTY_MAP[cmd.df] as 'beginner' | 'intermediate' | 'advanced'
+  if (cmd.f) expanded.frequency = FREQUENCY_MAP[cmd.f] as 'common' | 'rare' | 'essential'
   
   return expanded
 }
