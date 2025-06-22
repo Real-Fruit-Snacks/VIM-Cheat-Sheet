@@ -2,7 +2,7 @@ interface ExampleState {
   text: string[]
   cursorRow: number
   cursorCol: number
-  mode: 'normal' | 'insert' | 'visual'
+  mode: 'normal' | 'insert' | 'visual' | 'command'
   description: string
 }
 
@@ -5353,5 +5353,2393 @@ export const vimExamples: Record<string, VimCommandExample> = {
       description: 'Folding disabled, all folds opened'
     },
     explanation: 'Toggles folding on/off globally. When disabled, all folds are opened and no new folds can be created.'
+  },
+
+  // Missing Text Objects (Critical Priority)
+  'iw': {
+    command: 'iw',
+    beforeState: {
+      text: ['The quick brown fox jumps'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor on "brown" word'
+    },
+    afterState: {
+      text: ['The quick  fox jumps'],
+      cursorRow: 0,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'Word "brown" deleted'
+    },
+    explanation: 'Text object for inner word. "diw" deletes the word under cursor, "ciw" changes it, "yiw" copies it. Does not include surrounding spaces.'
+  },
+
+  'aw': {
+    command: 'aw',
+    beforeState: {
+      text: ['The quick brown fox jumps'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor on "brown" word'
+    },
+    afterState: {
+      text: ['The quick fox jumps'],
+      cursorRow: 0,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'Word "brown" and following space deleted'
+    },
+    explanation: 'Text object around word. "daw" deletes word and surrounding whitespace, "caw" changes it, "yaw" copies it. Includes spaces for clean deletion.'
+  },
+
+  'i"': {
+    command: 'i"',
+    beforeState: {
+      text: ['console.log("Hello World");'],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside double quotes'
+    },
+    afterState: {
+      text: ['console.log("");'],
+      cursorRow: 0,
+      cursorCol: 13,
+      mode: 'normal',
+      description: 'Text inside quotes deleted'
+    },
+    explanation: 'Text object for inner double quotes. "di"" deletes content inside quotes, "ci"" changes it, "yi"" copies it. Quotes remain intact.'
+  },
+
+  'a"': {
+    command: 'a"',
+    beforeState: {
+      text: ['console.log("Hello World");'],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside double quotes'
+    },
+    afterState: {
+      text: ['console.log();'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Quotes and content deleted'
+    },
+    explanation: 'Text object around double quotes. "da"" deletes quotes and content, "ca"" changes everything, "ya"" copies all including quotes.'
+  },
+
+  "i'": {
+    command: "i'",
+    beforeState: {
+      text: ["const msg = 'Hello VIM';"],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside single quotes'
+    },
+    afterState: {
+      text: ["const msg = '';"],
+      cursorRow: 0,
+      cursorCol: 13,
+      mode: 'normal',
+      description: 'Text inside quotes deleted'
+    },
+    explanation: 'Text object for inner single quotes. "di\'" deletes content inside quotes, "ci\'" changes it, "yi\'" copies it. Quotes remain.'
+  },
+
+  "a'": {
+    command: "a'",
+    beforeState: {
+      text: ["const msg = 'Hello VIM';"],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside single quotes'
+    },
+    afterState: {
+      text: ["const msg = ;"],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Quotes and content deleted'
+    },
+    explanation: 'Text object around single quotes. "da\'" deletes quotes and content, "ca\'" changes everything, "ya\'" copies all including quotes.'
+  },
+
+  'i(': {
+    command: 'i(',
+    beforeState: {
+      text: ['function call(arg1, arg2, arg3)'],
+      cursorRow: 0,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Cursor inside parentheses'
+    },
+    afterState: {
+      text: ['function call()'],
+      cursorRow: 0,
+      cursorCol: 14,
+      mode: 'normal',
+      description: 'Content inside parentheses deleted'
+    },
+    explanation: 'Text object for inner parentheses. "di(" deletes content inside parens, "ci(" changes it, "yi(" copies it. Parentheses remain.'
+  },
+
+  'a(': {
+    command: 'a(',
+    beforeState: {
+      text: ['function call(arg1, arg2, arg3)'],
+      cursorRow: 0,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Cursor inside parentheses'
+    },
+    afterState: {
+      text: ['function call'],
+      cursorRow: 0,
+      cursorCol: 13,
+      mode: 'normal',
+      description: 'Parentheses and content deleted'
+    },
+    explanation: 'Text object around parentheses. "da(" deletes parens and content, "ca(" changes everything, "ya(" copies all including parentheses.'
+  },
+
+  'i[': {
+    command: 'i[',
+    beforeState: {
+      text: ['array[index1, index2, index3]'],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside square brackets'
+    },
+    afterState: {
+      text: ['array[]'],
+      cursorRow: 0,
+      cursorCol: 6,
+      mode: 'normal',
+      description: 'Content inside brackets deleted'
+    },
+    explanation: 'Text object for inner square brackets. "di[" deletes content inside brackets, "ci[" changes it, "yi[" copies it. Brackets remain.'
+  },
+
+  'a[': {
+    command: 'a[',
+    beforeState: {
+      text: ['array[index1, index2, index3]'],
+      cursorRow: 0,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor inside square brackets'
+    },
+    afterState: {
+      text: ['array'],
+      cursorRow: 0,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Brackets and content deleted'
+    },
+    explanation: 'Text object around square brackets. "da[" deletes brackets and content, "ca[" changes everything, "ya[" copies all including brackets.'
+  },
+
+  'i{': {
+    command: 'i{',
+    beforeState: {
+      text: [
+        'object = {',
+        '  key1: value1,',
+        '  key2: value2',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Cursor inside curly braces'
+    },
+    afterState: {
+      text: [
+        'object = {',
+        '}' 
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Content inside braces deleted'
+    },
+    explanation: 'Text object for inner curly braces. "di{" deletes content inside braces, "ci{" changes it, "yi{" copies it. Braces remain intact.'
+  },
+
+  'a{': {
+    command: 'a{',
+    beforeState: {
+      text: [
+        'object = {',
+        '  key1: value1,',
+        '  key2: value2',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Cursor inside curly braces'
+    },
+    afterState: {
+      text: ['object = '],
+      cursorRow: 0,
+      cursorCol: 9,
+      mode: 'normal',
+      description: 'Braces and all content deleted'
+    },
+    explanation: 'Text object around curly braces. "da{" deletes braces and content, "ca{" changes everything, "ya{" copies all including braces.'
+  },
+
+  // Alternative notations for the same text objects
+  'i)': {
+    command: 'i)',
+    beforeState: {
+      text: ['if (condition && other_condition)'],
+      cursorRow: 0,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Cursor inside parentheses'
+    },
+    afterState: {
+      text: ['if ()'],
+      cursorRow: 0,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Content inside parentheses deleted'
+    },
+    explanation: 'Alternative notation for i(. Text object for inner parentheses. Same functionality as i( - selects content inside parentheses.'
+  },
+
+  'a)': {
+    command: 'a)',
+    beforeState: {
+      text: ['if (condition && other_condition)'],
+      cursorRow: 0,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Cursor inside parentheses'
+    },
+    afterState: {
+      text: ['if '],
+      cursorRow: 0,
+      cursorCol: 3,
+      mode: 'normal',
+      description: 'Parentheses and content deleted'
+    },
+    explanation: 'Alternative notation for a(. Text object around parentheses. Same functionality as a( - selects parentheses and content.'
+  },
+
+  'i]': {
+    command: 'i]',
+    beforeState: {
+      text: ['list[item1, item2, item3]'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor inside square brackets'
+    },
+    afterState: {
+      text: ['list[]'],
+      cursorRow: 0,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Content inside brackets deleted'
+    },
+    explanation: 'Alternative notation for i[. Text object for inner square brackets. Same functionality as i[ - selects content inside brackets.'
+  },
+
+  'a]': {
+    command: 'a]',
+    beforeState: {
+      text: ['list[item1, item2, item3]'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor inside square brackets'
+    },
+    afterState: {
+      text: ['list'],
+      cursorRow: 0,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Brackets and content deleted'
+    },
+    explanation: 'Alternative notation for a[. Text object around square brackets. Same functionality as a[ - selects brackets and content.'
+  },
+
+  'i}': {
+    command: 'i}',
+    beforeState: {
+      text: [
+        'function() {',
+        '  return true;',
+        '  // some comment',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Cursor inside curly braces'
+    },
+    afterState: {
+      text: [
+        'function() {',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Content inside braces deleted'
+    },
+    explanation: 'Alternative notation for i{. Text object for inner curly braces. Same functionality as i{ - selects content inside braces.'
+  },
+
+  'a}': {
+    command: 'a}',
+    beforeState: {
+      text: [
+        'function() {',
+        '  return true;',
+        '  // some comment',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Cursor inside curly braces'
+    },
+    afterState: {
+      text: ['function() '],
+      cursorRow: 0,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Braces and all content deleted'
+    },
+    explanation: 'Alternative notation for a{. Text object around curly braces. Same functionality as a{ - selects braces and content.'
+  },
+
+  // VIM Configuration Basics (vimrcBasics)
+  '~/.vimrc': {
+    command: '~/.vimrc',
+    beforeState: {
+      text: ['Creating VIM configuration file'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Need to create VIM config'
+    },
+    afterState: {
+      text: [
+        '--- ~/.vimrc file location ---',
+        '/home/username/.vimrc',
+        'VIM configuration file for Linux/Mac',
+        'Edit with: vim ~/.vimrc'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'VIM config file location shown'
+    },
+    explanation: 'Location of VIM configuration file on Linux/Mac systems. This file contains all your VIM settings and customizations.'
+  },
+
+  '$HOME/_vimrc': {
+    command: '$HOME/_vimrc',
+    beforeState: {
+      text: ['Creating VIM configuration on Windows'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Need VIM config on Windows'
+    },
+    afterState: {
+      text: [
+        '--- $HOME/_vimrc file location ---',
+        'C:\\Users\\username\\_vimrc',
+        'VIM configuration file for Windows',
+        'Edit with: vim $HOME/_vimrc'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Windows VIM config location shown'
+    },
+    explanation: 'Location of VIM configuration file on Windows systems. Uses underscore prefix instead of dot due to Windows filesystem conventions.'
+  },
+
+  ':source $MYVIMRC': {
+    command: ':source $MYVIMRC',
+    beforeState: {
+      text: [
+        '" Modified .vimrc settings',
+        'set number',
+        'set hlsearch',
+        'syntax on'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Modified .vimrc file open'
+    },
+    afterState: {
+      text: [
+        '" Modified .vimrc settings',
+        'set number',
+        'set hlsearch', 
+        'syntax on',
+        '',
+        '.vimrc reloaded without restarting VIM'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Settings reloaded and applied'
+    },
+    explanation: 'Reloads your .vimrc configuration file without restarting VIM. Essential for testing configuration changes immediately.'
+  },
+
+  '" comment': {
+    command: '" comment',
+    beforeState: {
+      text: [
+        'set number',
+        'set hlsearch',
+        'syntax on'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'VIM configuration file'
+    },
+    afterState: {
+      text: [
+        'set number',
+        '" Enable search highlighting',
+        'set hlsearch',
+        'syntax on'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Comment added to explain setting'
+    },
+    explanation: 'Comments in VIM configuration files start with double quote. Use them to document your settings and make .vimrc more readable.'
+  },
+
+  'set number': {
+    command: 'set number',
+    beforeState: {
+      text: [
+        'function example() {',
+        '  return true;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'No line numbers visible'
+    },
+    afterState: {
+      text: [
+        '1 | function example() {',
+        '2 |   return true;',
+        '3 | }'
+      ],
+      cursorRow: 0,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Line numbers now displayed'
+    },
+    explanation: 'Enables absolute line number display. Essential for navigation, debugging, and referencing specific lines in code files.'
+  },
+
+  'set relativenumber': {
+    command: 'set relativenumber',
+    beforeState: {
+      text: [
+        '1 | function example() {',
+        '2 |   let x = 1;',
+        '3 |   let y = 2;',
+        '4 |   return x + y;',
+        '5 | }'
+      ],
+      cursorRow: 2,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Cursor on line 3 with absolute numbers'
+    },
+    afterState: {
+      text: [
+        '2 | function example() {',
+        '1 |   let x = 1;',
+        '3 |   let y = 2;',
+        '1 |   return x + y;',
+        '2 | }'
+      ],
+      cursorRow: 2,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Relative numbers shown from current line'
+    },
+    explanation: 'Shows line numbers relative to current cursor position. Makes it easy to use counts with movement commands like 3j or 2k.'
+  },
+
+  'set hlsearch': {
+    command: 'set hlsearch',
+    beforeState: {
+      text: [
+        'function test() {',
+        '  test variable here',
+        '  return test + 1;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'After searching /test, no highlighting'
+    },
+    afterState: {
+      text: [
+        'function [test]() {',
+        '  [test] variable here',
+        '  return [test] + 1;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'All "test" matches highlighted'
+    },
+    explanation: 'Highlights all matches of your search pattern, making it easy to see all occurrences of searched text at once.'
+  },
+
+  'set incsearch': {
+    command: 'set incsearch',
+    beforeState: {
+      text: [
+        'function calculate() {',
+        '  calculator.run();',
+        '  return calculation;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Starting to type /calc...'
+    },
+    afterState: {
+      text: [
+        'function [calc]ulate() {',
+        '  calculator.run();',
+        '  return calculation;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 9,
+      mode: 'normal',
+      description: 'Cursor jumps to match as you type'
+    },
+    explanation: 'Shows search results incrementally as you type. Cursor jumps to the first match, updating in real-time as you type more characters.'
+  },
+
+  'set ignorecase': {
+    command: 'set ignorecase',
+    beforeState: {
+      text: [
+        'Function Test() {',
+        '  test variable',
+        '  TEST constant',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Searching /test finds only exact case'
+    },
+    afterState: {
+      text: [
+        'Function [Test]() {',
+        '  [test] variable',
+        '  [TEST] constant',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'All case variations highlighted'
+    },
+    explanation: 'Makes searches case-insensitive. Searching for "test" will match "test", "Test", "TEST", etc. Very useful for most text searching.'
+  },
+
+  'set smartcase': {
+    command: 'set smartcase',
+    beforeState: {
+      text: [
+        'Function Test() {',
+        '  test variable',
+        '  TEST constant',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'With ignorecase set, searching /Test'
+    },
+    afterState: {
+      text: [
+        'Function [Test]() {',
+        '  test variable',
+        '  TEST constant',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Only exact case "Test" highlighted'
+    },
+    explanation: 'Overrides ignorecase when search pattern contains uppercase. Lowercase = case-insensitive, uppercase = case-sensitive. Best of both worlds.'
+  },
+
+  'set tabstop=4': {
+    command: 'set tabstop=4',
+    beforeState: {
+      text: [
+        'function() {',
+        '\tindented with tab (8 spaces wide)',
+        '\t\tdouble indent',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Tabs display as 8 spaces (default)'
+    },
+    afterState: {
+      text: [
+        'function() {',
+        '    indented with tab (4 spaces wide)',
+        '        double indent',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Tabs now display as 4 spaces'
+    },
+    explanation: 'Sets display width of tab characters to 4 spaces. Common setting for most programming languages and coding standards.'
+  },
+
+  'set expandtab': {
+    command: 'set expandtab',
+    beforeState: {
+      text: [
+        'function() {',
+        '    code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'insert',
+      description: 'Pressing Tab key in insert mode'
+    },
+    afterState: {
+      text: [
+        'function() {',
+        '        code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 8,
+      mode: 'insert',
+      description: 'Tab converted to spaces'
+    },
+    explanation: 'Converts Tab key presses to spaces instead of tab characters. Ensures consistent indentation across all editors and systems.'
+  },
+
+  'set autoindent': {
+    command: 'set autoindent',
+    beforeState: {
+      text: [
+        'function example() {',
+        '    if (true) {',
+        '        console.log("test");'
+      ],
+      cursorRow: 2,
+      cursorCol: 27,
+      mode: 'insert',
+      description: 'Pressing Enter at end of indented line'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '    if (true) {',
+        '        console.log("test");',
+        '        '
+      ],
+      cursorRow: 3,
+      cursorCol: 8,
+      mode: 'insert',
+      description: 'New line automatically indented'
+    },
+    explanation: 'Automatically indents new lines to match the indentation of the current line. Essential for maintaining consistent code structure.'
+  },
+
+  'syntax on': {
+    command: 'syntax on',
+    beforeState: {
+      text: [
+        'function example() {',
+        '  let variable = "string";',
+        '  return variable + 123;',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Code with no syntax highlighting'
+    },
+    afterState: {
+      text: [
+        '[function] [example]() {',
+        '  [let] [variable] = ["string"];',
+        '  [return] [variable] + [123];',
+        '}'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Syntax highlighting enabled'
+    },
+    explanation: 'Enables syntax highlighting for programming languages. Colors keywords, strings, numbers, and comments to improve code readability.'
+  },
+
+  // VIM Key Mappings and Customization (vimrcKeysAndMappings)
+  'let mapleader = ","': {
+    command: 'let mapleader = ","',
+    beforeState: {
+      text: [
+        '" VIM configuration',
+        'set number',
+        'syntax on'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Basic .vimrc configuration'
+    },
+    afterState: {
+      text: [
+        '" VIM configuration',
+        'let mapleader = ","',
+        'set number',
+        'syntax on'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Leader key set to comma'
+    },
+    explanation: 'Sets the leader key to comma. Leader key acts as a prefix for custom key mappings, allowing you to create personalized shortcuts like ,w for save.'
+  },
+
+  'nnoremap <leader>w :w<CR>': {
+    command: 'nnoremap <leader>w :w<CR>',
+    beforeState: {
+      text: [
+        'let mapleader = ","',
+        '" Custom mapping to save file',
+        'nnoremap <leader>w :w<CR>'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Custom save mapping defined'
+    },
+    afterState: {
+      text: [
+        'let mapleader = ","',
+        '" Custom mapping to save file',
+        'nnoremap <leader>w :w<CR>',
+        '',
+        'Press ",w" to save file quickly'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Shortcut ,w now saves files'
+    },
+    explanation: 'Creates a custom mapping where leader+w (,w) saves the current file. Non-recursive normal mode mapping prevents conflicts with other mappings.'
+  },
+
+  'inoremap jj <Esc>': {
+    command: 'inoremap jj <Esc>',
+    beforeState: {
+      text: [
+        'function example() {',
+        '  typing in insert mode'
+      ],
+      cursorRow: 1,
+      cursorCol: 22,
+      mode: 'insert',
+      description: 'In insert mode, typing jj quickly'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '  typing in insert mode'
+      ],
+      cursorRow: 1,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'jj pressed, now in normal mode'
+    },
+    explanation: 'Maps double-j (jj) to Escape in insert mode. Popular alternative to reaching for Esc key, keeping hands on home row for faster editing.'
+  },
+
+  'vnoremap < <gv': {
+    command: 'vnoremap < <gv',
+    beforeState: {
+      text: [
+        'function example() {',
+        '    unindented code',
+        '    more code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines selected, pressing < to unindent'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        'unindented code',
+        'more code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines unindented, selection maintained'
+    },
+    explanation: 'Remaps < in visual mode to unindent and reselect. Default behavior loses selection after indenting, this keeps it selected for multiple adjustments.'
+  },
+
+  'vnoremap > >gv': {
+    command: 'vnoremap > >gv',
+    beforeState: {
+      text: [
+        'function example() {',
+        'indented code',
+        'more code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines selected, pressing > to indent'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '    indented code',
+        '    more code here',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines indented, selection maintained'
+    },
+    explanation: 'Remaps > in visual mode to indent and reselect. Allows you to press > multiple times to indent several levels without reselecting.'
+  },
+
+  // Key Notation Examples
+  '<CR>': {
+    command: '<CR>',
+    beforeState: {
+      text: [
+        '" Key notation example',
+        'nnoremap <leader>s :source %<CR>',
+        'inoremap <C-s> <Esc>:w<CR>i'
+      ],
+      cursorRow: 1,
+      cursorCol: 27,
+      mode: 'normal',
+      description: 'VIM key notation in mappings'
+    },
+    afterState: {
+      text: [
+        '" Key notation example',
+        'nnoremap <leader>s :source %<CR>',
+        'inoremap <C-s> <Esc>:w<CR>i',
+        '',
+        '<CR> represents the Enter/Return key'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Enter key notation explained'
+    },
+    explanation: 'Key notation for Enter/Return key in VIM mappings. Used to execute commands or insert newlines in custom key mappings.'
+  },
+
+  '<Esc>': {
+    command: '<Esc>',
+    beforeState: {
+      text: [
+        '" Exit insert mode mapping',
+        'inoremap jk <Esc>',
+        'cnoremap jk <Esc>'
+      ],
+      cursorRow: 1,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Escape key in mappings'
+    },
+    afterState: {
+      text: [
+        '" Exit insert mode mapping',
+        'inoremap jk <Esc>',
+        'cnoremap jk <Esc>',
+        '',
+        '<Esc> represents the Escape key'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Escape key notation explained'
+    },
+    explanation: 'Key notation for Escape key in VIM mappings. Commonly used to exit insert mode or cancel operations in custom mappings.'
+  },
+
+  '<Tab>': {
+    command: '<Tab>',
+    beforeState: {
+      text: [
+        '" Tab key mapping',
+        'nnoremap <Tab> >>',
+        'nnoremap <S-Tab> <<'
+      ],
+      cursorRow: 1,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Tab key in mappings'
+    },
+    afterState: {
+      text: [
+        '" Tab key mapping',
+        'nnoremap <Tab> >>',
+        'nnoremap <S-Tab> <<',
+        '',
+        '<Tab> represents the Tab key'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Tab key notation explained'
+    },
+    explanation: 'Key notation for Tab key in VIM mappings. Often mapped to indentation commands or completion triggers in custom configurations.'
+  },
+
+  '<Space>': {
+    command: '<Space>',
+    beforeState: {
+      text: [
+        '" Space key as leader',
+        'let mapleader = " "',
+        'nnoremap <Space>w :w<CR>'
+      ],
+      cursorRow: 2,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Space key in mappings'
+    },
+    afterState: {
+      text: [
+        '" Space key as leader',
+        'let mapleader = " "',
+        'nnoremap <Space>w :w<CR>',
+        '',
+        '<Space> represents the spacebar'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Space key notation explained'
+    },
+    explanation: 'Key notation for spacebar in VIM mappings. Popular choice for leader key due to its size and accessibility with either thumb.'
+  },
+
+  '<C-x>': {
+    command: '<C-x>',
+    beforeState: {
+      text: [
+        '" Ctrl combinations',
+        'nnoremap <C-s> :w<CR>',
+        'inoremap <C-x> <Esc>dd'
+      ],
+      cursorRow: 2,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Ctrl key combinations in mappings'
+    },
+    afterState: {
+      text: [
+        '" Ctrl combinations',
+        'nnoremap <C-s> :w<CR>',
+        'inoremap <C-x> <Esc>dd',
+        '',
+        '<C-x> represents Ctrl+x key combination'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Ctrl key notation explained'
+    },
+    explanation: 'Key notation for Ctrl key combinations in VIM mappings. <C-x> means hold Ctrl and press x. Used for many common shortcuts.'
+  },
+
+  '<leader>': {
+    command: '<leader>',
+    beforeState: {
+      text: [
+        'let mapleader = ","',
+        '" Leader key mappings',
+        'nnoremap <leader>q :q<CR>',
+        'nnoremap <leader>w :w<CR>'
+      ],
+      cursorRow: 2,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Leader key in mappings'
+    },
+    afterState: {
+      text: [
+        'let mapleader = ","',
+        '" Leader key mappings',
+        'nnoremap <leader>q :q<CR>',
+        'nnoremap <leader>w :w<CR>',
+        '',
+        '<leader> represents your configured leader key'
+      ],
+      cursorRow: 5,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Leader key notation explained'
+    },
+    explanation: 'Special key notation for the leader key in VIM mappings. Dynamically represents whatever key you\'ve set as mapleader (comma, space, etc).'
+  },
+
+  'nnoremap': {
+    command: 'nnoremap',
+    beforeState: {
+      text: [
+        '" Non-recursive normal mode mapping',
+        'nnoremap j gj',
+        'nnoremap k gk'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode mapping command'
+    },
+    afterState: {
+      text: [
+        '" Non-recursive normal mode mapping',
+        'nnoremap j gj',
+        'nnoremap k gk',
+        '',
+        'j and k now move by display lines, not file lines'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Custom j/k movement behavior'
+    },
+    explanation: 'Non-recursive normal mode mapping command. Creates custom key bindings that won\'t trigger other mappings, preventing infinite loops.'
+  },
+
+  'inoremap': {
+    command: 'inoremap',
+    beforeState: {
+      text: [
+        '" Insert mode shortcuts',
+        'inoremap <C-l> <Right>',
+        'inoremap <C-h> <Left>'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Insert mode mapping command'
+    },
+    afterState: {
+      text: [
+        '" Insert mode shortcuts',
+        'inoremap <C-l> <Right>',
+        'inoremap <C-h> <Left>',
+        '',
+        'Ctrl+h/l now move cursor in insert mode'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Insert mode navigation enabled'
+    },
+    explanation: 'Non-recursive insert mode mapping command. Creates custom key bindings that work only in insert mode, useful for navigation without leaving insert.'
+  },
+
+  'vnoremap': {
+    command: 'vnoremap',
+    beforeState: {
+      text: [
+        '" Visual mode enhancements',
+        'vnoremap < <gv',
+        'vnoremap > >gv'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Visual mode mapping command'
+    },
+    afterState: {
+      text: [
+        '" Visual mode enhancements',
+        'vnoremap < <gv',
+        'vnoremap > >gv',
+        '',
+        'Indent/unindent keeps visual selection active'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Better visual mode indentation'
+    },
+    explanation: 'Non-recursive visual mode mapping command. Creates custom key bindings that work only in visual mode, improving text selection workflows.'
+  },
+
+  ':%s/^$\\n//g': {
+    command: ':%s/^$\\n//g',
+    beforeState: {
+      text: [
+        'First line',
+        '',
+        'Second line',
+        '',
+        '',
+        'Third line',
+        ''
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'File with multiple empty lines'
+    },
+    afterState: {
+      text: [
+        'First line',
+        'Second line',
+        'Third line'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Empty lines removed'
+    },
+    explanation: 'Removes all empty lines from the file. ^$ matches lines that start and end with nothing (empty lines), \\n includes the newline character.'
+  },
+
+  ':%s/\\(\\w\\+\\)/[\\1]/g': {
+    command: ':%s/\\(\\w\\+\\)/[\\1]/g',
+    beforeState: {
+      text: [
+        'hello world test',
+        'vim editor rocks'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text with words to wrap'
+    },
+    afterState: {
+      text: [
+        '[hello] [world] [test]',
+        '[vim] [editor] [rocks]'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Words wrapped in brackets'
+    },
+    explanation: 'Uses capture groups to wrap each word in brackets. \\(\\w\\+\\) captures word characters, \\1 references the captured group in replacement.'
+  },
+
+  ':s#old#new#': {
+    command: ':s#old#new#',
+    beforeState: {
+      text: [
+        'Path: /home/user/old/file.txt',
+        'URL: http://old.example.com/path'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Line with forward slashes'
+    },
+    afterState: {
+      text: [
+        'Path: /home/user/new/file.txt',
+        'URL: http://old.example.com/path'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'First occurrence replaced'
+    },
+    explanation: 'Uses # as delimiter instead of / to avoid escaping forward slashes. Useful when working with file paths or URLs containing forward slashes.'
+  },
+
+  '\\n': {
+    command: '\\n',
+    beforeState: {
+      text: [
+        'Find: word1 word2',
+        'Replace with: :%s/word1 word2/word1\\nword2/g'
+      ],
+      cursorRow: 1,
+      cursorCol: 30,
+      mode: 'normal',
+      description: 'Pattern with newline escape'
+    },
+    afterState: {
+      text: [
+        'Find: word1 word2',
+        'Replace with: word1',
+        'word2'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Newline inserted in replacement'
+    },
+    explanation: 'Newline character in search/replace patterns. In replacement strings, \\n creates a new line. Essential for formatting and text restructuring.'
+  },
+
+  '\\t': {
+    command: '\\t',
+    beforeState: {
+      text: [
+        'Replace spaces with tabs:',
+        '    indented line',
+        '        more indented'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Lines with space indentation'
+    },
+    afterState: {
+      text: [
+        'Replace spaces with tabs:',
+        '\tindented line',
+        '\t\tmore indented'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Converted to tab indentation'
+    },
+    explanation: 'Tab character in patterns. \\t matches or inserts a tab character. Commonly used for indentation conversion and whitespace formatting.'
+  },
+
+  '\\s': {
+    command: '\\s',
+    beforeState: {
+      text: [
+        'Pattern: \\s matches any whitespace',
+        'Text:  multiple   spaces	and	tabs',
+        'Usage: :%s/\\s\\+/ /g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text with various whitespace'
+    },
+    afterState: {
+      text: [
+        'Pattern: \\s matches any whitespace',
+        'Text: multiple spaces and tabs',
+        'Usage: :%s/\\s\\+/ /g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normalized whitespace'
+    },
+    explanation: 'Matches any whitespace character (spaces, tabs, newlines). \\s\\+ matches one or more whitespace characters. Useful for cleaning up formatting.'
+  },
+
+  '\\d': {
+    command: '\\d',
+    beforeState: {
+      text: [
+        'Extract numbers from text:',
+        'Price: $29.99, Quantity: 5 items',
+        'Pattern: \\d matches digits'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text containing digits'
+    },
+    afterState: {
+      text: [
+        'Extract numbers from text:',
+        'Price: $XX.XX, Quantity: X items',
+        'Pattern: \\d matches digits'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Digits replaced with X'
+    },
+    explanation: 'Matches any digit character [0-9]. \\d\\+ matches one or more digits. Essential for number manipulation and data extraction.'
+  },
+
+  '\\w': {
+    command: '\\w',
+    beforeState: {
+      text: [
+        'Word pattern: \\w matches word chars',
+        'Text: hello_world123 and symbols!@#',
+        'Usage: :%s/\\w\\+/[WORD]/g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text with word characters'
+    },
+    afterState: {
+      text: [
+        'Word pattern: \\w matches word chars',
+        'Text: [WORD] and [WORD]!@#',
+        'Usage: :%s/\\w\\+/[WORD]/g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Word characters replaced'
+    },
+    explanation: 'Matches word characters [a-zA-Z0-9_]. \\w\\+ matches one or more word characters. Useful for identifying variable names and identifiers.'
+  },
+
+  '.*': {
+    command: '.*',
+    beforeState: {
+      text: [
+        'Pattern: .* matches everything',
+        'Line: Start middle end',
+        'Usage: :%s/Start.*end/REPLACED/g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Line with start and end markers'
+    },
+    afterState: {
+      text: [
+        'Pattern: .* matches everything',
+        'Line: REPLACED',
+        'Usage: :%s/Start.*end/REPLACED/g'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Everything between markers replaced'
+    },
+    explanation: 'Matches zero or more of any character except newline. Greedy matching - captures the longest possible match. Essential for complex pattern matching.'
+  },
+
+  '"*y': {
+    command: '"*y',
+    beforeState: {
+      text: [
+        'Select and copy to system clipboard:',
+        'hello world',
+        'This text will be copied'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Text selected in visual mode'
+    },
+    afterState: {
+      text: [
+        'Select and copy to system clipboard:',
+        'hello world',
+        'This text will be copied'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text copied to system clipboard'
+    },
+    explanation: 'Copies selected text to primary selection (Linux) or system clipboard. Text can be pasted with middle mouse click or Ctrl+V in other applications.'
+  },
+
+  '"*p': {
+    command: '"*p',
+    beforeState: {
+      text: [
+        'Paste from system clipboard:',
+        'Current line',
+        'Insert here:'
+      ],
+      cursorRow: 2,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor after colon, clipboard contains "system text"'
+    },
+    afterState: {
+      text: [
+        'Paste from system clipboard:',
+        'Current line',
+        'Insert here: system text'
+      ],
+      cursorRow: 2,
+      cursorCol: 24,
+      mode: 'normal',
+      description: 'System clipboard content pasted'
+    },
+    explanation: 'Pastes from primary selection (Linux) or system clipboard. Retrieves text copied from other applications or terminal selections.'
+  },
+
+  '".': {
+    command: '".',
+    beforeState: {
+      text: [
+        'Last inserted text register:',
+        'Previously typed: hello',
+        'Insert again:'
+      ],
+      cursorRow: 2,
+      cursorCol: 13,
+      mode: 'insert',
+      description: 'In insert mode, about to paste last insertion'
+    },
+    afterState: {
+      text: [
+        'Last inserted text register:',
+        'Previously typed: hello',
+        'Insert again: hello'
+      ],
+      cursorRow: 2,
+      cursorCol: 18,
+      mode: 'insert',
+      description: 'Last inserted text repeated'
+    },
+    explanation: 'Contains the last text that was inserted. Use Ctrl-r . in insert mode to paste it, or ". to reference in commands. Useful for repeating insertions.'
+  },
+
+  '"%': {
+    command: '"%',
+    beforeState: {
+      text: [
+        'Current filename register:',
+        'Insert current file path:',
+        'Editing: '
+      ],
+      cursorRow: 2,
+      cursorCol: 9,
+      mode: 'insert',
+      description: 'In insert mode, will paste filename'
+    },
+    afterState: {
+      text: [
+        'Current filename register:',
+        'Insert current file path:',
+        'Editing: /home/user/document.txt'
+      ],
+      cursorRow: 2,
+      cursorCol: 33,
+      mode: 'insert',
+      description: 'Current filename inserted'
+    },
+    explanation: 'Contains the current filename. Use Ctrl-r % in insert mode or "% in commands. Useful for referencing the current file in text or commands.'
+  },
+
+  '":': {
+    command: '":',
+    beforeState: {
+      text: [
+        'Last command register:',
+        'Previously ran: :set number',
+        'Repeat command:'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'insert',
+      description: 'About to insert last command'
+    },
+    afterState: {
+      text: [
+        'Last command register:',
+        'Previously ran: :set number',
+        'Repeat command: set number'
+      ],
+      cursorRow: 2,
+      cursorCol: 25,
+      mode: 'insert',
+      description: 'Last command inserted'
+    },
+    explanation: 'Contains the last executed command. Use Ctrl-r : in insert mode or ": in commands. Helpful for documenting or repeating commands.'
+  },
+
+  '"/': {
+    command: '"/',
+    beforeState: {
+      text: [
+        'Last search register:',
+        'Previously searched: /function',
+        'Search pattern was:'
+      ],
+      cursorRow: 2,
+      cursorCol: 20,
+      mode: 'insert',
+      description: 'About to insert last search pattern'
+    },
+    afterState: {
+      text: [
+        'Last search register:',
+        'Previously searched: /function',
+        'Search pattern was: function'
+      ],
+      cursorRow: 2,
+      cursorCol: 28,
+      mode: 'insert',
+      description: 'Last search pattern inserted'
+    },
+    explanation: 'Contains the last search pattern. Use Ctrl-r / in insert mode or "/ in commands. Useful for referencing or modifying previous searches.'
+  },
+
+  '"=': {
+    command: '"=',
+    beforeState: {
+      text: [
+        'Expression register for calculations:',
+        'Calculate: 25 + 17 = ',
+        'Result: '
+      ],
+      cursorRow: 2,
+      cursorCol: 8,
+      mode: 'insert',
+      description: 'In insert mode, ready for calculation'
+    },
+    afterState: {
+      text: [
+        'Expression register for calculations:',
+        'Calculate: 25 + 17 = ',
+        'Result: 42'
+      ],
+      cursorRow: 2,
+      cursorCol: 10,
+      mode: 'insert',
+      description: 'Calculation result inserted'
+    },
+    explanation: 'Expression register for calculations. Use Ctrl-r = in insert mode, enter expression like "25+17", press Enter. VIM evaluates and inserts the result.'
+  },
+
+  ':help': {
+    command: ':help',
+    beforeState: {
+      text: [
+        'Need help with VIM commands?',
+        'Type :help to open documentation',
+        'Current file content...'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'About to open help system'
+    },
+    afterState: {
+      text: [
+        'VIM HELP SYSTEM',
+        '================',
+        'Welcome to VIM help! Navigate with:',
+        '- Ctrl-] to follow links',
+        '- Ctrl-t to go back',
+        '- :q to close help'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Help window opened'
+    },
+    explanation: 'Opens VIM\'s comprehensive help documentation. Use Ctrl-] to follow links, Ctrl-t to go back, and :q to close help windows.'
+  },
+
+  ':help keyword': {
+    command: ':help keyword',
+    beforeState: {
+      text: [
+        'Get specific help:',
+        ':help w',
+        ':help search'
+      ],
+      cursorRow: 1,
+      cursorCol: 7,
+      mode: 'normal',
+      description: 'About to search for help on "w"'
+    },
+    afterState: {
+      text: [
+        'HELP FOR "w" COMMAND',
+        '====================',
+        'w                   Move cursor to beginning of next word',
+        'W                   Move to next WORD (space-delimited)',
+        'See also: b, e, ge'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Specific help for "w" displayed'
+    },
+    explanation: 'Gets help on a specific keyword, command, or topic. Very precise - helps you understand exactly what a command does and its variations.'
+  },
+
+  ':helpgrep pattern': {
+    command: ':helpgrep pattern',
+    beforeState: {
+      text: [
+        'Search across all help files:',
+        ':helpgrep register',
+        ':helpgrep copy'
+      ],
+      cursorRow: 1,
+      cursorCol: 16,
+      mode: 'normal',
+      description: 'About to search help for "register"'
+    },
+    afterState: {
+      text: [
+        'HELP SEARCH RESULTS',
+        '===================',
+        'Found 15 matches for "register":',
+        '1. usr_09.txt: Using the clipboard',
+        '2. change.txt: Registers and copying',
+        '3. cmdline.txt: Command line registers'
+      ],
+      cursorRow: 3,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Help search results displayed'
+    },
+    explanation: 'Searches through all help files for a pattern. Creates a quickfix list of matches. Use :cn/:cp to navigate results.'
+  },
+
+  ':h ctrl-v': {
+    command: ':h ctrl-v',
+    beforeState: {
+      text: [
+        'Get help for key combinations:',
+        ':h ctrl-v',
+        ':h ctrl-w'
+      ],
+      cursorRow: 1,
+      cursorCol: 9,
+      mode: 'normal',
+      description: 'About to get help for Ctrl-v'
+    },
+    afterState: {
+      text: [
+        'HELP FOR CTRL-V',
+        '===============',
+        'CTRL-V          Start visual block mode',
+        'i_CTRL-V        Insert literal character',
+        'c_CTRL-V        Insert literal in command line'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Ctrl-v help documentation shown'
+    },
+    explanation: 'Gets help for key combinations. Use the format shown - "ctrl-v" for Ctrl+V. Essential for understanding complex key bindings.'
+  },
+
+  ':h i_ctrl-r': {
+    command: ':h i_ctrl-r',
+    beforeState: {
+      text: [
+        'Insert mode command help:',
+        ':h i_ctrl-r',
+        ':h i_ctrl-w'
+      ],
+      cursorRow: 1,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Getting insert mode help'
+    },
+    afterState: {
+      text: [
+        'INSERT MODE CTRL-R',
+        '==================',
+        'i_CTRL-R        Insert register contents',
+        'i_CTRL-R "      Insert from default register',
+        'i_CTRL-R %      Insert current filename'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Insert mode Ctrl-r help shown'
+    },
+    explanation: 'Gets help for insert mode commands. Use "i_" prefix for insert mode help. Shows how to use registers and special insertions in insert mode.'
+  },
+
+  ':h c_ctrl-r': {
+    command: ':h c_ctrl-r',
+    beforeState: {
+      text: [
+        'Command mode command help:',
+        ':h c_ctrl-r',
+        ':h c_ctrl-w'
+      ],
+      cursorRow: 1,
+      cursorCol: 11,
+      mode: 'normal',
+      description: 'Getting command mode help'
+    },
+    afterState: {
+      text: [
+        'COMMAND MODE CTRL-R',
+        '===================',
+        'c_CTRL-R        Insert register in command line',
+        'c_CTRL-R "      Insert from default register',
+        'c_CTRL-R /      Insert last search pattern'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Command mode Ctrl-r help shown'
+    },
+    explanation: 'Gets help for command mode commands. Use "c_" prefix for command mode help. Shows how to insert register contents into command line.'
+  },
+
+  'v_d': {
+    command: 'd',
+    beforeState: {
+      text: [
+        'Delete selected text in visual mode:',
+        'The quick brown fox jumps',
+        'over the lazy dog'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'visual',
+      description: 'Selected text: "quick brown" in visual mode'
+    },
+    afterState: {
+      text: [
+        'Delete selected text in visual mode:',
+        'The  fox jumps',
+        'over the lazy dog'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Selected text deleted'
+    },
+    explanation: 'In visual mode, "d" deletes the selected text. Works with character, line, or block selections. Deleted text goes to default register.'
+  },
+
+  'v_c': {
+    command: 'c',
+    beforeState: {
+      text: [
+        'Change selected text in visual mode:',
+        'Hello old world',
+        'Goodbye old world'
+      ],
+      cursorRow: 1,
+      cursorCol: 6,
+      mode: 'visual',
+      description: 'Selected text: "old" in visual mode'
+    },
+    afterState: {
+      text: [
+        'Change selected text in visual mode:',
+        'Hello new world',
+        'Goodbye old world'
+      ],
+      cursorRow: 1,
+      cursorCol: 9,
+      mode: 'insert',
+      description: 'Replaced "old" with "new", now in insert mode'
+    },
+    explanation: 'In visual mode, "c" deletes the selected text and enters insert mode. Perfect for replacing selected content with new text.'
+  },
+
+  'v_y': {
+    command: 'y',
+    beforeState: {
+      text: [
+        'Copy selected text in visual mode:',
+        'important text here',
+        'paste destination:'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Selected text: "important text" in visual mode'
+    },
+    afterState: {
+      text: [
+        'Copy selected text in visual mode:',
+        'important text here',
+        'paste destination:'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Text copied to register, ready to paste'
+    },
+    explanation: 'In visual mode, "y" copies (yanks) the selected text to the default register. Text remains in place and can be pasted elsewhere.'
+  },
+
+  'v_>': {
+    command: '>',
+    beforeState: {
+      text: [
+        'Indent selected lines:',
+        'function example() {',
+        'console.log("hello");',
+        'return true;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'visual',
+      description: 'Lines 2-3 selected in visual line mode'
+    },
+    afterState: {
+      text: [
+        'Indent selected lines:',
+        'function example() {',
+        '    console.log("hello");',
+        '    return true;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Selected lines indented by one level'
+    },
+    explanation: 'In visual mode, ">" indents the selected lines. Use with visual line mode (V) for full lines, or visual block for column operations.'
+  },
+
+  'v_<': {
+    command: '<',
+    beforeState: {
+      text: [
+        'Unindent selected lines:',
+        'function example() {',
+        '        console.log("hello");',
+        '        return true;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 8,
+      mode: 'visual',
+      description: 'Over-indented lines selected'
+    },
+    afterState: {
+      text: [
+        'Unindent selected lines:',
+        'function example() {',
+        '    console.log("hello");',
+        '    return true;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 4,
+      mode: 'normal',
+      description: 'Selected lines unindented to proper level'
+    },
+    explanation: 'In visual mode, "<" removes one level of indentation from selected lines. Essential for fixing indentation and code formatting.'
+  },
+
+  ':q!': {
+    command: ':q!',
+    beforeState: {
+      text: [
+        'Modified file with unsaved changes:',
+        'This file has been modified',
+        'But I don\'t want to save these changes',
+        'Use :q! to quit without saving'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'File has unsaved modifications'
+    },
+    afterState: {
+      text: [
+        'VIM has exited without saving.',
+        'All changes were discarded.',
+        'Original file remains unchanged.'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Exited VIM, changes discarded'
+    },
+    explanation: 'Quits VIM without saving changes. The "!" forces the quit even with unsaved modifications. Use when you want to discard all changes.'
+  },
+
+  ':x': {
+    command: ':x',
+    beforeState: {
+      text: [
+        'File ready to save and exit:',
+        'My important document',
+        'with valuable content',
+        'Ready to save and close'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'File ready to be saved and closed'
+    },
+    afterState: {
+      text: [
+        'File saved successfully!',
+        'VIM has exited.',
+        'Document preserved to disk.'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'File saved and VIM exited'
+    },
+    explanation: 'Saves the file and exits VIM. Same as :wq but more efficient - only writes if the file has been modified. Smart alternative to :wq.'
+  },
+
+  ':w !sudo tee %': {
+    command: ':w !sudo tee %',
+    beforeState: {
+      text: [
+        'Error: Permission denied!',
+        'Cannot write to /etc/hosts',
+        'Need sudo privileges to save',
+        'Use :w !sudo tee % trick'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cannot save due to permissions'
+    },
+    afterState: {
+      text: [
+        'Success! File saved with sudo.',
+        'Password was prompted for sudo',
+        '/etc/hosts updated successfully',
+        'No need to restart VIM'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'File saved with elevated privileges'
+    },
+    explanation: 'Saves file with sudo privileges when you forgot to open with sudo. Uses tee command to write as root. Essential for system files.'
+  },
+
+  ':set paste': {
+    command: ':set paste',
+    beforeState: {
+      text: [
+        'About to paste from clipboard:',
+        'function broken() {',
+        'code here',
+        'Auto-indent will mess this up!'
+      ],
+      cursorRow: 2,
+      cursorCol: 9,
+      mode: 'normal',
+      description: 'Ready to paste, but auto-indent will cause issues'
+    },
+    afterState: {
+      text: [
+        'About to paste from clipboard:',
+        'function broken() {',
+        'code here',
+        '-- INSERT (paste) --'
+      ],
+      cursorRow: 2,
+      cursorCol: 9,
+      mode: 'insert',
+      description: 'Paste mode enabled, safe to paste'
+    },
+    explanation: 'Enables paste mode - disables auto-indent, auto-complete and other features that interfere with pasting. Essential when pasting code from clipboard.'
+  },
+
+  ':set nopaste': {
+    command: ':set nopaste',
+    beforeState: {
+      text: [
+        'Finished pasting code:',
+        'function working() {',
+        '  console.log("pasted correctly");',
+        '-- INSERT (paste) --'
+      ],
+      cursorRow: 2,
+      cursorCol: 30,
+      mode: 'insert',
+      description: 'In paste mode after successful paste'
+    },
+    afterState: {
+      text: [
+        'Finished pasting code:',
+        'function working() {',
+        '  console.log("pasted correctly");',
+        '-- INSERT --'
+      ],
+      cursorRow: 2,
+      cursorCol: 30,
+      mode: 'insert',
+      description: 'Normal insert mode restored'
+    },
+    explanation: 'Disables paste mode and restores normal VIM behavior - auto-indent, auto-complete, etc. Use after finishing paste operations.'
+  },
+
+  ':': {
+    command: ':',
+    beforeState: {
+      text: [
+        'Normal mode editing:',
+        'Press : to enter command mode',
+        'Type commands like :w, :q, :set'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'In normal mode, about to enter command mode'
+    },
+    afterState: {
+      text: [
+        'Normal mode editing:',
+        'Press : to enter command mode',
+        'Type commands like :w, :q, :set',
+        ':'
+      ],
+      cursorRow: 3,
+      cursorCol: 1,
+      mode: 'command',
+      description: 'Command line opened, ready for commands'
+    },
+    explanation: 'Enters command mode from normal mode. Command line appears at bottom. Type VIM commands like :w (save), :q (quit), :set (options).'
+  },
+
+  ':cd path': {
+    command: ':cd path',
+    beforeState: {
+      text: [
+        'Current directory: /home/user',
+        'Change to project directory:',
+        ':cd /home/user/projects/myapp'
+      ],
+      cursorRow: 2,
+      cursorCol: 27,
+      mode: 'normal',
+      description: 'About to change to project directory'
+    },
+    afterState: {
+      text: [
+        'Current directory: /home/user/projects/myapp',
+        'Successfully changed directory',
+        'Now in project root'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Changed to project directory'
+    },
+    explanation: 'Changes VIM\'s working directory. Affects file operations and relative paths. Use :pwd to see current directory.'
+  },
+
+  ':!command': {
+    command: ':!command',
+    beforeState: {
+      text: [
+        'Execute shell commands from VIM:',
+        ':!ls -la',
+        ':!git status'
+      ],
+      cursorRow: 1,
+      cursorCol: 7,
+      mode: 'normal',
+      description: 'About to run ls -la command'
+    },
+    afterState: {
+      text: [
+        'Shell command output:',
+        'total 48',
+        'drwxr-xr-x 3 user user 4096 Nov 22 10:30 .',
+        'drwxr-xr-x 5 user user 4096 Nov 20 09:15 ..',
+        '-rw-r--r-- 1 user user  156 Nov 22 10:30 file.txt',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 5,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Shell command executed, output displayed'
+    },
+    explanation: 'Executes shell commands without leaving VIM. Output is displayed, press Enter to return to editing. Use for git, ls, make, etc.'
+  },
+
+  'm{letter}': {
+    command: 'm{letter}',
+    beforeState: {
+      text: [
+        'Mark important locations:',
+        'function processData() {',
+        '  // TODO: implement this',
+        '  return result;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 8,
+      mode: 'normal',
+      description: 'Cursor on TODO comment, about to set mark "t"'
+    },
+    afterState: {
+      text: [
+        'Mark important locations:',
+        'function processData() {',
+        '  // TODO: implement this  [mark "t" set]',
+        '  return result;',
+        '}'
+      ],
+      cursorRow: 2,
+      cursorCol: 8,
+      mode: 'normal',
+      description: 'Mark "t" set at current position'
+    },
+    explanation: 'Sets a mark at current cursor position. Use a-z for file-local marks, A-Z for global marks. Example: "mt" sets mark "t", jump back with \'t or `t.'
+  },
+
+  '`{letter}': {
+    command: '`{letter}',
+    beforeState: {
+      text: [
+        'Jump to exact mark position:',
+        'Line 1 of file',
+        'Line 2 where mark "t" was set at col 15',
+        'Line 3 current position',
+        'Line 4 more content'
+      ],
+      cursorRow: 3,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cursor at line 3, about to jump to mark "t"'
+    },
+    afterState: {
+      text: [
+        'Jump to exact mark position:',
+        'Line 1 of file',
+        'Line 2 where mark "t" was set at col 15',
+        'Line 3 current position',
+        'Line 4 more content'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Jumped to exact position of mark "t"'
+    },
+    explanation: 'Jumps to exact position (line and column) of mark. Use backtick + letter. More precise than \' which goes to line start.'
+  },
+
+  '``': {
+    command: '``',
+    beforeState: {
+      text: [
+        'Jump back to previous position:',
+        'Moved here from line 5',
+        'This is line 2',
+        'Line 3',
+        'Original position was here'
+      ],
+      cursorRow: 1,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Moved to line 2, previous position was line 5 col 20'
+    },
+    afterState: {
+      text: [
+        'Jump back to previous position:',
+        'Moved here from line 5',
+        'This is line 2',
+        'Line 3',
+        'Original position was here'
+      ],
+      cursorRow: 4,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Jumped back to previous exact position'
+    },
+    explanation: 'Jumps back to previous cursor position (exact location). Double backtick. Alternative to \'\' which goes to line start only.'
+  },
+
+  ':changes': {
+    command: ':changes',
+    beforeState: {
+      text: [
+        'View change history:',
+        'Made several edits to this file',
+        'Want to see change locations',
+        'Use :changes command'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'About to view change list'
+    },
+    afterState: {
+      text: [
+        'CHANGE LIST:',
+        '  change line  col text',
+        '      3    10    5 added function',
+        '      2    25   12 fixed typo',
+        '      1    45    8 updated comment',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 4,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Change list displayed with line/column info'
+    },
+    explanation: 'Shows list of all changes made to current buffer. Lists line and column numbers. Use g; and g, to navigate through changes.'
+  },
+
+  ':set nospell': {
+    command: ':set nospell',
+    beforeState: {
+      text: [
+        'Disable spell checking:',
+        'The quick brown fox jumps',
+        'over teh lazy dog  [teh is underlined]',
+        'Spell check currently enabled'
+      ],
+      cursorRow: 2,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Spell checking enabled, misspellings highlighted'
+    },
+    afterState: {
+      text: [
+        'Disable spell checking:',
+        'The quick brown fox jumps',
+        'over teh lazy dog',
+        'Spell check disabled'
+      ],
+      cursorRow: 2,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Spell checking disabled, no highlighting'
+    },
+    explanation: 'Disables spell checking. Removes highlighting from misspelled words. Use when spell checking interferes with editing.'
+  },
+
+  ':set spelllang=en_us': {
+    command: ':set spelllang=en_us',
+    beforeState: {
+      text: [
+        'Set spell check language:',
+        'colour favour behaviour',
+        'Currently using British English',
+        'Change to American English'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Using British spelling dictionary'
+    },
+    afterState: {
+      text: [
+        'Set spell check language:',
+        'colour favour behaviour  [words now marked as misspelled]',
+        'Changed to American English',
+        'Color, favor, behavior would be correct'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Changed to American English dictionary'
+    },
+    explanation: 'Sets spell check language/locale. Common values: en_us, en_gb, de, fr, es. Affects which words are considered correctly spelled.'
+  },
+
+  'zug': {
+    command: 'zug',
+    beforeState: {
+      text: [
+        'Remove word from dictionary:',
+        'specialword was added to dictionary',
+        'But it was added by mistake',
+        'Use zug to remove it'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cursor on word that was incorrectly added'
+    },
+    afterState: {
+      text: [
+        'Remove word from dictionary:',
+        'specialword  [now marked as misspelled]',
+        'Word removed from personal dictionary',
+        'Will be flagged as error again'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Word removed from dictionary, now flagged'
+    },
+    explanation: 'Removes word under cursor from personal dictionary. Undoes previous "zg" addition. Word will be marked as misspelled again.'
+  },
+
+  'zuw': {
+    command: 'zuw',
+    beforeState: {
+      text: [
+        'Undo marking word as wrong:',
+        'validword was marked as incorrect',
+        'But it was marked by mistake',
+        'Use zuw to undo the marking'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cursor on word incorrectly marked as wrong'
+    },
+    afterState: {
+      text: [
+        'Undo marking word as wrong:',
+        'validword  [no longer marked as error]',
+        'Marking as incorrect undone',
+        'Word is now treated normally'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Word no longer marked as incorrect'
+    },
+    explanation: 'Undoes marking word as incorrect (undoes "zw" command). Word will no longer be flagged as intentionally wrong.'
   }
 }

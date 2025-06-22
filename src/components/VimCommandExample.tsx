@@ -5,7 +5,7 @@ interface ExampleState {
   text: string[]
   cursorRow: number
   cursorCol: number
-  mode: 'normal' | 'insert' | 'visual'
+  mode: 'normal' | 'insert' | 'visual' | 'command'
   description: string
 }
 
