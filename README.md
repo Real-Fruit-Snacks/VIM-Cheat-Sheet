@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.0.0-blue.svg" alt="Version 3.0.0" />
+      <img src="https://img.shields.io/badge/version-3.1.0-blue.svg" alt="Version 3.1.0" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -75,6 +75,25 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
     </td>
   </tr>
 </table>
+
+## 🚀 Version 3.1.0 - Mobile UX & Code Quality Release
+
+### 📱 Mobile Experience Enhancements
+- **Smart TOC Toggle**: Table of contents auto-hides on mobile devices
+- **Floating Action Button**: Easy access to help navigation when TOC is hidden  
+- **Auto-collapse Navigation**: TOC hides automatically after section selection on mobile
+- **Touch-Optimized Interface**: Improved tap targets and mobile responsiveness
+
+### 🛡️ Code Quality & Type Safety
+- **Zero ESLint Errors**: Complete resolution of all linting issues
+- **Full TypeScript Strict Mode**: 100% type safety compliance
+- **Enhanced Type Definitions**: Proper Fuse.js and search result typing
+- **Professional Code Standards**: Production-ready codebase quality
+
+### 🧹 Repository Optimization
+- **Lean Architecture**: Removed unnecessary files and build artifacts
+- **Enhanced .gitignore**: Comprehensive patterns for clean development
+- **Optimized Git History**: Aggressive garbage collection and cleanup
 
 ## 🚀 Version 3.0.0 - Major Performance Release
 
@@ -190,7 +209,7 @@ Perfect for offline and air-gapped environments:
 
 #### Option 1: Download Release
 1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-2. Extract `vim-cheatsheet-v3.0.0-gitlab-pages.zip`
+2. Extract `vim-cheatsheet-v3.1.0-gitlab-pages.zip`
 3. Upload contents to your GitLab Pages repository
 4. Enable GitLab Pages in project settings
 
@@ -363,6 +382,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.0.0 | 315+ Commands | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.1.0 | 315+ Commands | Performance Optimized</sub>
   </p>
 </div>
