@@ -13,7 +13,7 @@ import { vimExamples } from '../data/vim-examples'
 import { EnhancedSearch, COMMON_MISTAKES, RELATED_COMMANDS } from '../utils/enhancedSearch'
 import type { ExpandedCommand } from '../utils/dataCompression'
 
-type FilterType = 'all' | 'beginner' | 'intermediate' | 'advanced' | 'essential' | 'common' | 'rare'
+type FilterType = 'all' | 'favorites' | 'beginner' | 'intermediate' | 'advanced' | 'essential' | 'common' | 'rare'
 type SortType = 'alphabetical' | 'difficulty' | 'frequency' | 'category'
 
 export default function VimCheatsheetEnhanced() {
@@ -68,8 +68,8 @@ export default function VimCheatsheetEnhanced() {
       enhanced[category] = commands.map(cmd => ({
         ...cmd,
         category,
-        difficulty: getDifficultyLevel(cmd.command, category),
-        frequency: getFrequencyLevel(cmd.command, category)
+        difficulty: getDifficultyLevel(cmd.command),
+        frequency: getFrequencyLevel(cmd.command)
       } as ExpandedCommand & { category: string }))
     })
     
@@ -93,41 +93,43 @@ export default function VimCheatsheetEnhanced() {
       filtered = filtered.filter(cmd => searchResultCommands.has(cmd.command))
     }
 
-    // Apply difficulty/frequency filter
+    // Apply difficulty/frequency/favorites filter
     if (selectedFilter !== 'all') {
-      filtered = filtered.filter(cmd => 
-        cmd.difficulty === selectedFilter || cmd.frequency === selectedFilter
-      )
-    }
-
-    // Apply favorites filter
-    if (showFilters && favorites.size > 0) {
-      // Optional: show favorites first
+      if (selectedFilter === 'favorites') {
+        filtered = filtered.filter(cmd => favorites.has(cmd.command))
+      } else {
+        filtered = filtered.filter(cmd => 
+          cmd.difficulty === selectedFilter || cmd.frequency === selectedFilter
+        )
+      }
     }
 
     // Sort
     switch (sortBy) {
-      case 'alphabetical':
+      case 'alphabetical': {
         filtered = [...filtered].sort((a, b) => a.command.localeCompare(b.command))
         break
-      case 'difficulty':
+      }
+      case 'difficulty': {
         const difficultyOrder = { beginner: 0, intermediate: 1, advanced: 2 }
         filtered = [...filtered].sort((a, b) => 
           (difficultyOrder[a.difficulty || 'intermediate'] || 1) - 
           (difficultyOrder[b.difficulty || 'intermediate'] || 1)
         )
         break
-      case 'frequency':
+      }
+      case 'frequency': {
         const frequencyOrder = { essential: 0, common: 1, rare: 2 }
         filtered = [...filtered].sort((a, b) => 
           (frequencyOrder[a.frequency || 'common'] || 1) - 
           (frequencyOrder[b.frequency || 'common'] || 1)
         )
         break
+      }
     }
 
     return filtered
-  }, [debouncedSearchTerm, activeCategory, selectedFilter, sortBy, allCommands, enhancedCommands, enhancedSearch, showFilters, favorites.size])
+  }, [debouncedSearchTerm, activeCategory, selectedFilter, sortBy, allCommands, enhancedCommands, enhancedSearch, favorites])
 
   // Group commands by category for display
   const groupedCommands = useMemo(() => {
@@ -227,6 +229,15 @@ export default function VimCheatsheetEnhanced() {
     setSearchTerm(suggestion)
     setShowSuggestions(false)
     searchInputRef.current?.focus()
+  }
+
+  const clearFavorites = () => {
+    if (confirm('Are you sure you want to clear all favorites? This cannot be undone.')) {
+      setFavorites(new Set())
+      if (selectedFilter === 'favorites') {
+        setSelectedFilter('all')
+      }
+    }
   }
 
   // Keyboard navigation handlers
@@ -354,6 +365,7 @@ export default function VimCheatsheetEnhanced() {
                   className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white"
                 >
                   <option value="all">All Commands</option>
+                  <option value="favorites">❤️ My Favorites ({favorites.size})</option>
                   <option value="essential">Essential</option>
                   <option value="common">Common</option>
                   <option value="rare">Advanced/Rare</option>
@@ -387,13 +399,54 @@ export default function VimCheatsheetEnhanced() {
               <button
                 onClick={() => setActiveCategory(null)}
                 className={`w-full text-left px-3 py-2 rounded transition-colors ${
-                  activeCategory === null
+                  activeCategory === null && selectedFilter !== 'favorites'
                     ? 'bg-green-600 text-white'
                     : 'text-gray-300 hover:bg-gray-800'
                 }`}
               >
                 All Categories ({allCommands.length})
               </button>
+              
+              {/* Favorites Section */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setSelectedFilter('favorites')
+                    setActiveCategory(null)
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded transition-colors ${
+                    selectedFilter === 'favorites'
+                      ? 'bg-red-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center space-x-2">
+                      <Heart className="h-4 w-4 fill-current" />
+                      <span>My Favorites</span>
+                    </span>
+                    <span className="text-sm">({favorites.size})</span>
+                  </div>
+                </button>
+                
+                {/* Clear Favorites Button - only show when we have favorites */}
+                {favorites.size > 0 && (
+                  <button
+                    onClick={clearFavorites}
+                    className="w-full text-xs text-gray-500 hover:text-red-400 transition-colors px-3 py-1"
+                    title="Clear all favorites"
+                  >
+                    Clear All Favorites
+                  </button>
+                )}
+                
+                {/* Favorites tip when empty */}
+                {favorites.size === 0 && (
+                  <div className="px-3 py-2 text-xs text-gray-500">
+                    <p>Click the ❤️ icon next to commands to add them to your favorites!</p>
+                  </div>
+                )}
+              </div>
               {categories.map((category) => {
                 const count = enhancedCommands[category].length
                 return (
@@ -782,7 +835,7 @@ function getVimHelpInfo(command: string, category: string): { file: string; tag?
 }
 
 // Helper functions to assign difficulty and frequency levels
-function getDifficultyLevel(command: string, _category: string): 'beginner' | 'intermediate' | 'advanced' {
+function getDifficultyLevel(command: string): 'beginner' | 'intermediate' | 'advanced' {
   // Essential movement commands
   if (['h', 'j', 'k', 'l', 'w', 'b', 'i', 'a', ':w', ':q', 'dd', 'yy', 'p', 'u'].includes(command)) {
     return 'beginner'
@@ -797,7 +850,7 @@ function getDifficultyLevel(command: string, _category: string): 'beginner' | 'i
   return 'intermediate'
 }
 
-function getFrequencyLevel(command: string, _category: string): 'essential' | 'common' | 'rare' {
+function getFrequencyLevel(command: string): 'essential' | 'common' | 'rare' {
   // Most essential commands
   if (['h', 'j', 'k', 'l', 'i', ':w', ':q', 'dd', 'u', '/', 'n', 'p', 'yy'].includes(command)) {
     return 'essential'
