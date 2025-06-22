@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fix for text-size-adjust browser compatibility */
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
 /** Custom scrollbar styling for modal components */
 .custom-scrollbar {
   scrollbar-width: thin;
