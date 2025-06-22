@@ -26,6 +26,9 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: '0', description: 'Move to beginning of line', mode: 'normal' },
     { command: '^', description: 'Move to first non-blank character of line', mode: 'normal' },
     { command: '$', description: 'Move to end of line', mode: 'normal' },
+    { command: '%', description: 'Jump to matching bracket/parenthesis/brace', mode: 'normal' },
+    { command: '(', description: 'Move to beginning of sentence', mode: 'normal' },
+    { command: ')', description: 'Move to end of sentence', mode: 'normal' },
   ],
 
   documentNavigation: [
@@ -40,6 +43,8 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'L', description: 'Move to bottom of screen', mode: 'normal' },
     { command: 'gf', description: 'Go to file under cursor', mode: 'normal' },
     { command: 'gx', description: 'Open URL under cursor', mode: 'normal' },
+    { command: 'Ctrl-g', description: 'Show file status (line, column, percentage)', mode: 'normal' },
+    { command: 'g Ctrl-g', description: 'Show detailed cursor position info', mode: 'normal' },
   ],
 
   scrolling: [
@@ -76,11 +81,15 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: '.', description: 'Repeat last command', mode: 'normal' },
     { command: 'J', description: 'Join current line with next', mode: 'normal' },
     { command: 'gJ', description: 'Join lines without adding space', mode: 'normal' },
+    { command: 'Ctrl-a', description: 'Increment number under cursor', mode: 'normal' },
+    { command: 'Ctrl-x', description: 'Decrement number under cursor', mode: 'normal' },
+    { command: 'gv', description: 'Reselect last visual selection', mode: 'normal' },
+    { command: '~', description: 'Toggle case of character under cursor', mode: 'normal' },
   ],
 
   copyPasteAndRegisters: [
     { command: 'yy', description: 'Copy (yank) entire line', mode: 'normal' },
-    { command: 'Y', description: 'Copy entire line (same as yy)', mode: 'normal' },
+    { command: 'Y', description: 'Copy from cursor to end of line (same as y$)', mode: 'normal' },
     { command: 'yw', description: 'Copy word', mode: 'normal' },
     { command: 'y$', description: 'Copy from cursor to end of line', mode: 'normal' },
     { command: 'p', description: 'Paste after cursor', mode: 'normal' },
@@ -93,6 +102,12 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: '"ap', description: 'Paste from register "a"', mode: 'normal', example: 'Retrieve from named register' },
     { command: '"0p', description: 'Paste from yank register', mode: 'normal', example: 'Last copied text only' },
     { command: ':reg', description: 'Show all registers', mode: 'command', example: 'View register contents' },
+    { command: '"_d', description: 'Delete to black hole register (no overwrite)', mode: 'normal', example: '"_daw deletes word without affecting registers' },
+    { command: '".', description: 'Last inserted text register', mode: 'register' },
+    { command: '"%', description: 'Current filename register', mode: 'register' },
+    { command: '":', description: 'Last executed command register', mode: 'register' },
+    { command: '"/', description: 'Last search pattern register', mode: 'register' },
+    { command: '"=', description: 'Expression register for calculations', mode: 'register', example: 'Ctrl-r = in insert mode' },
   ],
 
   searchAndReplace: [
@@ -102,7 +117,7 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'N', description: 'Go to previous search result', mode: 'normal' },
     { command: '*', description: 'Search forward for word under cursor', mode: 'normal' },
     { command: '#', description: 'Search backward for word under cursor', mode: 'normal' },
-    { command: 'f{char}', description: 'Find character forward on line', mode: 'normal', example: 'fa finds next "a"' },
+    { command: 'f{char}', description: 'Find character forward on line', mode: 'normal', example: 'fa finds next "a", then ; to repeat' },
     { command: 'F{char}', description: 'Find character backward on line', mode: 'normal' },
     { command: 't{char}', description: 'Move to before character forward', mode: 'normal' },
     { command: 'T{char}', description: 'Move to before character backward', mode: 'normal' },
@@ -158,7 +173,7 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'as', description: 'A sentence', mode: 'operator' },
     { command: 'ip', description: 'Inner paragraph', mode: 'operator' },
     { command: 'ap', description: 'A paragraph', mode: 'operator' },
-    { command: 'i"', description: 'Inner quotes', mode: 'operator', example: 'ci" changes text inside quotes' },
+    { command: 'i"', description: 'Inner quotes', mode: 'operator', example: 'ci" changes text inside quotes, di" deletes inside quotes' },
     { command: 'a"', description: 'A quoted string (includes quotes)', mode: 'operator' },
     { command: "i'", description: 'Inner single quotes', mode: 'operator' },
     { command: "a'", description: 'A single quoted string', mode: 'operator' },
@@ -170,6 +185,14 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'a{', description: 'A braced block', mode: 'operator' },
     { command: 'it', description: 'Inner HTML/XML tag', mode: 'operator' },
     { command: 'at', description: 'A HTML/XML tag (includes tags)', mode: 'operator' },
+    { command: 'i)', description: 'Same as i( - inner parentheses', mode: 'operator' },
+    { command: 'a)', description: 'Same as a( - around parentheses', mode: 'operator' },
+    { command: 'i]', description: 'Same as i[ - inner square brackets', mode: 'operator' },
+    { command: 'a]', description: 'Same as a[ - around square brackets', mode: 'operator' },
+    { command: 'i}', description: 'Same as i{ - inner curly braces', mode: 'operator' },
+    { command: 'a}', description: 'Same as a{ - around curly braces', mode: 'operator' },
+    { command: 'i`', description: 'Inner backticks', mode: 'operator', example: 'ci` changes text inside backticks' },
+    { command: 'a`', description: 'Around backticks (includes backticks)', mode: 'operator' },
   ],
 
   marksAndJumps: [
@@ -200,7 +223,6 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'gg=G', description: 'Auto-indent entire file', mode: 'normal' },
     { command: 'Ctrl-t', description: 'Indent line in insert mode', mode: 'insert' },
     { command: 'Ctrl-d', description: 'Unindent line in insert mode', mode: 'insert' },
-    { command: 'K', description: 'Look up word under cursor', mode: 'normal' },
   ],
 
   numbersAndCounts: [
@@ -211,8 +233,8 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: '7x', description: 'Delete 7 characters', mode: 'normal' },
     { command: '10G', description: 'Go to line 10', mode: 'normal' },
     { command: '3.', description: 'Repeat last command 3 times', mode: 'normal' },
-    { command: '5u', description: 'Undo last 5 changes', mode: 'normal' },
-    { command: '2Ctrl-r', description: 'Redo 2 changes', mode: 'normal' },
+    { command: '5u', description: 'Undo 5 times (each u undoes one change)', mode: 'normal' },
+    { command: '2Ctrl-r', description: 'Redo 2 times (each Ctrl-r redoes one change)', mode: 'normal' },
   ],
 
   macrosAndAdvanced: [
@@ -235,6 +257,13 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: ':e filename', description: 'Open file', mode: 'command' },
     { command: ':e!', description: 'Reload current file (discard changes)', mode: 'command' },
     { command: 'Ctrl-^', description: 'Switch to alternate file', mode: 'normal' },
+    { command: ':r filename', description: 'Read file and insert below cursor', mode: 'command' },
+    { command: ':r !command', description: 'Read command output and insert', mode: 'command', example: ':r !date inserts current date' },
+    { command: ':w !sudo tee %', description: 'Save file with sudo', mode: 'command' },
+    { command: ':earlier 15m', description: 'Go back 15 minutes in time', mode: 'command' },
+    { command: ':later 15m', description: 'Go forward 15 minutes in time', mode: 'command' },
+    { command: ':set paste', description: 'Enable paste mode', mode: 'command' },
+    { command: ':set nopaste', description: 'Disable paste mode', mode: 'command' },
   ],
 
   windowsAndTabs: [
@@ -331,5 +360,41 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: ':!command', description: 'Execute shell command', mode: 'command', example: ':!ls runs ls command' },
     { command: ':version', description: 'Show vim version info', mode: 'command' },
     { command: ':retab', description: 'Convert tabs to spaces (or vice versa)', mode: 'command' },
+  ],
+
+  spellChecking: [
+    { command: ':set spell', description: 'Enable spell checking', mode: 'command' },
+    { command: ':set nospell', description: 'Disable spell checking', mode: 'command' },
+    { command: ':set spelllang=en_us', description: 'Set spell check language', mode: 'command' },
+    { command: ']s', description: 'Move to next misspelled word', mode: 'normal' },
+    { command: '[s', description: 'Move to previous misspelled word', mode: 'normal' },
+    { command: 'z=', description: 'Suggest corrections for word under cursor', mode: 'normal' },
+    { command: 'zg', description: 'Add word to dictionary', mode: 'normal' },
+    { command: 'zw', description: 'Mark word as incorrect', mode: 'normal' },
+    { command: 'zug', description: 'Remove word from dictionary', mode: 'normal' },
+    { command: 'zuw', description: 'Undo marking word as incorrect', mode: 'normal' },
+  ],
+
+  helpSystem: [
+    { command: ':help', description: 'Open help documentation', mode: 'command' },
+    { command: ':help keyword', description: 'Get help on specific keyword', mode: 'command' },
+    { command: ':helpgrep pattern', description: 'Search help files', mode: 'command' },
+    { command: 'K', description: 'Look up word under cursor in man pages', mode: 'normal' },
+    { command: 'Ctrl-]', description: 'Follow help link under cursor', mode: 'normal' },
+    { command: 'Ctrl-t', description: 'Go back in help stack', mode: 'normal' },
+    { command: ':h ctrl-v', description: 'Help for key combinations', mode: 'command', example: 'Use ctrl-v for Ctrl+V' },
+    { command: ':h i_ctrl-r', description: 'Help for insert mode commands', mode: 'command', example: 'Prefix with i_ for insert mode' },
+    { command: ':h c_ctrl-r', description: 'Help for command mode commands', mode: 'command', example: 'Prefix with c_ for command mode' },
+  ],
+
+  diffMode: [
+    { command: ':vimdiff file1 file2', description: 'Start vimdiff with two files', mode: 'command' },
+    { command: ':diffthis', description: 'Make current window part of diff', mode: 'command' },
+    { command: ':diffoff', description: 'Turn off diff mode', mode: 'command' },
+    { command: ']c', description: 'Jump to next change', mode: 'normal' },
+    { command: '[c', description: 'Jump to previous change', mode: 'normal' },
+    { command: 'do', description: 'Diff obtain (get change from other file)', mode: 'normal' },
+    { command: 'dp', description: 'Diff put (put change to other file)', mode: 'normal' },
+    { command: ':diffupdate', description: 'Update diff highlighting', mode: 'command' },
   ]
 }
