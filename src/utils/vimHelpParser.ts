@@ -164,7 +164,7 @@ export class VimHelpParser {
  */
 export class VimHelpCache {
   private cache: Map<string, ParsedHelpContent> = new Map()
-  private baseUrl = '/vim-help/'
+  private baseUrl = import.meta.env.BASE_URL + 'vim-help/'
   public isPreloaded = false
   
   async getHelpFile(filename: string): Promise<ParsedHelpContent | null> {
