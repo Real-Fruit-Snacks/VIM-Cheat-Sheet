@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { vimCommands } from '../data/vim-commands'
-import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown } from 'lucide-react'
+import { vimExamples } from '../data/vim-examples'
+import VimCommandExample from './VimCommandExample'
+import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle } from 'lucide-react'
 
 interface VimCommand {
   command: string
@@ -24,6 +26,7 @@ export default function VimCheatsheet() {
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null)
   const [commandBuilder, setCommandBuilder] = useState<string>('')
   const [showCommandBuilder, setShowCommandBuilder] = useState(false)
+  const [showExamples, setShowExamples] = useState<Set<string>>(new Set())
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -91,14 +94,16 @@ export default function VimCheatsheet() {
       case 'alphabetical':
         filtered.sort((a, b) => a.command.localeCompare(b.command))
         break
-      case 'difficulty':
+      case 'difficulty': {
         const difficultyOrder = { beginner: 0, intermediate: 1, advanced: 2 }
         filtered.sort((a, b) => difficultyOrder[a.difficulty!] - difficultyOrder[b.difficulty!])
         break
-      case 'frequency':
+      }
+      case 'frequency': {
         const frequencyOrder = { essential: 0, common: 1, rare: 2 }
         filtered.sort((a, b) => frequencyOrder[a.frequency!] - frequencyOrder[b.frequency!])
         break
+      }
       default: // category
         filtered.sort((a, b) => a.category.localeCompare(b.category))
     }
@@ -145,6 +150,16 @@ export default function VimCheatsheet() {
     if (!showCommandBuilder) {
       setShowCommandBuilder(true)
     }
+  }
+
+  const toggleExample = (command: string) => {
+    const newShowExamples = new Set(showExamples)
+    if (newShowExamples.has(command)) {
+      newShowExamples.delete(command)
+    } else {
+      newShowExamples.add(command)
+    }
+    setShowExamples(newShowExamples)
   }
 
   const clearCommandBuilder = () => {
@@ -339,6 +354,19 @@ export default function VimCheatsheet() {
                             {cmd.command}
                           </code>
                           <div className="flex items-center space-x-1">
+                            {cmd.category === 'basicMovement' && vimExamples[cmd.command] && (
+                              <button
+                                onClick={() => toggleExample(cmd.command)}
+                                className={`p-1 transition-colors ${
+                                  showExamples.has(cmd.command)
+                                    ? 'text-blue-400 hover:text-blue-300'
+                                    : 'text-gray-400 hover:text-blue-400'
+                                }`}
+                                title="Toggle interactive example"
+                              >
+                                <PlayCircle className="h-3 w-3" />
+                              </button>
+                            )}
                             <button
                               onClick={() => copyCommand(cmd.command)}
                               className="p-1 text-gray-400 hover:text-white transition-colors"
@@ -398,6 +426,16 @@ export default function VimCheatsheet() {
                               <span className="font-semibold">Example:</span> {cmd.example}
                             </p>
                           </div>
+                        )}
+
+                        {/* Interactive Example for Basic Movement Commands */}
+                        {cmd.category === 'basicMovement' && showExamples.has(cmd.command) && vimExamples[cmd.command] && (
+                          <VimCommandExample
+                            command={vimExamples[cmd.command].command}
+                            beforeState={vimExamples[cmd.command].beforeState}
+                            afterState={vimExamples[cmd.command].afterState}
+                            explanation={vimExamples[cmd.command].explanation}
+                          />
                         )}
                       </div>
                     ))}
