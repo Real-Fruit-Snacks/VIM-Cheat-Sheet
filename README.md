@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-2.1.0-blue.svg" alt="Version" />
+      <img src="https://img.shields.io/badge/version-2.2.0-blue.svg" alt="Version" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React" />
@@ -83,6 +83,7 @@ This isn't just another VIM reference—it's a **comprehensive, interactive lear
 - **315+ VIM Commands** - Comprehensive coverage across all VIM functionality
 - **24 Organized Categories** - Logical grouping from basic movement to advanced features
 - **Interactive Examples** - Animated demonstrations for EVERY single command
+- **Integrated VIM Documentation** - Official VIM help files available offline within the app
 - **Smart Search** - Find commands by name, description, mode, or example text
 - **Advanced Filtering** - Filter by difficulty level, frequency, or category
 - **Favorites System** - Save frequently used commands for quick access
@@ -120,6 +121,23 @@ Featuring **315 interactive examples** covering ALL commands across every catego
 - ⭐ **Essential** - Commands you'll use constantly
 - 📋 **Common** - Regular workflow commands
 - 🔧 **Rare** - Specialized commands for specific tasks
+
+### Integrated VIM Documentation
+
+**🆕 Version 2.2.0 Feature:** Official VIM help documentation is now available directly within the app!
+
+- **Offline Access** - All VIM help files bundled with the application
+- **Context-Aware Help** - Click the help icon next to any command for detailed documentation
+- **Full Text Search** - Search across all help files to find specific topics
+- **Cross-References** - Navigate between related help topics with clickable links
+- **Syntax Highlighting** - VIM help syntax properly formatted and highlighted
+
+The integrated help viewer includes:
+- Complete VIM reference manual
+- Command-specific documentation
+- Usage examples and explanations
+- Tips and advanced techniques
+- Quick navigation between help topics
 
 ## Interactive Examples
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { vimCommands } from '../data/vim-commands'
 import { vimExamples } from '../data/vim-examples'
 import VimCommandExample from './VimCommandExample'
+import VimHelpViewer from './VimHelpViewer'
 import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle } from 'lucide-react'
 
 interface VimCommand {
@@ -27,6 +28,9 @@ export default function VimCheatsheet() {
   const [commandBuilder, setCommandBuilder] = useState<string>('')
   const [showCommandBuilder, setShowCommandBuilder] = useState(false)
   const [showExamples, setShowExamples] = useState<Set<string>>(new Set())
+  const [showHelpViewer, setShowHelpViewer] = useState(false)
+  const [helpFile, setHelpFile] = useState<string>('index.txt')
+  const [helpTag, setHelpTag] = useState<string | undefined>(undefined)
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -160,6 +164,13 @@ export default function VimCheatsheet() {
       newShowExamples.add(command)
     }
     setShowExamples(newShowExamples)
+  }
+
+  const openHelpViewer = (command: string, category: string) => {
+    const helpInfo = getVimHelpInfo(command, category)
+    setHelpFile(helpInfo.file)
+    setHelpTag(helpInfo.tag)
+    setShowHelpViewer(true)
   }
 
   const clearCommandBuilder = () => {
@@ -328,10 +339,10 @@ export default function VimCheatsheet() {
             <div className="flex items-start space-x-3">
               <HelpCircle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="text-blue-300 font-medium mb-1">Official VIM Documentation</p>
+                <p className="text-blue-300 font-medium mb-1">Integrated VIM Documentation</p>
                 <p className="text-blue-200/80">
-                  Each command now links to its official VIM help documentation on vimhelp.org. 
-                  Click the <HelpCircle className="inline-block h-3 w-3" /> icon next to any command to view detailed documentation.
+                  Official VIM help documentation is now available directly within this app. 
+                  Click the <HelpCircle className="inline-block h-3 w-3" /> icon next to any command to view detailed documentation offline.
                 </p>
                 <p className="text-blue-200/60 mt-2 text-xs">
                   Tip: In VIM, use <code className="bg-gray-800 px-1 rounded">:help command</code> to access the same documentation.
@@ -408,16 +419,16 @@ export default function VimCheatsheet() {
                             >
                               <Heart className={`h-3 w-3 ${favorites.has(cmd.command) ? 'fill-current' : ''}`} />
                             </button>
-                            <a
-                              href={getVimHelpUrl(cmd.command, category)}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                openHelpViewer(cmd.command, category)
+                              }}
                               className="p-1 text-gray-400 hover:text-blue-400 transition-colors"
-                              title="View official VIM help"
-                              onClick={(e) => e.stopPropagation()}
+                              title="View VIM help documentation"
                             >
                               <HelpCircle className="h-3 w-3" />
-                            </a>
+                            </button>
                           </div>
                         </div>
 
@@ -475,114 +486,117 @@ export default function VimCheatsheet() {
           )}
         </div>
       </div>
+      
+      {/* VIM Help Viewer */}
+      <VimHelpViewer
+        isOpen={showHelpViewer}
+        onClose={() => setShowHelpViewer(false)}
+        initialFile={helpFile}
+        initialTag={helpTag}
+      />
     </div>
   )
 }
 
-// Generate VIM help URL for a command
-function getVimHelpUrl(command: string, category: string): string {
-  const baseUrl = 'https://vimhelp.org/'
-  
+// Get help file and tag for a command
+function getVimHelpInfo(command: string, category: string): { file: string; tag?: string } {
   // Map commands to their help documentation
-  const helpMap: Record<string, string> = {
+  const helpMap: Record<string, { file: string; tag?: string }> = {
     // Movement
-    'h': 'motion.txt.html#h',
-    'j': 'motion.txt.html#j', 
-    'k': 'motion.txt.html#k',
-    'l': 'motion.txt.html#l',
-    'w': 'motion.txt.html#w',
-    'b': 'motion.txt.html#b',
-    'e': 'motion.txt.html#e',
-    '0': 'motion.txt.html#0',
-    '$': 'motion.txt.html#$',
-    '^': 'motion.txt.html#^',
-    'gg': 'motion.txt.html#gg',
-    'G': 'motion.txt.html#G',
-    '%': 'motion.txt.html#%',
+    'h': { file: 'motion.txt', tag: 'h' },
+    'j': { file: 'motion.txt', tag: 'j' },
+    'k': { file: 'motion.txt', tag: 'k' },
+    'l': { file: 'motion.txt', tag: 'l' },
+    'w': { file: 'motion.txt', tag: 'w' },
+    'b': { file: 'motion.txt', tag: 'b' },
+    'e': { file: 'motion.txt', tag: 'e' },
+    '0': { file: 'motion.txt', tag: '0' },
+    '$': { file: 'motion.txt', tag: '$' },
+    '^': { file: 'motion.txt', tag: '^' },
+    'gg': { file: 'motion.txt', tag: 'gg' },
+    'G': { file: 'motion.txt', tag: 'G' },
+    '%': { file: 'motion.txt', tag: '%' },
     
     // Editing
-    'i': 'insert.txt.html#i',
-    'a': 'insert.txt.html#a',
-    'o': 'insert.txt.html#o',
-    'O': 'insert.txt.html#O',
-    'I': 'insert.txt.html#I',
-    'A': 'insert.txt.html#A',
-    'dd': 'change.txt.html#dd',
-    'dw': 'change.txt.html#dw',
-    'd$': 'change.txt.html#d$',
-    'x': 'change.txt.html#x',
-    'u': 'undo.txt.html#u',
-    'Ctrl-r': 'undo.txt.html#CTRL-R',
-    'p': 'change.txt.html#p',
-    'P': 'change.txt.html#P',
-    'yy': 'change.txt.html#yy',
-    'yw': 'change.txt.html#yw',
+    'i': { file: 'insert.txt', tag: 'i' },
+    'a': { file: 'insert.txt', tag: 'a' },
+    'o': { file: 'insert.txt', tag: 'o' },
+    'O': { file: 'insert.txt', tag: 'O' },
+    'I': { file: 'insert.txt', tag: 'I' },
+    'A': { file: 'insert.txt', tag: 'A' },
+    'dd': { file: 'change.txt', tag: 'dd' },
+    'dw': { file: 'change.txt', tag: 'dw' },
+    'd$': { file: 'change.txt', tag: 'd$' },
+    'x': { file: 'change.txt', tag: 'x' },
+    'u': { file: 'undo.txt', tag: 'u' },
+    'Ctrl-r': { file: 'undo.txt', tag: 'CTRL-R' },
+    'p': { file: 'change.txt', tag: 'p' },
+    'P': { file: 'change.txt', tag: 'P' },
+    'yy': { file: 'change.txt', tag: 'yy' },
+    'yw': { file: 'change.txt', tag: 'yw' },
     
     // Visual mode
-    'v': 'visual.txt.html#v',
-    'V': 'visual.txt.html#V',
-    'Ctrl-v': 'visual.txt.html#CTRL-V',
+    'v': { file: 'visual.txt', tag: 'v' },
+    'V': { file: 'visual.txt', tag: 'V' },
+    'Ctrl-v': { file: 'visual.txt', tag: 'CTRL-V' },
     
     // Search
-    '/': 'pattern.txt.html#/',
-    '?': 'pattern.txt.html#?',
-    'n': 'pattern.txt.html#n',
-    'N': 'pattern.txt.html#N',
-    '*': 'pattern.txt.html#star',
-    '#': 'pattern.txt.html##',
+    '/': { file: 'pattern.txt', tag: '/' },
+    '?': { file: 'pattern.txt', tag: '?' },
+    'n': { file: 'pattern.txt', tag: 'n' },
+    'N': { file: 'pattern.txt', tag: 'N' },
+    '*': { file: 'pattern.txt', tag: 'star' },
+    '#': { file: 'pattern.txt', tag: '#' },
     
     // Files
-    ':w': 'editing.txt.html#:w',
-    ':q': 'editing.txt.html#:q',
-    ':wq': 'editing.txt.html#:wq',
-    ':x': 'editing.txt.html#:x',
-    ':e': 'editing.txt.html#:e',
+    ':w': { file: 'editing.txt', tag: ':w' },
+    ':q': { file: 'editing.txt', tag: ':q' },
+    ':wq': { file: 'editing.txt', tag: ':wq' },
+    ':x': { file: 'editing.txt', tag: ':x' },
+    ':e': { file: 'editing.txt', tag: ':e' },
     
     // Windows
-    ':sp': 'windows.txt.html#:sp',
-    ':vsp': 'windows.txt.html#:vsp',
-    'Ctrl-w w': 'windows.txt.html#CTRL-W_w',
-    'Ctrl-w h': 'windows.txt.html#CTRL-W_h',
-    'Ctrl-w j': 'windows.txt.html#CTRL-W_j',
-    'Ctrl-w k': 'windows.txt.html#CTRL-W_k',
-    'Ctrl-w l': 'windows.txt.html#CTRL-W_l',
+    ':sp': { file: 'windows.txt', tag: ':sp' },
+    ':vsp': { file: 'windows.txt', tag: ':vsp' },
+    'Ctrl-w w': { file: 'windows.txt', tag: 'CTRL-W_w' },
+    'Ctrl-w h': { file: 'windows.txt', tag: 'CTRL-W_h' },
+    'Ctrl-w j': { file: 'windows.txt', tag: 'CTRL-W_j' },
+    'Ctrl-w k': { file: 'windows.txt', tag: 'CTRL-W_k' },
+    'Ctrl-w l': { file: 'windows.txt', tag: 'CTRL-W_l' },
     
     // Help
-    ':help': 'helphelp.txt.html#:help',
+    ':help': { file: 'index.txt', tag: ':help' },
     
     // Add more mappings as needed
   }
   
-  // Clean command for lookup (for future use)
-  // const cleanCmd = command.replace(/[{}[\]]/g, '').replace(/\s+/g, '-')
-  
-  // Return specific help URL if mapped, otherwise general help based on category
+  // Return specific help info if mapped, otherwise general help based on category
   if (helpMap[command]) {
-    return baseUrl + helpMap[command]
+    return helpMap[command]
   }
   
   // Category-based fallbacks
-  const categoryMap: Record<string, string> = {
-    'basicMovement': 'motion.txt.html',
-    'documentNavigation': 'motion.txt.html',
-    'scrolling': 'scroll.txt.html',
-    'basicEditing': 'change.txt.html',
-    'insertMode': 'insert.txt.html',
-    'visualMode': 'visual.txt.html',
-    'searchAndReplace': 'pattern.txt.html',
-    'fileOperations': 'editing.txt.html',
-    'windowsAndTabs': 'windows.txt.html',
-    'marksAndJumps': 'motion.txt.html#mark-motions',
-    'registers': 'change.txt.html#registers',
-    'macrosAndAdvanced': 'repeat.txt.html',
-    'folding': 'fold.txt.html',
-    'completion': 'insert.txt.html#ins-completion',
-    'spellChecking': 'spell.txt.html',
-    'diffMode': 'diff.txt.html',
-    'helpSystem': 'helphelp.txt.html'
+  const categoryMap: Record<string, { file: string; tag?: string }> = {
+    'basicMovement': { file: 'motion.txt' },
+    'documentNavigation': { file: 'motion.txt' },
+    'scrolling': { file: 'scroll.txt' },
+    'basicEditing': { file: 'change.txt' },
+    'insertMode': { file: 'insert.txt' },
+    'visualMode': { file: 'visual.txt' },
+    'searchAndReplace': { file: 'pattern.txt' },
+    'fileOperations': { file: 'editing.txt' },
+    'windowsAndTabs': { file: 'windows.txt' },
+    'marksAndJumps': { file: 'motion.txt', tag: 'mark-motions' },
+    'registers': { file: 'change.txt', tag: 'registers' },
+    'macrosAndAdvanced': { file: 'repeat.txt' },
+    'folding': { file: 'fold.txt' },
+    'completion': { file: 'insert.txt', tag: 'ins-completion' },
+    'spellChecking': { file: 'spell.txt' },
+    'diffMode': { file: 'diff.txt' },
+    'helpSystem': { file: 'index.txt' }
   }
   
-  return baseUrl + (categoryMap[category] || 'index.txt.html')
+  return categoryMap[category] || { file: 'index.txt' }
 }
 
 // Helper functions to assign difficulty and frequency levels
