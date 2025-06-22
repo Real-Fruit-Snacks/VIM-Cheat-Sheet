@@ -354,11 +354,6 @@ export default function VimCheatsheet() {
                             >
                               {cmd.command}
                             </code>
-                            {vimExamples[cmd.command] && (
-                              <span className="text-xs text-blue-400 font-semibold" title="Interactive example available">
-                                ▶
-                              </span>
-                            )}
                           </div>
                           <div className="flex items-center space-x-1">
                             {vimExamples[cmd.command] && (
