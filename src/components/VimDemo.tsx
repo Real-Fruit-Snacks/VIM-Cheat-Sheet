@@ -76,13 +76,17 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     
     intervalRef.current = setInterval(() => {
       stepIndex++
-      if (stepIndex < demo.steps.length) {
-        setCurrentStep(stepIndex)
-      } else {
-        setIsPlaying(false)
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current)
-          intervalRef.current = null
+      if (stepIndex <= demo.steps.length) {
+        if (stepIndex < demo.steps.length) {
+          // Show the next step
+          setCurrentStep(stepIndex)
+        } else {
+          // We've shown all steps, now stop after giving last step full time
+          setIsPlaying(false)
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current)
+            intervalRef.current = null
+          }
         }
       }
     }, 3000) // 3 seconds per step
