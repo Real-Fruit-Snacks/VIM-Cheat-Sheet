@@ -26,7 +26,7 @@ npm run build:gitlab
 
 ## Architecture Overview
 
-This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interactive command examples**. The app is built for performance with a **216KB main bundle** and comprehensive offline support for GitLab/GitHub Pages deployment.
+This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interactive command examples** plus **6 comprehensive workflow demos**. The app is built for performance with a **216KB main bundle** and comprehensive offline support for GitLab/GitHub Pages deployment.
 
 ### Core Architecture Patterns
 
@@ -39,6 +39,7 @@ This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interac
 **Component Structure:**
 - `VimCheatsheetEnhanced.tsx` - Main application (800+ lines, replaces original component)
 - `VimCommandExampleAnimated.tsx` - Interactive command demonstrations with animated cursor
+- `VimDemo.tsx` - Multi-step workflow demo orchestration component
 - `VimHelpViewer.tsx` - Integrated official VIM documentation viewer
 - `SearchSuggestions.tsx` - Intelligent fuzzy search with Fuse.js
 - Custom hooks: `useDebounce`, `useKeyboardNavigation`, `useSwipeGesture`
@@ -46,6 +47,7 @@ This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interac
 **Data Layer:**
 - `src/data/vim-commands.ts` - 399 lines of structured command definitions
 - `src/data/vim-examples.ts` - 8,583 lines of interactive example states
+- `src/data/vim-demos.ts` - 6 comprehensive workflow demonstrations
 - `public/vim-help/` - 16 official VIM help files for offline documentation
 - `utils/enhancedSearch.ts` - Command synonyms, typo correction, related commands
 
@@ -53,6 +55,9 @@ This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interac
 
 **Interactive Examples System:**
 Every command has before/after state visualization with animated cursor movement. Examples use `VimCommandExample` interface with `beforeState`/`afterState` properties.
+
+**Workflow Demo System:**
+Multi-step demonstrations showing real-world VIM usage patterns. `VimDemo` orchestrates sequences of commands with auto-play and manual navigation. Each demo contains metadata (category, difficulty, time-to-master) and step-by-step workflows using the same `VimCommandExampleAnimated` component for consistency.
 
 **VIM-Style Navigation:**
 - `j/k` for up/down navigation
@@ -107,3 +112,22 @@ Current performance metrics:
 - Total build: 1.7MB including help files
 - Virtual scrolling handles 315+ commands efficiently
 - 300ms search debounce for optimal UX
+
+## Demo System Architecture
+
+**Component Relationships:**
+- `VimDemo` manages multi-step workflow orchestration with auto-play and manual navigation
+- `VimCommandExampleAnimated` renders individual command states with VIM-accurate visualization
+- Shared `ExampleState` interface ensures consistency between single commands and demo steps
+- Main app (`VimCheatsheetEnhanced`) provides view switching between "Commands" and "Demos"
+
+**Data Structure:**
+- Each demo contains metadata (category, difficulty, useCase, timeToMaster) plus array of steps
+- Each step has command, description, before/after states, and explanation
+- All demo data is declaratively defined in `vim-demos.ts` for easy extension
+
+**Key Implementation Details:**
+- Auto-play uses 3-second intervals with proper cleanup to prevent memory leaks
+- `VimCommandExampleAnimated` syncs internal state with prop changes for demo progression
+- React.memo optimization prevents unnecessary re-renders during step transitions
+- Component follows VIM principles with instant state transitions (no animations)
