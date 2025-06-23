@@ -31,11 +31,11 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Cleanup interval on unmount or when isPlaying changes
+  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+        clearTimeout(intervalRef.current)
         intervalRef.current = null
       }
     }
@@ -55,7 +55,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
 
   const reset = () => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current)
+      clearTimeout(intervalRef.current)
       intervalRef.current = null
     }
     setCurrentStep(0)
@@ -63,33 +63,35 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   }
 
   const playDemo = () => {
-    // Clear any existing interval
+    // Clear any existing timeout
     if (intervalRef.current) {
-      clearInterval(intervalRef.current)
+      clearTimeout(intervalRef.current)
     }
     
     setIsPlaying(true)
     
-    // Auto-advance through steps starting from step 0
-    let stepIndex = 0
-    setCurrentStep(stepIndex)
+    // Start with step 0
+    let currentStepIndex = 0
+    setCurrentStep(currentStepIndex)
     
-    intervalRef.current = setInterval(() => {
-      stepIndex++
-      if (stepIndex <= demo.steps.length) {
-        if (stepIndex < demo.steps.length) {
-          // Show the next step
-          setCurrentStep(stepIndex)
-        } else {
-          // We've shown all steps, now stop after giving last step full time
+    const totalSteps = demo.steps.length
+    
+    const advanceToNextStep = () => {
+      currentStepIndex++
+      if (currentStepIndex < totalSteps) {
+        // Show the next step and schedule another advance
+        setCurrentStep(currentStepIndex)
+        intervalRef.current = setTimeout(advanceToNextStep, 3000)
+      } else {
+        // All steps have been shown, stop the demo after last step gets full time
+        intervalRef.current = setTimeout(() => {
           setIsPlaying(false)
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current)
-            intervalRef.current = null
-          }
-        }
+        }, 3000)
       }
-    }, 3000) // 3 seconds per step
+    }
+    
+    // Schedule the first advance (step 0 → step 1)
+    intervalRef.current = setTimeout(advanceToNextStep, 3000)
   }
 
   const getCategoryIcon = (category: string) => {
