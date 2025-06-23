@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Play, RotateCcw } from 'lucide-react'
 
 export interface ExampleState {
@@ -22,52 +22,7 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
   const [currentState, setCurrentState] = useState<ExampleState>(before)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showBefore, setShowBefore] = useState(true)
-  const animationRef = useRef<number | undefined>(undefined)
-  const cursorRef = useRef<HTMLDivElement>(null)
 
-  // Clean up animation on unmount
-  useEffect(() => {
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
-      }
-    }
-  }, [])
-
-  const animateCursor = (fromRow: number, fromCol: number, toRow: number, toCol: number, duration: number) => {
-    const startTime = Date.now()
-    
-    const animate = () => {
-      const elapsed = Date.now() - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      
-      // Easing function for smooth animation
-      const easeInOutCubic = (t: number) => t < 0.5 
-        ? 4 * t * t * t 
-        : 1 - Math.pow(-2 * t + 2, 3) / 2
-      
-      const easedProgress = easeInOutCubic(progress)
-      
-      const currentRow = fromRow + (toRow - fromRow) * easedProgress
-      const currentCol = fromCol + (toCol - fromCol) * easedProgress
-      
-      setCurrentState(prev => ({
-        ...prev,
-        cursorRow: Math.round(currentRow),
-        cursorCol: Math.round(currentCol)
-      }))
-      
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate)
-      } else {
-        // Animation complete, set final state
-        setCurrentState(after)
-        setIsAnimating(false)
-      }
-    }
-    
-    animationRef.current = requestAnimationFrame(animate)
-  }
 
   const runExample = () => {
     if (isAnimating) return
@@ -76,22 +31,15 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
     setShowBefore(false)
     setCurrentState(before)
     
-    // Calculate animation duration based on cursor distance
-    const rowDiff = Math.abs(after.cursorRow - before.cursorRow)
-    const colDiff = Math.abs(after.cursorCol - before.cursorCol)
-    const distance = Math.sqrt(rowDiff * rowDiff + colDiff * colDiff)
-    const duration = Math.min(300 + distance * 50, 1000) // 300-1000ms
-    
-    // Start animation after a brief pause
+    // VIM cursor movements are instant, not animated
+    // Show the command execution with a brief delay for clarity
     setTimeout(() => {
-      animateCursor(before.cursorRow, before.cursorCol, after.cursorRow, after.cursorCol, duration)
-    }, 200)
+      setCurrentState(after)
+      setIsAnimating(false)
+    }, 150) // Brief pause to show the command execution
   }
 
   const reset = () => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current)
-    }
     setIsAnimating(false)
     setShowBefore(true)
     setCurrentState(before)
@@ -133,18 +81,15 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
             className={`
               relative inline-block
               ${isSelected ? 'bg-blue-500/30 text-white' : ''}
-              ${isCursor && isAnimating ? 'transition-all duration-150' : ''}
             `}
           >
             {char === ' ' ? '\u00A0' : char}
             {isCursor && (
               <div
-                ref={cursorRef}
                 className={`
                   absolute inset-0 
                   ${currentState.mode === 'insert' ? 'border-l-2' : 'bg-opacity-70'} 
                   ${getModeColor(currentState.mode)}
-                  ${isAnimating ? 'animate-pulse' : ''}
                 `}
                 style={{
                   width: currentState.mode === 'insert' ? '2px' : '100%',
