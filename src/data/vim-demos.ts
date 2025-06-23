@@ -892,6 +892,33 @@ export const vimDemos: VimDemoData[] = [
           description: 'Function arguments changed'
         },
         explanation: 'ci( changes everything inside parentheses, perfect for updating function arguments.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            'const message = "Hello, VIM!";',
+            'const greeting = ;',
+            'console.log("VIM is amazing!");'
+          ],
+          cursorRow: 2,
+          cursorCol: 28,
+          mode: 'insert',
+          description: 'Function arguments changed'
+        },
+        after: {
+          text: [
+            'const message = "Hello, VIM!";',
+            'const greeting = ;',
+            'console.log("VIM is amazing!");'
+          ],
+          cursorRow: 2,
+          cursorCol: 27,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -1431,6 +1458,45 @@ export const vimDemos: VimDemoData[] = [
           description: 'Professional signature completed'
         },
         explanation: 'A moves to end of line and enters insert mode to complete the professional signature with sender name.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            'To: john.doe@company.com',
+            'Subject: Project Timeline Follow-up',
+            '',
+            'Hi John,',
+            '',
+            'I wanted to follow up on our previous discussion about the project timeline.',
+            '',
+            'Thanks and best regards,',
+            'Sarah'
+          ],
+          cursorRow: 8,
+          cursorCol: 5,
+          mode: 'insert',
+          description: 'Professional signature completed'
+        },
+        after: {
+          text: [
+            'To: john.doe@company.com',
+            'Subject: Project Timeline Follow-up',
+            '',
+            'Hi John,',
+            '',
+            'I wanted to follow up on our previous discussion about the project timeline.',
+            '',
+            'Thanks and best regards,',
+            'Sarah'
+          ],
+          cursorRow: 8,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -1653,6 +1719,43 @@ export const vimDemos: VimDemoData[] = [
           description: 'Analysis summary added'
         },
         explanation: 'O creates a new line above the current line and enters insert mode to add a summary of the log analysis findings.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            '# LOG ANALYSIS: 2 errors found - config load failure, DB timeout',
+            '2024-01-15 10:30:15 INFO Application started',
+            '2024-01-15 10:30:16 DEBUG Database connection established',
+            '2024-01-15 10:30:17 ERROR Failed to load config file',
+            '2024-01-15 10:30:18 INFO Retrying with default config',
+            '2024-01-15 10:30:19 WARN Deprecated API usage detected',
+            '# 2024-01-15 10:30:20 ERROR Database timeout',
+            '2024-01-15 10:30:21 INFO Application running normally'
+          ],
+          cursorRow: 0,
+          cursorCol: 65,
+          mode: 'insert',
+          description: 'In insert mode after adding summary'
+        },
+        after: {
+          text: [
+            '# LOG ANALYSIS: 2 errors found - config load failure, DB timeout',
+            '2024-01-15 10:30:15 INFO Application started',
+            '2024-01-15 10:30:16 DEBUG Database connection established',
+            '2024-01-15 10:30:17 ERROR Failed to load config file',
+            '2024-01-15 10:30:18 INFO Retrying with default config',
+            '2024-01-15 10:30:19 WARN Deprecated API usage detected',
+            '# 2024-01-15 10:30:20 ERROR Database timeout',
+            '2024-01-15 10:30:21 INFO Application running normally'
+          ],
+          cursorRow: 0,
+          cursorCol: 64,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -1876,6 +1979,37 @@ export const vimDemos: VimDemoData[] = [
           description: 'Table properly formatted'
         },
         explanation: 'cc replaces the line with the final table row, completing the markdown table with proper formatting and alignment.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            '| Name | Age | City | Email |',
+            '|------|-----|------|-------|',
+            '| John | 30 | NYC | john@email.com |',
+            '| Jane | 25 | LA | jane@email.com |',
+            'Email'
+          ],
+          cursorRow: 3,
+          cursorCol: 34,
+          mode: 'insert',
+          description: 'Table properly formatted'
+        },
+        after: {
+          text: [
+            '| Name | Age | City | Email |',
+            '|------|-----|------|-------|',
+            '| John | 30 | NYC | john@email.com |',
+            '| Jane | 25 | LA | jane@email.com |',
+            'Email'
+          ],
+          cursorRow: 3,
+          cursorCol: 33,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -2152,6 +2286,41 @@ export const vimDemos: VimDemoData[] = [
           description: 'New config setting added'
         },
         explanation: 'o creates a new line below and enters insert mode to add a new configuration setting for logging.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            'server_name=localhost',
+            'port=3000',
+            'debug=true',
+            'max_connections=100',
+            'timeout=30',
+            'ssl_enabled=true',
+            'log_level=info'
+          ],
+          cursorRow: 6,
+          cursorCol: 13,
+          mode: 'insert',
+          description: 'In insert mode after adding log_level'
+        },
+        after: {
+          text: [
+            'server_name=localhost',
+            'port=3000',
+            'debug=true',
+            'max_connections=100',
+            'timeout=30',
+            'ssl_enabled=true',
+            'log_level=info'
+          ],
+          cursorRow: 6,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -2918,6 +3087,47 @@ export const vimDemos: VimDemoData[] = [
           description: 'Validation added to function'
         },
         explanation: 'o creates a new line and enters insert mode to add data validation before processing.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            '// main.js',
+            'import { formatDate, validateData } from "./utils.js"',
+            '',
+            'function processData(data) {',
+            '  if (!validateData(data)) return []',
+            '  return data.map(item => ({',
+            '    ...item,',
+            '    formatted: formatDate(item.date)',
+            '  }))',
+            '}'
+          ],
+          cursorRow: 4,
+          cursorCol: 33,
+          mode: 'insert',
+          description: 'In insert mode after adding validation'
+        },
+        after: {
+          text: [
+            '// main.js',
+            'import { formatDate, validateData } from "./utils.js"',
+            '',
+            'function processData(data) {',
+            '  if (!validateData(data)) return []',
+            '  return data.map(item => ({',
+            '    ...item,',
+            '    formatted: formatDate(item.date)',
+            '  }))',
+            '}'
+          ],
+          cursorRow: 4,
+          cursorCol: 32,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   },
@@ -6355,6 +6565,35 @@ export const vimDemos: VimDemoData[] = [
           description: 'Signature expanded!'
         },
         explanation: 'Typing "sig" followed by space expands to the full signature block.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Return to normal mode',
+        before: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.',
+            'Best regards,',
+            'John Smith'
+          ],
+          cursorRow: 3,
+          cursorCol: 10,
+          mode: 'insert',
+          description: 'In insert mode after signature'
+        },
+        after: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.',
+            'Best regards,',
+            'John Smith'
+          ],
+          cursorRow: 3,
+          cursorCol: 9,
+          mode: 'normal',
+          description: 'Back in normal mode'
+        },
+        explanation: 'Always return to normal mode when finished'
       }
     ]
   }

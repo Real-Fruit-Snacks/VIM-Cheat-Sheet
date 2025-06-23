@@ -14,6 +14,7 @@ import { vimExamples } from '../data/vim-examples'
 import { vimDemos } from '../data/vim-demos'
 import { EnhancedSearch, COMMON_MISTAKES, RELATED_COMMANDS } from '../utils/enhancedSearch'
 import type { ExpandedCommand } from '../utils/dataCompression'
+import { safeGetItem, safeSetItem, safeCopyToClipboard } from '../utils/safeStorage'
 
 type FilterType = 'all' | 'favorites' | 'beginner' | 'intermediate' | 'advanced' | 'essential' | 'common' | 'rare'
 type SortType = 'alphabetical' | 'difficulty' | 'frequency' | 'category'
@@ -51,17 +52,21 @@ export default function VimCheatsheetEnhanced() {
   // Initialize enhanced search
   const enhancedSearch = useMemo(() => new EnhancedSearch(vimCommands), [])
 
-  // Load favorites from localStorage
+  // Load favorites from localStorage with fallback
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('vim-cheatsheet-favorites')
+    const savedFavorites = safeGetItem('vim-cheatsheet-favorites')
     if (savedFavorites) {
-      setFavorites(new Set(JSON.parse(savedFavorites)))
+      try {
+        setFavorites(new Set(JSON.parse(savedFavorites)))
+      } catch (error) {
+        console.error('Failed to parse favorites:', error)
+      }
     }
   }, [])
 
-  // Save favorites to localStorage
+  // Save favorites to localStorage with fallback
   useEffect(() => {
-    localStorage.setItem('vim-cheatsheet-favorites', JSON.stringify(Array.from(favorites)))
+    safeSetItem('vim-cheatsheet-favorites', JSON.stringify(Array.from(favorites)))
   }, [favorites])
 
   // Enhanced commands with difficulty and frequency
@@ -182,12 +187,13 @@ export default function VimCheatsheetEnhanced() {
   }
 
   const copyCommand = async (command: string) => {
-    try {
-      await navigator.clipboard.writeText(command)
+    const result = await safeCopyToClipboard(command)
+    if (result.success) {
       setCopiedCommand(command)
       setTimeout(() => setCopiedCommand(null), 2000)
-    } catch (error) {
-      console.error('Failed to copy command:', error)
+    } else {
+      // Show error toast or fallback UI
+      alert(`Copy command manually: ${command}`)
     }
   }
 

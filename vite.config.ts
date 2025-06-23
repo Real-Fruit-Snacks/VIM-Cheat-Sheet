@@ -37,11 +37,11 @@ export default defineConfig({
   },
   // Development server configuration
   server: {
-    headers: {
-      // Enable CORS for development
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Cross-Origin-Opener-Policy': 'same-origin',
-    },
+    // Removed restrictive CORS headers that can conflict with corporate networks
+    // headers: {
+    //   'Cross-Origin-Embedder-Policy': 'require-corp',
+    //   'Cross-Origin-Opener-Policy': 'same-origin',
+    // },
   },
   // Optimize dependencies
   optimizeDeps: {
