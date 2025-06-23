@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.1.3-blue.svg" alt="Version 3.1.3" />
+      <img src="https://img.shields.io/badge/version-3.2.0-blue.svg" alt="Version 3.2.0" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -76,10 +76,10 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
   </tr>
 </table>
 
-## 🚀 Version 3.1.3 - Interactive Workflow Demos
+## 🚀 Version 3.2.0 - Comprehensive Demo Collection
 
-### 🎭 Revolutionary Learning Experience
-- **6 Comprehensive Workflow Demos**: Learn real-world VIM usage patterns through step-by-step interactive demonstrations
+### 🎭 Revolutionary Learning Experience  
+- **16 Comprehensive Workflow Demos**: Learn real-world VIM usage patterns through step-by-step interactive demonstrations spanning beginner to advanced levels
 - **Multi-step Command Sequences**: See how individual commands combine into powerful workflows
 - **Auto-play & Manual Navigation**: Choose your learning style - watch demos play automatically or step through manually
 - **Real-world Scenarios**: Code refactoring, markdown formatting, CSV cleanup, advanced navigation, and text object mastery
@@ -90,10 +90,12 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
 - **Performance Optimized**: Efficient state management with proper cleanup to prevent memory leaks
 - **Declarative Demo Data**: Easy extensibility through structured demo definitions
 
-### 🎯 Workflow Categories
-- **Developer Workflows**: Code refactoring, commenting, navigation patterns
-- **Writer Workflows**: Markdown formatting, document structure
-- **General Workflows**: Data processing, text manipulation, advanced editing
+### 🎯 Comprehensive Demo Collection
+- **Small Beginner Demos (3-4 steps)**: Essential line editing, word operations, file navigation
+- **Medium Intermediate Demos (5-8 steps)**: Email composition, log analysis, table formatting, configuration editing  
+- **Large Advanced Demos (9-12 steps)**: Macro automation, multi-buffer workflows, complex regex patterns
+- **Diverse Categories**: 7 developer, 4 writer, and 5 general workflows covering all use cases
+- **Progressive Difficulty**: 5 beginner, 6 intermediate, and 5 advanced demos for structured learning
 
 ## 🚀 Version 3.1.1 - Build Fix & Deployment Stability
 
@@ -156,7 +158,7 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
 
 ### Core Capabilities
 - **315+ VIM Commands** - Complete coverage across all VIM functionality
-- **6 Workflow Demos** - Real-world multi-step demonstrations showing VIM mastery
+- **16 Workflow Demos** - Comprehensive real-world multi-step demonstrations from beginner to advanced
 - **24 Organized Categories** - From basic movement to advanced macros  
 - **Interactive Examples** - Animated demonstrations for every command
 - **Integrated Documentation** - 16 official VIM help files included offline
@@ -173,7 +175,7 @@ Every command features:
 - **Step-by-Step Explanations** - Clear descriptions of command behavior
 
 ### 🎭 Workflow Demo System
-Six comprehensive demonstrations showcasing:
+Sixteen comprehensive demonstrations showcasing:
 - **Multi-Step Workflows** - Learn how commands combine for real-world tasks
 - **Auto-Play Mode** - Watch complete workflows unfold automatically with 3-second steps
 - **Manual Navigation** - Step through at your own pace with forward/backward controls
@@ -425,6 +427,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.1.3 | 315+ Commands • 6 Workflow Demos | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.2.0 | 315+ Commands • 16 Workflow Demos | Performance Optimized</sub>
   </p>
 </div>
