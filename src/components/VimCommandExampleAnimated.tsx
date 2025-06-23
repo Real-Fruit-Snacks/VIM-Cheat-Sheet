@@ -5,7 +5,7 @@ export interface ExampleState {
   text: string[]
   cursorRow: number
   cursorCol: number
-  mode: 'normal' | 'insert' | 'visual' | 'command'
+  mode: 'normal' | 'insert' | 'visual' | 'visual-line' | 'visual-block' | 'command'
   description: string
   visualEnd?: { row: number; col: number }
   commandLine?: string
@@ -50,6 +50,8 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       case 'normal': return 'bg-blue-500'
       case 'insert': return 'bg-green-500'
       case 'visual': return 'bg-purple-500'
+      case 'visual-line': return 'bg-purple-600'
+      case 'visual-block': return 'bg-purple-700'
       case 'command': return 'bg-yellow-500'
       default: return 'bg-gray-500'
     }
@@ -60,6 +62,8 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       case 'normal': return '-- NORMAL --'
       case 'insert': return '-- INSERT --'
       case 'visual': return '-- VISUAL --'
+      case 'visual-line': return '-- VISUAL LINE --'
+      case 'visual-block': return '-- VISUAL BLOCK --'
       case 'command': return ':'
       default: return ''
     }
@@ -72,7 +76,8 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       
       chars.forEach((char, colIndex) => {
         const isCursor = rowIndex === currentState.cursorRow && colIndex === currentState.cursorCol
-        const isSelected = currentState.mode === 'visual' && currentState.visualEnd && 
+        const isSelected = (currentState.mode === 'visual' || currentState.mode === 'visual-line' || currentState.mode === 'visual-block') && 
+          currentState.visualEnd && 
           isInVisualSelection(rowIndex, colIndex, currentState)
         
         const charElement = (
@@ -80,7 +85,7 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
             key={`${rowIndex}-${colIndex}`}
             className={`
               relative inline-block
-              ${isSelected ? 'bg-blue-500/30 text-white' : ''}
+              ${isSelected ? 'bg-purple-500/50 text-white' : ''}
             `}
           >
             {char === ' ' ? '\u00A0' : char}
@@ -144,6 +149,14 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
     return true
   }
 
+  const isLineInVisualSelection = (row: number, state: ExampleState) => {
+    if (!state.visualEnd) return false
+    if (state.mode !== 'visual' && state.mode !== 'visual-line' && state.mode !== 'visual-block') return false
+    const startRow = Math.min(state.cursorRow, state.visualEnd.row)
+    const endRow = Math.max(state.cursorRow, state.visualEnd.row)
+    return row >= startRow && row <= endRow
+  }
+
   return (
     <div className={`bg-gray-800 rounded-lg overflow-hidden ${className}`}>
       {/* Toolbar */}
@@ -177,16 +190,31 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       <div className="p-4">
         {/* Line numbers and content */}
         <div className="font-mono text-sm">
-          {currentState.text.map((_, index) => (
-            <div key={index} className="flex">
-              <span className="text-gray-600 mr-4 select-none w-8 text-right">
-                {index + 1}
-              </span>
-              <div className="text-gray-200 whitespace-pre">
-                {renderTextWithCursor()[index]}
+          {currentState.text.map((_, index) => {
+            const isLineSelected = isLineInVisualSelection(index, currentState)
+            return (
+              <div key={index} className="flex relative">
+                {/* Visual mode line indicator */}
+                {isLineSelected && (
+                  <div className="absolute left-0 w-1 h-full bg-purple-500" />
+                )}
+                
+                {/* Line number */}
+                <span className={`mr-4 select-none w-8 text-right ${
+                  isLineSelected ? 'text-purple-400 font-bold' : 'text-gray-600'
+                }`}>
+                  {index + 1}
+                </span>
+                
+                {/* Line content with optional background */}
+                <div className={`text-gray-200 whitespace-pre flex-1 ${
+                  isLineSelected ? 'bg-purple-500/10' : ''
+                }`}>
+                  {renderTextWithCursor()[index]}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
           
           {/* Empty lines with tilde */}
           {Array.from({ length: Math.max(0, 6 - currentState.text.length) }, (_, i) => (
@@ -205,6 +233,13 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
               {' '}
               {currentState.cursorRow + 1},{currentState.cursorCol + 1}
               {' '}
+              {(currentState.mode === 'visual' || currentState.mode === 'visual-line' || currentState.mode === 'visual-block') && currentState.visualEnd && (
+                <>
+                  {' → '}
+                  {currentState.visualEnd.row + 1},{currentState.visualEnd.col + 1}
+                  {' '}
+                </>
+              )}
               {Math.round(((currentState.cursorRow + 1) / currentState.text.length) * 100)}%
             </div>
             <div className={`px-2 py-0.5 rounded ${getModeColor(currentState.mode)} text-white font-semibold`}>
