@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X } from 'lucide-react'
+import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X, Zap } from 'lucide-react'
 import { useDebounce } from '../hooks/useDebounce'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 import { useSwipeGesture } from '../hooks/useSwipeGesture'
@@ -8,8 +8,10 @@ import VirtualCommandList from './VirtualCommandList'
 import SearchSuggestions from './SearchSuggestions'
 import VimCommandExampleAnimated from './VimCommandExampleAnimated'
 import VimHelpViewer from './VimHelpViewer'
+import VimDemo from './VimDemo'
 import { vimCommands } from '../data/vim-commands'
 import { vimExamples } from '../data/vim-examples'
+import { vimDemos } from '../data/vim-demos'
 import { EnhancedSearch, COMMON_MISTAKES, RELATED_COMMANDS } from '../utils/enhancedSearch'
 import type { ExpandedCommand } from '../utils/dataCompression'
 
@@ -34,6 +36,7 @@ export default function VimCheatsheetEnhanced() {
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(true)
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCommandIndex, setSelectedCommandIndex] = useState(0)
+  const [currentView, setCurrentView] = useState<'commands' | 'demos'>('commands')
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -528,8 +531,33 @@ export default function VimCheatsheetEnhanced() {
           </div>
         )}
 
-        {/* Keyboard Help Toggle */}
+        {/* View Switcher */}
         <div className="border-t border-gray-700 p-4">
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <button
+              onClick={() => setCurrentView('commands')}
+              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
+                currentView === 'commands' 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+              }`}
+            >
+              <Search className="h-4 w-4" />
+              <span className="text-sm">Commands</span>
+            </button>
+            <button
+              onClick={() => setCurrentView('demos')}
+              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
+                currentView === 'demos' 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              <span className="text-sm">Demos</span>
+            </button>
+          </div>
+          
           <button
             onClick={toggleKeyboardHelp}
             className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
@@ -551,11 +579,18 @@ export default function VimCheatsheetEnhanced() {
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
               VIM Cheatsheet
             </h1>
-            <p className="text-gray-400">
-              Showing {filteredCommands.length} commands
-              {searchTerm && ` matching "${searchTerm}"`}
-              {selectedFilter !== 'all' && ` • ${selectedFilter} level`}
-            </p>
+            {currentView === 'commands' && (
+              <p className="text-gray-400">
+                Showing {filteredCommands.length} commands
+                {searchTerm && ` matching "${searchTerm}"`}
+                {selectedFilter !== 'all' && ` • ${selectedFilter} level`}
+              </p>
+            )}
+            {currentView === 'demos' && (
+              <p className="text-gray-400">
+                {vimDemos.length} interactive workflow demonstrations
+              </p>
+            )}
           </div>
 
           {/* Keyboard Shortcuts Help */}
@@ -584,8 +619,10 @@ export default function VimCheatsheetEnhanced() {
             </div>
           )}
 
-          {/* Commands */}
-          {Object.keys(groupedCommands).length === 0 ? (
+          {/* Commands View */}
+          {currentView === 'commands' && (
+            <>
+              {Object.keys(groupedCommands).length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-400 text-lg">No commands found</p>
               {searchTerm && (
@@ -779,6 +816,24 @@ export default function VimCheatsheetEnhanced() {
                 </div>
                 )
               })}
+            </div>
+              )}
+            </>
+          )}
+
+          {/* Demos View */}
+          {currentView === 'demos' && (
+            <div className="space-y-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-white mb-2">VIM Demos</h2>
+                <p className="text-gray-400">Learn real-world VIM workflows through interactive demonstrations</p>
+              </div>
+
+              <div className="grid gap-6">
+                {vimDemos.map(demo => (
+                  <VimDemo key={demo.id} demo={demo} />
+                ))}
+              </div>
             </div>
           )}
         </div>

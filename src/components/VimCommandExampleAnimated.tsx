@@ -137,6 +137,13 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
     
     const startRow = Math.min(state.cursorRow, state.visualEnd.row)
     const endRow = Math.max(state.cursorRow, state.visualEnd.row)
+    
+    // For visual line mode, select entire lines
+    if (state.mode === 'visual-line') {
+      return row >= startRow && row <= endRow
+    }
+    
+    // For character visual mode, use character-by-character selection
     const startCol = state.cursorRow < state.visualEnd.row ? state.cursorCol : state.visualEnd.col
     const endCol = state.cursorRow < state.visualEnd.row ? state.visualEnd.col : state.cursorCol
     
@@ -208,7 +215,7 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
                 
                 {/* Line content with optional background */}
                 <div className={`text-gray-200 whitespace-pre flex-1 ${
-                  isLineSelected ? 'bg-purple-500/10' : ''
+                  isLineSelected ? (currentState.mode === 'visual-line' ? 'bg-purple-500/30' : 'bg-purple-500/10') : ''
                 }`}>
                   {renderTextWithCursor()[index]}
                 </div>
