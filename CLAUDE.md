@@ -33,7 +33,7 @@ This project currently has no automated test suite. Interactive testing is done 
 
 ## Architecture Overview
 
-This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interactive command examples** plus **16 comprehensive workflow demos**. The app is built for performance with a **216KB main bundle** and comprehensive offline support for GitLab/GitHub Pages deployment.
+This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interactive command examples** plus **30 comprehensive workflow demos**. The app is built for performance with a **216KB main bundle** and comprehensive offline support for GitLab/GitHub Pages deployment.
 
 ### Core Architecture Patterns
 
@@ -54,7 +54,7 @@ This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interac
 **Data Layer:**
 - `src/data/vim-commands.ts` - 399 lines of structured command definitions
 - `src/data/vim-examples.ts` - 8,583 lines of interactive example states
-- `src/data/vim-demos.ts` - 16 comprehensive workflow demonstrations (beginner to advanced)
+- `src/data/vim-demos.ts` - 30 comprehensive workflow demonstrations (beginner to advanced)
 - `public/vim-help/` - 16 official VIM help files for offline documentation
 - `utils/enhancedSearch.ts` - Command synonyms, typo correction, related commands
 

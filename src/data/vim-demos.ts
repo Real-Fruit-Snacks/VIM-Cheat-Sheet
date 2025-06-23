@@ -3210,5 +3210,3152 @@ export const vimDemos: VimDemoData[] = [
         explanation: ':g/Total/ runs substitution only on lines containing "Total", adding money emoji before dollar amounts.'
       }
     ]
+  },
+  {
+    id: 'search-and-count',
+    title: 'Search Pattern Counting and Navigation',
+    description: 'Master VIM\'s search capabilities to count occurrences and navigate through matches efficiently.',
+    category: 'general',
+    difficulty: 'beginner',
+    timeToMaster: '3-5 min',
+    useCase: 'Pattern analysis',
+    steps: [
+      {
+        command: ':%s/error//gn',
+        description: 'Count all occurrences of "error"',
+        before: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Log file with multiple error entries'
+        },
+        after: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: '3 matches found (shown in command line)'
+        },
+        explanation: 'The n flag in substitution counts matches without making changes. Perfect for quick pattern analysis.'
+      },
+      {
+        command: '/error',
+        description: 'Search for first occurrence',
+        before: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Begin search navigation'
+        },
+        after: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 16,
+          mode: 'normal',
+          description: 'Cursor at first "error"'
+        },
+        explanation: '/error searches forward and positions cursor at the first match.'
+      },
+      {
+        command: 'n',
+        description: 'Navigate to next match',
+        before: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 16,
+          mode: 'normal',
+          description: 'At first match'
+        },
+        after: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'Cursor at second "error"'
+        },
+        explanation: 'n moves to the next search match, allowing quick navigation through all occurrences.'
+      },
+      {
+        command: 'N',
+        description: 'Navigate to previous match',
+        before: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'At second match'
+        },
+        after: {
+          text: [
+            'Log: Connection error on line 5',
+            'Info: Process started successfully',
+            'Error: File not found error',
+            'Warning: Deprecated function used',
+            'Error: Network timeout error occurred'
+          ],
+          cursorRow: 0,
+          cursorCol: 16,
+          mode: 'normal',
+          description: 'Back at first "error"'
+        },
+        explanation: 'N (uppercase) moves to the previous match, useful for navigating backwards through search results.'
+      }
+    ]
+  },
+  {
+    id: 'json-formatting',
+    title: 'JSON Data Formatting and Editing',
+    description: 'Transform messy JSON data into properly formatted, readable structure using VIM\'s powerful editing commands.',
+    category: 'developer',
+    difficulty: 'intermediate',
+    timeToMaster: '8-12 min',
+    useCase: 'Data formatting',
+    steps: [
+      {
+        command: 'ggVG=',
+        description: 'Auto-indent entire file',
+        before: {
+          text: [
+            '{"users":[{"id":1,"name":"Alice","email":"alice@example.com"},',
+            '{"id":2,"name":"Bob","email":"bob@example.com"},',
+            '{"id":3,"name":"Charlie","email":"charlie@example.com"}],',
+            '"settings":{"theme":"dark","notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Compressed JSON on few lines'
+        },
+        after: {
+          text: [
+            '{"users":[{"id":1,"name":"Alice","email":"alice@example.com"},',
+            '          {"id":2,"name":"Bob","email":"bob@example.com"},',
+            '          {"id":3,"name":"Charlie","email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark","notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Basic indentation applied'
+        },
+        explanation: 'ggVG= selects entire file (gg=top, V=visual line, G=bottom) and auto-indents with =.'
+      },
+      {
+        command: ':%s/,{/,\\r{/g',
+        description: 'Add newlines before objects',
+        before: {
+          text: [
+            '{"users":[{"id":1,"name":"Alice","email":"alice@example.com"},',
+            '          {"id":2,"name":"Bob","email":"bob@example.com"},',
+            '          {"id":3,"name":"Charlie","email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark","notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Objects on same lines'
+        },
+        after: {
+          text: [
+            '{"users":[{"id":1,"name":"Alice","email":"alice@example.com"},',
+            '{',
+            '          {"id":2,"name":"Bob","email":"bob@example.com"},',
+            '{',
+            '          {"id":3,"name":"Charlie","email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark","notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Newlines added before objects'
+        },
+        explanation: '\\r in replacement adds a newline, breaking objects onto separate lines for clarity.'
+      },
+      {
+        command: ':%s/,"/,\\r"/g',
+        description: 'Add newlines before properties',
+        before: {
+          text: [
+            '{"users":[{"id":1,"name":"Alice","email":"alice@example.com"},',
+            '{',
+            '          {"id":2,"name":"Bob","email":"bob@example.com"},',
+            '{',
+            '          {"id":3,"name":"Charlie","email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark","notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Properties on same lines'
+        },
+        after: {
+          text: [
+            '{"users":[{"id":1,',
+            '"name":"Alice",',
+            '"email":"alice@example.com"},',
+            '{',
+            '          {"id":2,',
+            '"name":"Bob",',
+            '"email":"bob@example.com"},',
+            '{',
+            '          {"id":3,',
+            '"name":"Charlie",',
+            '"email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark",',
+            '"notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Properties on separate lines'
+        },
+        explanation: 'Breaking properties onto separate lines makes JSON much more readable and editable.'
+      },
+      {
+        command: ':%s/\\[{/[\\r{/g',
+        description: 'Format array openings',
+        before: {
+          text: [
+            '{"users":[{"id":1,',
+            '"name":"Alice",',
+            '"email":"alice@example.com"},',
+            '{',
+            '          {"id":2,',
+            '"name":"Bob",',
+            '"email":"bob@example.com"},',
+            '{',
+            '          {"id":3,',
+            '"name":"Charlie",',
+            '"email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark",',
+            '"notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Array brackets need formatting'
+        },
+        after: {
+          text: [
+            '{"users":[',
+            '{"id":1,',
+            '"name":"Alice",',
+            '"email":"alice@example.com"},',
+            '{',
+            '          {"id":2,',
+            '"name":"Bob",',
+            '"email":"bob@example.com"},',
+            '{',
+            '          {"id":3,',
+            '"name":"Charlie",',
+            '"email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark",',
+            '"notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Array opening formatted'
+        },
+        explanation: 'Placing array elements on new lines improves structure visibility.'
+      },
+      {
+        command: 'ggVG=',
+        description: 'Re-indent after formatting',
+        before: {
+          text: [
+            '{"users":[',
+            '{"id":1,',
+            '"name":"Alice",',
+            '"email":"alice@example.com"},',
+            '{',
+            '          {"id":2,',
+            '"name":"Bob",',
+            '"email":"bob@example.com"},',
+            '{',
+            '          {"id":3,',
+            '"name":"Charlie",',
+            '"email":"charlie@example.com"}],',
+            ' "settings":{"theme":"dark",',
+            '"notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Inconsistent indentation'
+        },
+        after: {
+          text: [
+            '{"users":[',
+            '  {"id":1,',
+            '    "name":"Alice",',
+            '    "email":"alice@example.com"},',
+            '  {',
+            '    {"id":2,',
+            '      "name":"Bob",',
+            '      "email":"bob@example.com"},',
+            '    {',
+            '      {"id":3,',
+            '        "name":"Charlie",',
+            '        "email":"charlie@example.com"}],',
+            '  "settings":{"theme":"dark",',
+            '    "notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Proper indentation applied'
+        },
+        explanation: 'Final auto-indent creates consistent, readable JSON structure.'
+      },
+      {
+        command: '/Bob<CR>',
+        description: 'Find specific user',
+        before: {
+          text: [
+            '{"users":[',
+            '  {"id":1,',
+            '    "name":"Alice",',
+            '    "email":"alice@example.com"},',
+            '  {',
+            '    {"id":2,',
+            '      "name":"Bob",',
+            '      "email":"bob@example.com"},',
+            '    {',
+            '      {"id":3,',
+            '        "name":"Charlie",',
+            '        "email":"charlie@example.com"}],',
+            '  "settings":{"theme":"dark",',
+            '    "notifications":true}}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Navigate to specific data'
+        },
+        after: {
+          text: [
+            '{"users":[',
+            '  {"id":1,',
+            '    "name":"Alice",',
+            '    "email":"alice@example.com"},',
+            '  {',
+            '    {"id":2,',
+            '      "name":"Bob",',
+            '      "email":"bob@example.com"},',
+            '    {',
+            '      {"id":3,',
+            '        "name":"Charlie",',
+            '        "email":"charlie@example.com"}],',
+            '  "settings":{"theme":"dark",',
+            '    "notifications":true}}'
+          ],
+          cursorRow: 6,
+          cursorCol: 14,
+          mode: 'normal',
+          description: 'Cursor at "Bob"'
+        },
+        explanation: 'With formatted JSON, finding specific data becomes much easier.'
+      }
+    ]
+  },
+  {
+    id: 'git-conflict-resolution',
+    title: 'Resolving Git Merge Conflicts',
+    description: 'Learn efficient techniques to resolve git merge conflicts using VIM\'s powerful selection and deletion commands.',
+    category: 'developer',
+    difficulty: 'advanced',
+    timeToMaster: '10-15 min',
+    useCase: 'Version control',
+    steps: [
+      {
+        command: '/<<<<<<< HEAD',
+        description: 'Find conflict marker',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '<<<<<<< HEAD',
+            '  return a + b; // Our version',
+            '=======',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'File with merge conflicts'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '<<<<<<< HEAD',
+            '  return a + b; // Our version',
+            '=======',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At first conflict'
+        },
+        explanation: 'Navigate to the first merge conflict marker to begin resolution.'
+      },
+      {
+        command: 'V/=======\\n',
+        description: 'Select our version',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '<<<<<<< HEAD',
+            '  return a + b; // Our version',
+            '=======',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to select HEAD version'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '<<<<<<< HEAD',
+            '  return a + b; // Our version',
+            '=======',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'visual-line',
+          description: 'HEAD section selected'
+        },
+        explanation: 'V enters visual line mode, then search for ======= to select the entire HEAD section.'
+      },
+      {
+        command: 'd',
+        description: 'Delete conflict markers and HEAD version',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '<<<<<<< HEAD',
+            '  return a + b; // Our version',
+            '=======',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'visual-line',
+          description: 'HEAD section selected'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Kept their version'
+        },
+        explanation: 'd deletes the selected lines, effectively choosing their version of the code.'
+      },
+      {
+        command: 'dd',
+        description: 'Remove remaining conflict marker',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '>>>>>>> feature-branch',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At remaining marker'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'First conflict resolved'
+        },
+        explanation: 'dd deletes the entire line containing the conflict marker.'
+      },
+      {
+        command: '/<<<<<<< HEAD',
+        description: 'Find next conflict',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready for next conflict'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At second conflict'
+        },
+        explanation: 'Search for the next conflict marker to continue resolving.'
+      },
+      {
+        command: 'dd',
+        description: 'Delete HEAD marker',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '<<<<<<< HEAD',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Remove conflict marker'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'HEAD marker removed'
+        },
+        explanation: 'Remove the conflict marker to prepare for merging both versions.'
+      },
+      {
+        command: 'jjcwdebug',
+        description: 'Merge both versions',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.log("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to merge versions'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.debug("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 13,
+          mode: 'insert',
+          description: 'Changed log to debug'
+        },
+        explanation: 'jj moves down two lines, cw changes the word from "log" to "debug" to match their version.'
+      },
+      {
+        command: '<Esc>/=======',
+        description: 'Find separator to remove',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.debug("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 5,
+          cursorCol: 13,
+          mode: 'insert',
+          description: 'Ready to clean up'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.debug("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 7,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At separator'
+        },
+        explanation: 'Exit insert mode and navigate to the separator line.'
+      },
+      {
+        command: '3dd',
+        description: 'Remove duplicate code and markers',
+        before: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.debug("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '=======',
+            '  console.debug("Processing data:", data);',
+            '  return data.map(item => item * 2);',
+            '>>>>>>> feature-branch',
+            '}'
+          ],
+          cursorRow: 7,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Remove remaining conflict'
+        },
+        after: {
+          text: [
+            'function calculate(a, b) {',
+            '  return a + b + 1; // Their version adds 1',
+            '}',
+            '',
+            'function process(data) {',
+            '  console.debug("Processing:", data);',
+            '  return data.map(x => x * 2);',
+            '}'
+          ],
+          cursorRow: 7,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Conflicts resolved!'
+        },
+        explanation: '3dd deletes three lines at once, removing the separator and duplicate code.'
+      }
+    ]
+  },
+  {
+    id: 'column-editing',
+    title: 'Column Editing with Visual Block Mode',
+    description: 'Master VIM\'s visual block mode to edit multiple lines simultaneously - perfect for aligning code and data.',
+    category: 'general',
+    difficulty: 'intermediate',
+    timeToMaster: '5-8 min',
+    useCase: 'Multi-line editing',
+    steps: [
+      {
+        command: '<C-v>',
+        description: 'Enter visual block mode',
+        before: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'normal',
+          description: 'Variables need prefix change'
+        },
+        after: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'visual-block',
+          description: 'Visual block mode active'
+        },
+        explanation: 'Ctrl+V enters visual block mode, allowing rectangular selections across multiple lines.'
+      },
+      {
+        command: '4j',
+        description: 'Extend selection down',
+        before: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'visual-block',
+          description: 'Single character selected'
+        },
+        after: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 4,
+          cursorCol: 6,
+          mode: 'visual-block',
+          description: 'Column selected on all lines'
+        },
+        explanation: '4j moves down 4 lines, extending the visual block selection to cover all 5 lines.'
+      },
+      {
+        command: '3l',
+        description: 'Extend selection right',
+        before: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 4,
+          cursorCol: 6,
+          mode: 'visual-block',
+          description: 'Single column selected'
+        },
+        after: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 4,
+          cursorCol: 9,
+          mode: 'visual-block',
+          description: '"user" selected on all lines'
+        },
+        explanation: '3l moves right 3 characters, selecting "user" on all 5 lines simultaneously.'
+      },
+      {
+        command: 'c',
+        description: 'Change selected text',
+        before: {
+          text: [
+            'const userA = "Alice";',
+            'const userB = "Bob";',
+            'const userC = "Charlie";',
+            'const userD = "David";',
+            'const userE = "Eve";'
+          ],
+          cursorRow: 4,
+          cursorCol: 9,
+          mode: 'visual-block',
+          description: '"user" selected'
+        },
+        after: {
+          text: [
+            'const A = "Alice";',
+            'const B = "Bob";',
+            'const C = "Charlie";',
+            'const D = "David";',
+            'const E = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'insert',
+          description: 'Ready to type replacement'
+        },
+        explanation: 'c deletes the selected block and enters insert mode for replacement.'
+      },
+      {
+        command: 'person',
+        description: 'Type new prefix',
+        before: {
+          text: [
+            'const A = "Alice";',
+            'const B = "Bob";',
+            'const C = "Charlie";',
+            'const D = "David";',
+            'const E = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'insert',
+          description: 'In insert mode'
+        },
+        after: {
+          text: [
+            'const personA = "Alice";',
+            'const personB = "Bob";',
+            'const personC = "Charlie";',
+            'const personD = "David";',
+            'const personE = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 12,
+          mode: 'insert',
+          description: 'New prefix typed'
+        },
+        explanation: 'Typing in visual block mode applies the change to all selected lines.'
+      },
+      {
+        command: '<Esc>',
+        description: 'Apply changes to all lines',
+        before: {
+          text: [
+            'const personA = "Alice";',
+            'const personB = "Bob";',
+            'const personC = "Charlie";',
+            'const personD = "David";',
+            'const personE = "Eve";'
+          ],
+          cursorRow: 0,
+          cursorCol: 12,
+          mode: 'insert',
+          description: 'Changes pending'
+        },
+        after: {
+          text: [
+            'const personA = "Alice";',
+            'const personB = "Bob";',
+            'const personC = "Charlie";',
+            'const personD = "David";',
+            'const personE = "Eve";'
+          ],
+          cursorRow: 4,
+          cursorCol: 11,
+          mode: 'normal',
+          description: 'All variables renamed!'
+        },
+        explanation: 'Exiting insert mode applies the typed text to all lines that were selected in the visual block.'
+      }
+    ]
+  },
+  {
+    id: 'file-comparison',
+    title: 'File Comparison and Diff Navigation',
+    description: 'Navigate and edit files in diff mode to compare changes and merge differences efficiently.',
+    category: 'developer',
+    difficulty: 'advanced',
+    timeToMaster: '12-15 min',
+    useCase: 'Code review',
+    steps: [
+      {
+        command: ':vsplit oldfile.js',
+        description: 'Open file in vertical split',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Current file open'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Two files side by side'
+        },
+        explanation: ':vsplit opens another file in a vertical split for comparison.'
+      },
+      {
+        command: ':windo diffthis',
+        description: 'Enable diff mode',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Split view ready'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Diff highlighting active'
+        },
+        explanation: ':windo diffthis runs diffthis in all windows, highlighting differences.'
+      },
+      {
+        command: ']c',
+        description: 'Jump to next difference',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At file start'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'At first difference'
+        },
+        explanation: ']c jumps to the next change in diff mode.'
+      },
+      {
+        command: 'do',
+        description: 'Get change from other file',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b, c) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'At parameter difference'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Obtained old version'
+        },
+        explanation: 'do (diff obtain) pulls the change from the other window.'
+      },
+      {
+        command: ']c',
+        description: 'Next difference',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'First change merged'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'At sum calculation'
+        },
+        explanation: 'Navigate to the next difference to continue merging.'
+      },
+      {
+        command: 'dp',
+        description: 'Put change to other file',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'At new sum logic'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Pushed to other file'
+        },
+        explanation: 'dp (diff put) sends the current change to the other window.'
+      },
+      {
+        command: '[c',
+        description: 'Previous difference',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 2,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Moving backwards'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Back at parameters'
+        },
+        explanation: '[c jumps to the previous change, useful for reviewing.'
+      },
+      {
+        command: ':diffupdate',
+        description: 'Refresh diff highlighting',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'After changes'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 1,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Diff recalculated'
+        },
+        explanation: ':diffupdate recalculates differences after manual edits.'
+      },
+      {
+        command: 'zo',
+        description: 'Open folded unchanged text',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Unchanged text folded'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'All text visible'
+        },
+        explanation: 'zo opens folds to see context around changes.'
+      },
+      {
+        command: ':diffoff!',
+        description: 'Exit diff mode',
+        before: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In diff mode'
+        },
+        after: {
+          text: [
+            '// newfile.js',
+            'function calculate(a, b) {',
+            '  const sum = a + b + c;',
+            '  const average = sum / 3;',
+            '  return { sum, average };',
+            '}'
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Normal editing resumed'
+        },
+        explanation: ':diffoff! turns off diff mode in all windows.'
+      }
+    ]
+  },
+  {
+    id: 'quick-fixes',
+    title: 'Quick Fixes and Corrections',
+    description: 'Learn essential VIM commands for quickly fixing common typos and formatting issues.',
+    category: 'writer',
+    difficulty: 'beginner',
+    timeToMaster: '3-5 min',
+    useCase: 'Text correction',
+    steps: [
+      {
+        command: 'xp',
+        description: 'Transpose two characters',
+        before: {
+          text: [
+            'I need to fxi this typo quickly.',
+            'The order of tehse letters is wrong.',
+            'Sometimes I type too fsat.'
+          ],
+          cursorRow: 0,
+          cursorCol: 11,
+          mode: 'normal',
+          description: 'Cursor on swapped letters'
+        },
+        after: {
+          text: [
+            'I need to fix this typo quickly.',
+            'The order of tehse letters is wrong.',
+            'Sometimes I type too fsat.'
+          ],
+          cursorRow: 0,
+          cursorCol: 11,
+          mode: 'normal',
+          description: 'Characters transposed'
+        },
+        explanation: 'xp deletes character under cursor (x) and puts it after (p), effectively swapping two characters.'
+      },
+      {
+        command: 'ddp',
+        description: 'Swap current line with next',
+        before: {
+          text: [
+            'I need to fix this typo quickly.',
+            'The order of tehse letters is wrong.',
+            'Sometimes I type too fsat.'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Lines in wrong order'
+        },
+        after: {
+          text: [
+            'I need to fix this typo quickly.',
+            'Sometimes I type too fsat.',
+            'The order of tehse letters is wrong.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Lines swapped'
+        },
+        explanation: 'ddp deletes current line (dd) and puts it below (p), swapping two lines.'
+      },
+      {
+        command: '~',
+        description: 'Toggle case of character',
+        before: {
+          text: [
+            'I need to fix this typo quickly.',
+            'Sometimes I type too fsat.',
+            'the order of tehse letters is wrong.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Lowercase at start'
+        },
+        after: {
+          text: [
+            'I need to fix this typo quickly.',
+            'Sometimes I type too fsat.',
+            'The order of tehse letters is wrong.'
+          ],
+          cursorRow: 2,
+          cursorCol: 1,
+          mode: 'normal',
+          description: 'First letter capitalized'
+        },
+        explanation: '~ toggles the case of the character under cursor and moves right.'
+      },
+      {
+        command: 'r.',
+        description: 'Replace character with period',
+        before: {
+          text: [
+            'I need to fix this typo quickly.',
+            'Sometimes I type too fsat,',
+            'The order of tehse letters is wrong.'
+          ],
+          cursorRow: 1,
+          cursorCol: 25,
+          mode: 'normal',
+          description: 'Wrong punctuation'
+        },
+        after: {
+          text: [
+            'I need to fix this typo quickly.',
+            'Sometimes I type too fsat.',
+            'The order of tehse letters is wrong.'
+          ],
+          cursorRow: 1,
+          cursorCol: 25,
+          mode: 'normal',
+          description: 'Comma replaced with period'
+        },
+        explanation: 'r. replaces the character under cursor with a period without entering insert mode.'
+      }
+    ]
+  },
+  {
+    id: 'paragraph-manipulation',
+    title: 'Paragraph and Text Block Manipulation',
+    description: 'Master paragraph-level operations for efficient text restructuring and formatting.',
+    category: 'writer',
+    difficulty: 'intermediate',
+    timeToMaster: '7-10 min',
+    useCase: 'Document editing',
+    steps: [
+      {
+        command: 'vip',
+        description: 'Select inner paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph',
+            'that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 3,
+          cursorCol: 10,
+          mode: 'normal',
+          description: 'Cursor in middle paragraph'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph',
+            'that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 4,
+          cursorCol: 36,
+          mode: 'visual',
+          description: 'Entire paragraph selected'
+        },
+        explanation: 'vip selects "inner paragraph" - the current paragraph without surrounding blank lines.'
+      },
+      {
+        command: 'gq',
+        description: 'Format paragraph to line width',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph',
+            'that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 4,
+          cursorCol: 36,
+          mode: 'visual',
+          description: 'Paragraph selected'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Paragraph reformatted'
+        },
+        explanation: 'gq reformats selected text to fit within the configured line width (usually 80 characters).'
+      },
+      {
+        command: '}',
+        description: 'Jump to next paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At paragraph start'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At blank line'
+        },
+        explanation: '} moves forward to the next paragraph boundary (blank line).'
+      },
+      {
+        command: 'dap',
+        description: 'Delete a paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 2,
+          cursorCol: 10,
+          mode: 'normal',
+          description: 'In main paragraph'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Paragraph deleted with blanks'
+        },
+        explanation: 'dap deletes "a paragraph" including surrounding blank lines.'
+      },
+      {
+        command: 'p',
+        description: 'Paste deleted paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.'
+          ],
+          cursorRow: 2,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to paste'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            ''
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Paragraph pasted below'
+        },
+        explanation: 'p pastes the deleted paragraph after the current line, effectively moving it.'
+      },
+      {
+        command: '{',
+        description: 'Jump to previous paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            ''
+          ],
+          cursorRow: 5,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'In last paragraph'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            ''
+          ],
+          cursorRow: 3,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At previous blank line'
+        },
+        explanation: '{ moves backward to the previous paragraph boundary.'
+      },
+      {
+        command: '>ip',
+        description: 'Indent paragraph',
+        before: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.',
+            '',
+            'This is the main content paragraph that spans multiple lines and contains',
+            'important information for the reader.',
+            ''
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Unindented paragraph'
+        },
+        after: {
+          text: [
+            'Introduction paragraph here.',
+            '',
+            'Conclusion paragraph follows.',
+            '',
+            '    This is the main content paragraph that spans multiple lines and contains',
+            '    important information for the reader.',
+            ''
+          ],
+          cursorRow: 4,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Paragraph indented'
+        },
+        explanation: '>ip indents the inner paragraph, adding leading spaces to all lines.'
+      }
+    ]
+  },
+  {
+    id: 'number-manipulation',
+    title: 'Number Increment and Math Operations',
+    description: 'Use VIM\'s built-in number manipulation features for quick calculations and adjustments.',
+    category: 'general',
+    difficulty: 'beginner',
+    timeToMaster: '2-4 min',
+    useCase: 'Data editing',
+    steps: [
+      {
+        command: '<C-a>',
+        description: 'Increment number',
+        before: {
+          text: [
+            'Product quantity: 5',
+            'Price: $49.99',
+            'Discount: 10%',
+            'Year: 2023'
+          ],
+          cursorRow: 0,
+          cursorCol: 18,
+          mode: 'normal',
+          description: 'Cursor on number 5'
+        },
+        after: {
+          text: [
+            'Product quantity: 6',
+            'Price: $49.99',
+            'Discount: 10%',
+            'Year: 2023'
+          ],
+          cursorRow: 0,
+          cursorCol: 18,
+          mode: 'normal',
+          description: 'Number incremented to 6'
+        },
+        explanation: 'Ctrl+A increments the number under or after the cursor by 1.'
+      },
+      {
+        command: '5<C-a>',
+        description: 'Increment by specific amount',
+        before: {
+          text: [
+            'Product quantity: 6',
+            'Price: $49.99',
+            'Discount: 10%',
+            'Year: 2023'
+          ],
+          cursorRow: 2,
+          cursorCol: 10,
+          mode: 'normal',
+          description: 'At discount percentage'
+        },
+        after: {
+          text: [
+            'Product quantity: 6',
+            'Price: $49.99',
+            'Discount: 15%',
+            'Year: 2023'
+          ],
+          cursorRow: 2,
+          cursorCol: 10,
+          mode: 'normal',
+          description: 'Discount increased by 5'
+        },
+        explanation: 'Prefixing Ctrl+A with a number increments by that amount (5 in this case).'
+      },
+      {
+        command: '<C-x>',
+        description: 'Decrement number',
+        before: {
+          text: [
+            'Product quantity: 6',
+            'Price: $49.99',
+            'Discount: 15%',
+            'Year: 2023'
+          ],
+          cursorRow: 3,
+          cursorCol: 6,
+          mode: 'normal',
+          description: 'At year 2023'
+        },
+        after: {
+          text: [
+            'Product quantity: 6',
+            'Price: $49.99',
+            'Discount: 15%',
+            'Year: 2022'
+          ],
+          cursorRow: 3,
+          cursorCol: 9,
+          mode: 'normal',
+          description: 'Year decremented to 2022'
+        },
+        explanation: 'Ctrl+X decrements the number under or after the cursor by 1.'
+      }
+    ]
+  },
+  {
+    id: 'advanced-regex-substitution',
+    title: 'Advanced Regex Substitutions',
+    description: 'Harness the power of regular expressions for complex text transformations and pattern matching.',
+    category: 'developer',
+    difficulty: 'advanced',
+    timeToMaster: '15-20 min',
+    useCase: 'Complex refactoring',
+    steps: [
+      {
+        command: ':%s/\\(\\w\\+\\)_\\(\\w\\+\\)/\\U\\1\\u\\2/g',
+        description: 'Convert snake_case to CamelCase',
+        before: {
+          text: [
+            'const user_name = "John";',
+            'const user_email = "john@example.com";',
+            'const is_active = true;',
+            'const last_login_date = new Date();',
+            'const account_balance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Snake case variables'
+        },
+        after: {
+          text: [
+            'const UserName = "John";',
+            'const UserEmail = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Converted to CamelCase'
+        },
+        explanation: 'Complex regex using capture groups (\\1, \\2) and case modifiers (\\U=uppercase, \\u=capitalize).'
+      },
+      {
+        command: ':%s/= \\(".*"\\);/= \\L\\1;/g',
+        description: 'Convert strings to lowercase',
+        before: {
+          text: [
+            'const UserName = "John";',
+            'const UserEmail = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Mixed case strings'
+        },
+        after: {
+          text: [
+            'const UserName = "john";',
+            'const UserEmail = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'String values lowercased'
+        },
+        explanation: '\\L converts captured group to lowercase, affecting only string values.'
+      },
+      {
+        command: ':%s/\\v(\\w+)Email/\\1Address/g',
+        description: 'Use very magic mode for cleaner regex',
+        before: {
+          text: [
+            'const UserName = "john";',
+            'const UserEmail = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Email in variable name'
+        },
+        after: {
+          text: [
+            'const UserName = "john";',
+            'const UserAddress = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Email renamed to Address'
+        },
+        explanation: '\\v enables "very magic" mode where most characters have special meaning without escaping.'
+      },
+      {
+        command: ':%s/\\v"([^@]+)@[^"]+"/\\1/g',
+        description: 'Extract username from email',
+        before: {
+          text: [
+            'const UserName = "john";',
+            'const UserAddress = "john@example.com";',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Email address present'
+        },
+        after: {
+          text: [
+            'const UserName = "john";',
+            'const UserAddress = john;',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Email replaced with username'
+        },
+        explanation: '[^@]+ matches everything before @ in email, [^"]+ matches until closing quote.'
+      },
+      {
+        command: ':%s/\\v(const \\w+ \\= )([^;]+)/\\1validateInput(\\2)/g',
+        description: 'Wrap values in function call',
+        before: {
+          text: [
+            'const UserName = "john";',
+            'const UserAddress = john;',
+            'const IsActive = true;',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = 1000;'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Direct assignments'
+        },
+        after: {
+          text: [
+            'const UserName = validateInput("john");',
+            'const UserAddress = validateInput(john);',
+            'const IsActive = validateInput(true);',
+            'const LastLoginDate = validateInput(new Date());',
+            'const AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Values wrapped in validation'
+        },
+        explanation: 'Captures variable declaration and value separately, wraps value in function call.'
+      },
+      {
+        command: ':g/Date/s/validateInput(\\(.*\\))/\\1/g',
+        description: 'Remove validation from Date lines',
+        before: {
+          text: [
+            'const UserName = validateInput("john");',
+            'const UserAddress = validateInput(john);',
+            'const IsActive = validateInput(true);',
+            'const LastLoginDate = validateInput(new Date());',
+            'const AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'All values validated'
+        },
+        after: {
+          text: [
+            'const UserName = validateInput("john");',
+            'const UserAddress = validateInput(john);',
+            'const IsActive = validateInput(true);',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Date validation removed'
+        },
+        explanation: ':g/Date/ applies substitution only to lines containing "Date".'
+      },
+      {
+        command: ':%s/\\v^(\\s*)const (\\w+)/\\1let \\2/g',
+        description: 'Convert const to let',
+        before: {
+          text: [
+            'const UserName = validateInput("john");',
+            'const UserAddress = validateInput(john);',
+            'const IsActive = validateInput(true);',
+            'const LastLoginDate = new Date();',
+            'const AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Using const declarations'
+        },
+        after: {
+          text: [
+            'let UserName = validateInput("john");',
+            'let UserAddress = validateInput(john);',
+            'let IsActive = validateInput(true);',
+            'let LastLoginDate = new Date();',
+            'let AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Changed to let'
+        },
+        explanation: '^(\\s*) captures leading whitespace to preserve indentation.'
+      },
+      {
+        command: ':%s/\\v(\\d+)/$\\1.00/g',
+        description: 'Format numbers as currency',
+        before: {
+          text: [
+            'let UserName = validateInput("john");',
+            'let UserAddress = validateInput(john);',
+            'let IsActive = validateInput(true);',
+            'let LastLoginDate = new Date();',
+            'let AccountBalance = validateInput(1000);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Plain number'
+        },
+        after: {
+          text: [
+            'let UserName = validateInput("john");',
+            'let UserAddress = validateInput(john);',
+            'let IsActive = validateInput(true);',
+            'let LastLoginDate = new Date();',
+            'let AccountBalance = validateInput($1000.00);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Number formatted as currency'
+        },
+        explanation: '\\d+ matches one or more digits, replacement adds currency formatting.'
+      },
+      {
+        command: ':%s/\\vvalidateInput\\(([^)]+)\\)/sanitize(\\1, "strict")/g',
+        description: 'Add parameter to function calls',
+        before: {
+          text: [
+            'let UserName = validateInput("john");',
+            'let UserAddress = validateInput(john);',
+            'let IsActive = validateInput(true);',
+            'let LastLoginDate = new Date();',
+            'let AccountBalance = validateInput($1000.00);'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Single parameter functions'
+        },
+        after: {
+          text: [
+            'let UserName = sanitize("john", "strict");',
+            'let UserAddress = sanitize(john, "strict");',
+            'let IsActive = sanitize(true, "strict");',
+            'let LastLoginDate = new Date();',
+            'let AccountBalance = sanitize($1000.00, "strict");'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Function renamed with parameter'
+        },
+        explanation: '[^)]+ matches everything inside parentheses, avoiding nested parentheses issues.'
+      }
+    ]
+  },
+  {
+    id: 'spell-check-workflow',
+    title: 'Spell Checking and Corrections',
+    description: 'Use VIM\'s built-in spell checker to find and fix spelling errors efficiently.',
+    category: 'writer',
+    difficulty: 'intermediate',
+    timeToMaster: '5-7 min',
+    useCase: 'Proofreading',
+    steps: [
+      {
+        command: ':set spell',
+        description: 'Enable spell checking',
+        before: {
+          text: [
+            'The qiuck brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Text with spelling errors'
+        },
+        after: {
+          text: [
+            'The qiuck brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Spell check enabled (errors highlighted)'
+        },
+        explanation: ':set spell enables spell checking, highlighting misspelled words.'
+      },
+      {
+        command: ']s',
+        description: 'Jump to next misspelling',
+        before: {
+          text: [
+            'The qiuck brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'At beginning'
+        },
+        after: {
+          text: [
+            'The qiuck brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Cursor at "qiuck"'
+        },
+        explanation: ']s moves to the next misspelled word.'
+      },
+      {
+        command: 'z=',
+        description: 'Show spelling suggestions',
+        before: {
+          text: [
+            'The qiuck brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'On misspelled word'
+        },
+        after: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Word corrected to "quick"'
+        },
+        explanation: 'z= shows spelling suggestions; selecting one replaces the misspelled word.'
+      },
+      {
+        command: ']s',
+        description: 'Next misspelling',
+        before: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'First error fixed'
+        },
+        after: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 5,
+          mode: 'normal',
+          description: 'At "sentance"'
+        },
+        explanation: 'Continue navigating through spelling errors.'
+      },
+      {
+        command: '1z=',
+        description: 'Choose first suggestion',
+        before: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentance contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 5,
+          mode: 'normal',
+          description: 'On "sentance"'
+        },
+        after: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentence contains mispelled words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 5,
+          mode: 'normal',
+          description: 'Corrected to "sentence"'
+        },
+        explanation: '1z= automatically selects the first suggestion without showing the menu.'
+      },
+      {
+        command: 'zg',
+        description: 'Add word to dictionary',
+        before: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentence contains VIM-specific words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'On "VIM" (marked as error)'
+        },
+        after: {
+          text: [
+            'The quick brown fox jumps over the lazy dog.',
+            'This sentence contains VIM-specific words.',
+            'Grammer and spelling are impotant for clarity.',
+            'Sometimes we make typoes when writing quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 23,
+          mode: 'normal',
+          description: '"VIM" added to dictionary'
+        },
+        explanation: 'zg adds the word under cursor to the spell check dictionary as a good word.'
+      }
+    ]
+  },
+  {
+    id: 'buffer-navigation',
+    title: 'Efficient Buffer and Window Management',
+    description: 'Master working with multiple files using buffers, windows, and tabs for productive editing sessions.',
+    category: 'developer',
+    difficulty: 'intermediate',
+    timeToMaster: '8-10 min',
+    useCase: 'Multi-file editing',
+    steps: [
+      {
+        command: ':e config.js',
+        description: 'Open another file',
+        before: {
+          text: [
+            '// main.js',
+            'import config from "./config";',
+            'import utils from "./utils";',
+            '',
+            'function main() {',
+            '  console.log("Starting application");',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Editing main.js'
+        },
+        after: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Now editing config.js'
+        },
+        explanation: ':e opens a file in the current window, adding it to the buffer list.'
+      },
+      {
+        command: ':ls',
+        description: 'List all buffers',
+        before: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Multiple files open'
+        },
+        after: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Buffer list shown'
+        },
+        explanation: ':ls shows all open buffers with their numbers and status.'
+      },
+      {
+        command: ':b1',
+        description: 'Switch to buffer 1',
+        before: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In config.js'
+        },
+        after: {
+          text: [
+            '// main.js',
+            'import config from "./config";',
+            'import utils from "./utils";',
+            '',
+            'function main() {',
+            '  console.log("Starting application");',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Back in main.js'
+        },
+        explanation: ':b1 switches to buffer number 1 (or :b filename for named switching).'
+      },
+      {
+        command: '<C-^>',
+        description: 'Toggle between buffers',
+        before: {
+          text: [
+            '// main.js',
+            'import config from "./config";',
+            'import utils from "./utils";',
+            '',
+            'function main() {',
+            '  console.log("Starting application");',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In main.js'
+        },
+        after: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Quickly back to config.js'
+        },
+        explanation: 'Ctrl+^ toggles between the current and alternate (previous) buffer.'
+      },
+      {
+        command: ':split utils.js',
+        description: 'Open file in horizontal split',
+        before: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Single window'
+        },
+        after: {
+          text: [
+            '// utils.js',
+            'export function formatDate(date) {',
+            '  return date.toISOString();',
+            '}',
+            '',
+            'export function delay(ms) {',
+            '  return new Promise(resolve => setTimeout(resolve, ms));',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'utils.js in top split'
+        },
+        explanation: ':split opens a file in a new horizontal window split.'
+      },
+      {
+        command: '<C-w>w',
+        description: 'Cycle through windows',
+        before: {
+          text: [
+            '// utils.js',
+            'export function formatDate(date) {',
+            '  return date.toISOString();',
+            '}',
+            '',
+            'export function delay(ms) {',
+            '  return new Promise(resolve => setTimeout(resolve, ms));',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In top window'
+        },
+        after: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Moved to bottom window'
+        },
+        explanation: 'Ctrl+W W cycles through all open windows.'
+      },
+      {
+        command: ':tabnew test.js',
+        description: 'Open file in new tab',
+        before: {
+          text: [
+            '// config.js',
+            'export default {',
+            '  apiUrl: "https://api.example.com",',
+            '  timeout: 5000,',
+            '  retries: 3',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In split window'
+        },
+        after: {
+          text: [
+            '// test.js',
+            'describe("Main functionality", () => {',
+            '  it("should initialize correctly", () => {',
+            '    expect(true).toBe(true);',
+            '  });',
+            '});'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'New tab with test.js'
+        },
+        explanation: ':tabnew opens a file in a new tab for separate workspace.'
+      },
+      {
+        command: 'gt',
+        description: 'Go to next tab',
+        before: {
+          text: [
+            '// test.js',
+            'describe("Main functionality", () => {',
+            '  it("should initialize correctly", () => {',
+            '    expect(true).toBe(true);',
+            '  });',
+            '});'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'In second tab'
+        },
+        after: {
+          text: [
+            '// utils.js',
+            'export function formatDate(date) {',
+            '  return date.toISOString();',
+            '}',
+            '',
+            'export function delay(ms) {',
+            '  return new Promise(resolve => setTimeout(resolve, ms));',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Back to first tab'
+        },
+        explanation: 'gt moves to the next tab (gT for previous tab).'
+      }
+    ]
+  },
+  {
+    id: 'quick-macro-recording',
+    title: 'Quick Macro Recording',
+    description: 'Record and replay simple macros to automate repetitive tasks efficiently.',
+    category: 'general',
+    difficulty: 'beginner',
+    timeToMaster: '4-6 min',
+    useCase: 'Task automation',
+    steps: [
+      {
+        command: 'qa',
+        description: 'Start recording macro in register a',
+        before: {
+          text: [
+            'item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Plain list items'
+        },
+        after: {
+          text: [
+            'item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Recording macro...'
+        },
+        explanation: 'qa starts recording a macro into register "a". All following commands will be recorded.'
+      },
+      {
+        command: 'I- ',
+        description: 'Insert dash and space at beginning',
+        before: {
+          text: [
+            'item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Recording actions'
+        },
+        after: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 0,
+          cursorCol: 2,
+          mode: 'insert',
+          description: 'Prefix added'
+        },
+        explanation: 'I moves to beginning of line and enters insert mode, then we type "- ".'
+      },
+      {
+        command: '<Esc>j',
+        description: 'Exit insert mode and move down',
+        before: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 0,
+          cursorCol: 2,
+          mode: 'insert',
+          description: 'Still recording'
+        },
+        after: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready for next line'
+        },
+        explanation: 'Esc exits insert mode, j moves to the next line.'
+      },
+      {
+        command: 'q',
+        description: 'Stop recording macro',
+        before: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Recording complete'
+        },
+        after: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Macro saved in register a'
+        },
+        explanation: 'q stops the macro recording. The macro is now stored in register "a".'
+      },
+      {
+        command: '4@a',
+        description: 'Replay macro 4 times',
+        before: {
+          text: [
+            '- item1',
+            'item2',
+            'item3',
+            'item4',
+            'item5'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to replay'
+        },
+        after: {
+          text: [
+            '- item1',
+            '- item2',
+            '- item3',
+            '- item4',
+            '- item5'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'All items prefixed!'
+        },
+        explanation: '4@a replays the macro in register "a" 4 times, formatting all remaining lines.'
+      }
+    ]
+  },
+  {
+    id: 'session-management',
+    title: 'Session Management and Workspace Restoration',
+    description: 'Save and restore complete VIM sessions including windows, buffers, and settings for project continuity.',
+    category: 'developer',
+    difficulty: 'advanced',
+    timeToMaster: '10-12 min',
+    useCase: 'Project management',
+    steps: [
+      {
+        command: ':set sessionoptions+=resize',
+        description: 'Configure session options',
+        before: {
+          text: [
+            '// Current workspace with multiple files open',
+            'function processData() {',
+            '  // Complex project setup',
+            '  return data.map(transform);',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Complex workspace'
+        },
+        after: {
+          text: [
+            '// Current workspace with multiple files open',
+            'function processData() {',
+            '  // Complex project setup',
+            '  return data.map(transform);',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Session options configured'
+        },
+        explanation: 'sessionoptions determines what gets saved in a session file. Adding "resize" saves window sizes.'
+      },
+      {
+        command: ':vsplit README.md',
+        description: 'Create complex window layout',
+        before: {
+          text: [
+            '// Current workspace with multiple files open',
+            'function processData() {',
+            '  // Complex project setup',
+            '  return data.map(transform);',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Single window'
+        },
+        after: {
+          text: [
+            '# Project README',
+            '',
+            'This project demonstrates VIM session management.',
+            'All window layouts can be saved and restored.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Split window layout'
+        },
+        explanation: 'Create a complex window arrangement that we want to save.'
+      },
+      {
+        command: ':tabnew TODO.txt',
+        description: 'Add another tab',
+        before: {
+          text: [
+            '# Project README',
+            '',
+            'This project demonstrates VIM session management.',
+            'All window layouts can be saved and restored.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Split windows in tab 1'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'TODO list in new tab'
+        },
+        explanation: 'Add multiple tabs to demonstrate full workspace preservation.'
+      },
+      {
+        command: ':mksession ~/project-session.vim',
+        description: 'Save current session',
+        before: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Complete workspace setup'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Session saved to file'
+        },
+        explanation: ':mksession creates a Vim script that recreates the current editing session.'
+      },
+      {
+        command: ':qa',
+        description: 'Quit all windows',
+        before: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'About to exit'
+        },
+        after: {
+          text: [
+            '~',
+            '~',
+            '~',
+            'VIM - Vi IMproved'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Fresh VIM instance'
+        },
+        explanation: ':qa quits all windows, simulating closing VIM completely.'
+      },
+      {
+        command: 'vim -S ~/project-session.vim',
+        description: 'Restore session from command line',
+        before: {
+          text: [
+            '~',
+            '~',
+            '~',
+            'VIM - Vi IMproved'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Starting fresh'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Workspace fully restored!'
+        },
+        explanation: 'vim -S loads a session file, restoring all windows, tabs, and buffer positions.'
+      },
+      {
+        command: ':source ~/project-session.vim',
+        description: 'Restore session from within VIM',
+        before: {
+          text: [
+            'some_file.txt',
+            'with random content'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Already in VIM'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Session restored'
+        },
+        explanation: ':source can load a session file from within a running VIM instance.'
+      },
+      {
+        command: ':set sessionoptions+=globals',
+        description: 'Save global variables too',
+        before: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Basic session'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Enhanced session options'
+        },
+        explanation: 'Adding "globals" saves global variables, preserving even more state.'
+      },
+      {
+        command: ':mksession!',
+        description: 'Overwrite existing session',
+        before: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Updated workspace'
+        },
+        after: {
+          text: [
+            '[ ] Complete feature implementation',
+            '[ ] Write unit tests',
+            '[ ] Update documentation',
+            '[x] Setup project structure'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Session updated'
+        },
+        explanation: 'The ! forces overwriting an existing session file with current state.'
+      }
+    ]
+  },
+  {
+    id: 'smart-abbreviations',
+    title: 'Smart Abbreviations and Auto-Expansion',
+    description: 'Set up intelligent abbreviations that expand automatically as you type for faster writing.',
+    category: 'writer',
+    difficulty: 'beginner',
+    timeToMaster: '3-5 min',
+    useCase: 'Writing efficiency',
+    steps: [
+      {
+        command: ':ab teh the',
+        description: 'Create simple typo correction',
+        before: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Common typo present'
+        },
+        after: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly.'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Abbreviation defined'
+        },
+        explanation: ':ab creates an abbreviation that auto-expands when typing.'
+      },
+      {
+        command: 'A Teh cat is here.',
+        description: 'Type text with abbreviation',
+        before: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly.'
+          ],
+          cursorRow: 1,
+          cursorCol: 36,
+          mode: 'normal',
+          description: 'Ready to append'
+        },
+        after: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.'
+          ],
+          cursorRow: 1,
+          cursorCol: 55,
+          mode: 'insert',
+          description: 'Auto-corrected to "The"'
+        },
+        explanation: 'When you type "teh" followed by a space or punctuation, it automatically becomes "the".'
+      },
+      {
+        command: '<Esc>:iab sig Best regards,<CR>John Smith',
+        description: 'Create multi-line signature',
+        before: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.'
+          ],
+          cursorRow: 1,
+          cursorCol: 54,
+          mode: 'normal',
+          description: 'Creating signature'
+        },
+        after: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.'
+          ],
+          cursorRow: 1,
+          cursorCol: 54,
+          mode: 'normal',
+          description: 'Multi-line abbreviation set'
+        },
+        explanation: ':iab creates insert-mode only abbreviations. <CR> in the expansion creates newlines.'
+      },
+      {
+        command: 'osig',
+        description: 'Use signature abbreviation',
+        before: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.'
+          ],
+          cursorRow: 1,
+          cursorCol: 54,
+          mode: 'normal',
+          description: 'Ready to sign'
+        },
+        after: {
+          text: [
+            'I often type teh instead of the correct word.',
+            'This happens when I type too quickly. The cat is here.',
+            'Best regards,',
+            'John Smith'
+          ],
+          cursorRow: 3,
+          cursorCol: 10,
+          mode: 'insert',
+          description: 'Signature expanded!'
+        },
+        explanation: 'Typing "sig" followed by space expands to the full signature block.'
+      }
+    ]
   }
 ]

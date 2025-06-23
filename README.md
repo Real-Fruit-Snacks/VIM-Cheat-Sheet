@@ -175,7 +175,7 @@ Every command features:
 - **Step-by-Step Explanations** - Clear descriptions of command behavior
 
 ### 🎭 Workflow Demo System
-Sixteen comprehensive demonstrations showcasing:
+Thirty comprehensive demonstrations showcasing:
 - **Multi-Step Workflows** - Learn how commands combine for real-world tasks
 - **Auto-Play Mode** - Watch complete workflows unfold automatically with 3-second steps
 - **Manual Navigation** - Step through at your own pace with forward/backward controls
