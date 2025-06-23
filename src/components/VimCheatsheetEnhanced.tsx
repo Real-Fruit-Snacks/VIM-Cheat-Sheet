@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X, Zap } from 'lucide-react'
+import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X, Zap, Sun, Moon, Download, Upload } from 'lucide-react'
 import { useDebounce } from '../hooks/useDebounce'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 import { useSwipeGesture } from '../hooks/useSwipeGesture'
+import { useTheme } from '../hooks/useTheme'
 import MobileSidebar from './MobileSidebar'
 import VirtualCommandList from './VirtualCommandList'
 import SearchSuggestions from './SearchSuggestions'
@@ -38,6 +39,8 @@ export default function VimCheatsheetEnhanced() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCommandIndex, setSelectedCommandIndex] = useState(0)
   const [currentView, setCurrentView] = useState<'commands' | 'demos'>('commands')
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
+  const [showSearchHistory, setShowSearchHistory] = useState(false)
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -51,9 +54,13 @@ export default function VimCheatsheetEnhanced() {
 
   // Initialize enhanced search
   const enhancedSearch = useMemo(() => new EnhancedSearch(vimCommands), [])
+  
+  // Theme management
+  const { theme, toggleTheme } = useTheme()
 
-  // Load favorites from localStorage with fallback
+  // Load favorites and search history from localStorage with fallback
   useEffect(() => {
+    // Load favorites
     const savedFavorites = safeGetItem('vim-cheatsheet-favorites')
     if (savedFavorites) {
       try {
@@ -62,12 +69,27 @@ export default function VimCheatsheetEnhanced() {
         console.error('Failed to parse favorites:', error)
       }
     }
+    
+    // Load search history
+    const savedHistory = safeGetItem('vim-cheatsheet-search-history')
+    if (savedHistory) {
+      try {
+        setSearchHistory(JSON.parse(savedHistory))
+      } catch (error) {
+        console.error('Failed to parse search history:', error)
+      }
+    }
   }, [])
 
   // Save favorites to localStorage with fallback
   useEffect(() => {
     safeSetItem('vim-cheatsheet-favorites', JSON.stringify(Array.from(favorites)))
   }, [favorites])
+  
+  // Save search history to localStorage with fallback
+  useEffect(() => {
+    safeSetItem('vim-cheatsheet-search-history', JSON.stringify(searchHistory))
+  }, [searchHistory])
 
   // Enhanced commands with difficulty and frequency
   const enhancedCommands = useMemo(() => {
@@ -224,6 +246,26 @@ export default function VimCheatsheetEnhanced() {
   const clearCommandBuilder = () => {
     setCommandBuilder('')
   }
+  
+  // Add search to history
+  const addToSearchHistory = (term: string) => {
+    if (!term.trim()) return
+    
+    setSearchHistory(prev => {
+      // Remove duplicates and add to front
+      const filtered = prev.filter(h => h !== term)
+      const newHistory = [term, ...filtered].slice(0, 10) // Keep last 10
+      return newHistory
+    })
+  }
+  
+  // Handle search submission
+  const handleSearchSubmit = (term: string) => {
+    if (term.trim()) {
+      addToSearchHistory(term)
+      setShowSearchHistory(false)
+    }
+  }
 
   const copyCommandBuilder = async () => {
     try {
@@ -238,6 +280,8 @@ export default function VimCheatsheetEnhanced() {
   const selectSuggestion = (suggestion: string) => {
     setSearchTerm(suggestion)
     setShowSuggestions(false)
+    setShowSearchHistory(false)
+    handleSearchSubmit(suggestion)
     searchInputRef.current?.focus()
   }
 
@@ -248,6 +292,68 @@ export default function VimCheatsheetEnhanced() {
         setSelectedFilter('all')
       }
     }
+  }
+  
+  const exportFavorites = () => {
+    const favoritesData = {
+      version: '1.0',
+      exportDate: new Date().toISOString(),
+      favorites: Array.from(favorites),
+      count: favorites.size
+    }
+    
+    const dataStr = JSON.stringify(favoritesData, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `vim-favorites-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+  
+  const importFavorites = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'application/json'
+    
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+      
+      try {
+        const text = await file.text()
+        const data = JSON.parse(text)
+        
+        // Validate the data
+        if (!data.favorites || !Array.isArray(data.favorites)) {
+          throw new Error('Invalid favorites file format')
+        }
+        
+        // Merge with existing favorites or replace
+        const shouldMerge = confirm(
+          `Import ${data.favorites.length} favorites?\n\n` +
+          `Choose OK to merge with existing favorites, or Cancel to replace them.`
+        )
+        
+        if (shouldMerge) {
+          setFavorites(prev => new Set([...prev, ...data.favorites]))
+        } else {
+          setFavorites(new Set(data.favorites))
+        }
+        
+        // Show imported count
+        alert(`Successfully imported ${data.favorites.length} favorites!`)
+      } catch (error) {
+        alert('Failed to import favorites. Please ensure the file is a valid JSON export.')
+        console.error('Import error:', error)
+      }
+    }
+    
+    input.click()
   }
 
   // Keyboard navigation handlers
@@ -326,6 +432,20 @@ export default function VimCheatsheetEnhanced() {
   useEffect(() => {
     commandElementsRef.current.clear()
   }, [filteredCommands])
+  
+  // Handle clicking outside to close search history
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showSearchHistory && searchInputRef.current && !searchInputRef.current.contains(event.target as Node)) {
+        setShowSearchHistory(false)
+      }
+    }
+    
+    if (showSearchHistory) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showSearchHistory])
 
   // Check if command has example
   const hasExample = (command: string): boolean => {
@@ -333,13 +453,13 @@ export default function VimCheatsheetEnhanced() {
   }
 
   return (
-    <div className="h-screen bg-gray-900 text-gray-100 flex overflow-hidden">
+    <div className="h-screen bg-theme-bg-primary text-theme-text-primary flex overflow-hidden">
       {/* Sidebar */}
       <MobileSidebar
         ref={sidebarRef}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(prev => !prev)}
-        className="w-64 md:w-80 border-r border-gray-700 flex flex-col"
+        className="w-64 md:w-80 border-r border-theme-border-primary flex flex-col"
       >
         <div className="p-4 space-y-4">
           {/* Search Bar */}
@@ -353,8 +473,19 @@ export default function VimCheatsheetEnhanced() {
                 onChange={(e) => {
                   setSearchTerm(e.target.value)
                   setShowSuggestions(true)
+                  setShowSearchHistory(false)
                 }}
-                onFocus={() => setShowSuggestions(true)}
+                onFocus={() => {
+                  setShowSuggestions(true)
+                  if (!searchTerm && searchHistory.length > 0) {
+                    setShowSearchHistory(true)
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearchSubmit(searchTerm)
+                  }
+                }}
                 placeholder="Search commands... (press /)"
                 className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500 text-sm"
               />
@@ -363,6 +494,7 @@ export default function VimCheatsheetEnhanced() {
                   onClick={() => {
                     setSearchTerm('')
                     setShowSuggestions(false)
+                    setShowSearchHistory(false)
                   }}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
                 >
@@ -379,6 +511,52 @@ export default function VimCheatsheetEnhanced() {
               onSelectSuggestion={selectSuggestion}
               isVisible={showSuggestions && (searchSuggestions.length > 0 || !!commonMistakeSuggestion)}
             />
+            
+            {/* Search History */}
+            {showSearchHistory && searchHistory.length > 0 && (
+              <div className="absolute top-full mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg overflow-hidden z-50">
+                <div className="p-2 border-b border-gray-700">
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase">Recent Searches</h4>
+                </div>
+                <div className="max-h-48 overflow-y-auto">
+                  {searchHistory.map((term, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchTerm(term)
+                        setShowSearchHistory(false)
+                        handleSearchSubmit(term)
+                      }}
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-gray-700 transition-colors flex items-center justify-between group"
+                    >
+                      <span className="text-gray-300">{term}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSearchHistory(prev => prev.filter((_, i) => i !== index))
+                        }}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-red-400"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </button>
+                  ))}
+                </div>
+                {searchHistory.length > 0 && (
+                  <div className="p-2 border-t border-gray-700">
+                    <button
+                      onClick={() => {
+                        setSearchHistory([])
+                        setShowSearchHistory(false)
+                      }}
+                      className="text-xs text-gray-400 hover:text-red-400 transition-colors"
+                    >
+                      Clear search history
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Filters */}
@@ -423,6 +601,30 @@ export default function VimCheatsheetEnhanced() {
                 </select>
               </div>
             )}
+          </div>
+          
+          {/* Favorites Management */}
+          <div className="px-4 pb-4">
+            <div className={`flex ${favorites.size > 0 ? 'space-x-2' : ''}`}>
+              {favorites.size > 0 && (
+                <button
+                  onClick={exportFavorites}
+                  className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors"
+                  title="Export favorites as JSON"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>Export</span>
+                </button>
+              )}
+              <button
+                onClick={importFavorites}
+                className={`${favorites.size > 0 ? 'flex-1' : 'w-full'} flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors`}
+                title="Import favorites from JSON"
+              >
+                <Upload className="h-4 w-4" />
+                <span>Import Favorites</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -566,10 +768,24 @@ export default function VimCheatsheetEnhanced() {
           
           <button
             onClick={toggleKeyboardHelp}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors mb-2"
           >
             <Keyboard className="h-4 w-4" />
             <span className="text-sm">Keyboard Shortcuts</span>
+          </button>
+          
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+            <span className="text-sm">
+              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            </span>
           </button>
         </div>
       </MobileSidebar>

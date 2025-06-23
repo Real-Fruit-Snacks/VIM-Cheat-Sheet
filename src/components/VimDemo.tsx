@@ -29,6 +29,7 @@ interface VimDemoProps {
 const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [playbackSpeed, setPlaybackSpeed] = useState(1)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   // Cleanup timeout on unmount
@@ -40,6 +41,29 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       }
     }
   }, [])
+  
+  // Restart playback when speed changes if currently playing
+  useEffect(() => {
+    if (isPlaying && intervalRef.current) {
+      // Clear current timeout
+      clearTimeout(intervalRef.current)
+      
+      // Continue from current step with new speed
+      const advanceToNextStep = () => {
+        if (currentStep < demo.steps.length - 1) {
+          setCurrentStep(prev => prev + 1)
+          intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+        } else {
+          intervalRef.current = setTimeout(() => {
+            setIsPlaying(false)
+          }, 3000 / playbackSpeed)
+        }
+      }
+      
+      // Schedule next step with new speed
+      intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+    }
+  }, [playbackSpeed, isPlaying, currentStep, demo.steps.length])
 
   const nextStep = () => {
     if (currentStep < demo.steps.length - 1) {
@@ -81,17 +105,17 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       if (currentStepIndex < totalSteps) {
         // Show the next step and schedule another advance
         setCurrentStep(currentStepIndex)
-        intervalRef.current = setTimeout(advanceToNextStep, 3000)
+        intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
       } else {
         // All steps have been shown, stop the demo after last step gets full time
         intervalRef.current = setTimeout(() => {
           setIsPlaying(false)
-        }, 3000)
+        }, 3000 / playbackSpeed)
       }
     }
     
     // Schedule the first advance (step 0 → step 1)
-    intervalRef.current = setTimeout(advanceToNextStep, 3000)
+    intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
   }
 
   const getCategoryIcon = (category: string) => {
@@ -157,6 +181,24 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
             >
               <RotateCcw className="h-4 w-4" />
             </button>
+            
+            {/* Speed Control */}
+            <div className="flex items-center space-x-1 ml-4 bg-gray-800 rounded-lg px-2 py-1">
+              <span className="text-xs text-gray-400 mr-1">Speed:</span>
+              {[0.5, 1, 1.5, 2].map(speed => (
+                <button
+                  key={speed}
+                  onClick={() => setPlaybackSpeed(speed)}
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                    playbackSpeed === speed
+                      ? 'bg-green-600 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                  }`}
+                >
+                  {speed}x
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
