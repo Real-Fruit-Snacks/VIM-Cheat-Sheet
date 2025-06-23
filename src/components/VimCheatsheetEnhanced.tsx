@@ -268,12 +268,13 @@ export default function VimCheatsheetEnhanced() {
   }
 
   const copyCommandBuilder = async () => {
-    try {
-      await navigator.clipboard.writeText(commandBuilder)
+    const result = await safeCopyToClipboard(commandBuilder)
+    if (result.success) {
       setCopiedCommand(commandBuilder)
       setTimeout(() => setCopiedCommand(null), 2000)
-    } catch (error) {
-      console.error('Failed to copy command builder:', error)
+    } else {
+      // Show error toast or fallback UI
+      alert(`Copy command sequence manually: ${commandBuilder}`)
     }
   }
 
@@ -303,57 +304,131 @@ export default function VimCheatsheetEnhanced() {
     }
     
     const dataStr = JSON.stringify(favoritesData, null, 2)
-    const blob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
     
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `vim-favorites-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
+    try {
+      // Try modern Blob download approach
+      const blob = new Blob([dataStr], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `vim-favorites-${new Date().toISOString().split('T')[0]}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      // Fallback: Show data in a text area for manual copying
+      console.warn('Blob download blocked, using text fallback:', error)
+      const fallbackModal = document.createElement('div')
+      fallbackModal.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+          <div style="background: #1f2937; color: white; padding: 20px; border-radius: 8px; max-width: 600px; width: 90%;">
+            <h3 style="margin-top: 0;">Export Favorites (Manual Copy)</h3>
+            <p>Copy the JSON data below and save it as a .json file:</p>
+            <textarea style="width: 100%; height: 300px; background: #374151; color: white; border: 1px solid #6b7280; padding: 10px; font-family: monospace;" readonly>${dataStr}</textarea>
+            <div style="margin-top: 15px; text-align: right;">
+              <button onclick="this.closest('div').parentElement.remove()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Close</button>
+            </div>
+          </div>
+        </div>
+      `
+      document.body.appendChild(fallbackModal)
+    }
   }
   
   const importFavorites = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'application/json'
-    
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (!file) return
+    try {
+      // Try file input approach
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = 'application/json'
       
-      try {
-        const text = await file.text()
-        const data = JSON.parse(text)
+      input.onchange = async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0]
+        if (!file) return
         
-        // Validate the data
-        if (!data.favorites || !Array.isArray(data.favorites)) {
-          throw new Error('Invalid favorites file format')
+        try {
+          const text = await file.text()
+          const data = JSON.parse(text)
+          
+          // Validate the data
+          if (!data.favorites || !Array.isArray(data.favorites)) {
+            throw new Error('Invalid favorites file format')
+          }
+          
+          // Merge with existing favorites or replace (safe confirm fallback)
+          let shouldMerge = true
+          try {
+            shouldMerge = confirm(
+              `Import ${data.favorites.length} favorites?\n\n` +
+              `Choose OK to merge with existing favorites, or Cancel to replace them.`
+            )
+          } catch {
+            // If confirm is blocked, default to merge
+            shouldMerge = true
+          }
+          
+          if (shouldMerge) {
+            setFavorites(prev => new Set([...prev, ...data.favorites]))
+          } else {
+            setFavorites(new Set(data.favorites))
+          }
+          
+          // Show imported count (safe alert fallback)
+          try {
+            alert(`Successfully imported ${data.favorites.length} favorites!`)
+          } catch {
+            console.log(`Successfully imported ${data.favorites.length} favorites!`)
+          }
+        } catch (error) {
+          try {
+            alert('Failed to import favorites. Please ensure the file is a valid JSON export.')
+          } catch {
+            console.error('Failed to import favorites:', error)
+          }
         }
-        
-        // Merge with existing favorites or replace
-        const shouldMerge = confirm(
-          `Import ${data.favorites.length} favorites?\n\n` +
-          `Choose OK to merge with existing favorites, or Cancel to replace them.`
-        )
-        
-        if (shouldMerge) {
-          setFavorites(prev => new Set([...prev, ...data.favorites]))
-        } else {
-          setFavorites(new Set(data.favorites))
-        }
-        
-        // Show imported count
-        alert(`Successfully imported ${data.favorites.length} favorites!`)
-      } catch (error) {
-        alert('Failed to import favorites. Please ensure the file is a valid JSON export.')
-        console.error('Import error:', error)
       }
+      
+      input.click()
+    } catch (error) {
+      // Fallback: Show paste interface for manual JSON input
+      console.warn('File input blocked, using paste fallback:', error)
+      const pasteModal = document.createElement('div')
+      pasteModal.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+          <div style="background: #1f2937; color: white; padding: 20px; border-radius: 8px; max-width: 600px; width: 90%;">
+            <h3 style="margin-top: 0;">Import Favorites (Paste JSON)</h3>
+            <p>Paste your exported favorites JSON data below:</p>
+            <textarea id="pasteArea" style="width: 100%; height: 300px; background: #374151; color: white; border: 1px solid #6b7280; padding: 10px; font-family: monospace;" placeholder="Paste JSON data here..."></textarea>
+            <div style="margin-top: 15px; text-align: right;">
+              <button onclick="this.closest('div').parentElement.remove()" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px;">Cancel</button>
+              <button onclick="
+                try {
+                  const data = JSON.parse(document.getElementById('pasteArea').value);
+                  if (!data.favorites || !Array.isArray(data.favorites)) throw new Error('Invalid format');
+                  window.vimImportCallback(data.favorites);
+                  this.closest('div').parentElement.remove();
+                } catch(e) {
+                  alert('Invalid JSON format. Please check your data.');
+                }
+              " style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Import</button>
+            </div>
+          </div>
+        </div>
+      `
+      
+      // Set up callback for manual import
+      interface WindowWithCallback extends Window {
+        vimImportCallback?: (favoritesArray: string[]) => void
+      }
+      ;(window as WindowWithCallback).vimImportCallback = (favoritesArray: string[]) => {
+        setFavorites(prev => new Set([...prev, ...favoritesArray]))
+        console.log(`Successfully imported ${favoritesArray.length} favorites!`)
+      }
+      
+      document.body.appendChild(pasteModal)
     }
-    
-    input.click()
   }
 
   // Keyboard navigation handlers
