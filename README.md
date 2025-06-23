@@ -10,7 +10,7 @@
   </p>
   
   <p align="center">
-    315+ Commands • Interactive Examples • Offline Ready • Performance Optimized
+    315+ Commands • Interactive Examples • Workflow Demos • Offline Ready • Performance Optimized
   </p>
   
   <p align="center">
@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.1.1-blue.svg" alt="Version 3.1.1" />
+      <img src="https://img.shields.io/badge/version-3.1.3-blue.svg" alt="Version 3.1.3" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -75,6 +75,25 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
     </td>
   </tr>
 </table>
+
+## 🚀 Version 3.1.3 - Interactive Workflow Demos
+
+### 🎭 Revolutionary Learning Experience
+- **6 Comprehensive Workflow Demos**: Learn real-world VIM usage patterns through step-by-step interactive demonstrations
+- **Multi-step Command Sequences**: See how individual commands combine into powerful workflows
+- **Auto-play & Manual Navigation**: Choose your learning style - watch demos play automatically or step through manually
+- **Real-world Scenarios**: Code refactoring, markdown formatting, CSV cleanup, advanced navigation, and text object mastery
+
+### 🏗️ Enhanced Architecture
+- **Demo System Integration**: Seamless view switching between individual commands and comprehensive workflows
+- **Consistent Visualization**: Workflow demos use the same VIM-accurate rendering as individual command examples
+- **Performance Optimized**: Efficient state management with proper cleanup to prevent memory leaks
+- **Declarative Demo Data**: Easy extensibility through structured demo definitions
+
+### 🎯 Workflow Categories
+- **Developer Workflows**: Code refactoring, commenting, navigation patterns
+- **Writer Workflows**: Markdown formatting, document structure
+- **General Workflows**: Data processing, text manipulation, advanced editing
 
 ## 🚀 Version 3.1.1 - Build Fix & Deployment Stability
 
@@ -137,6 +156,7 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
 
 ### Core Capabilities
 - **315+ VIM Commands** - Complete coverage across all VIM functionality
+- **6 Workflow Demos** - Real-world multi-step demonstrations showing VIM mastery
 - **24 Organized Categories** - From basic movement to advanced macros  
 - **Interactive Examples** - Animated demonstrations for every command
 - **Integrated Documentation** - 16 official VIM help files included offline
@@ -151,6 +171,15 @@ Every command features:
 - **Mode Indicators** - Visual feedback for Normal/Insert/Visual modes
 - **Realistic Scenarios** - Practical examples you'll actually encounter
 - **Step-by-Step Explanations** - Clear descriptions of command behavior
+
+### 🎭 Workflow Demo System
+Six comprehensive demonstrations showcasing:
+- **Multi-Step Workflows** - Learn how commands combine for real-world tasks
+- **Auto-Play Mode** - Watch complete workflows unfold automatically with 3-second steps
+- **Manual Navigation** - Step through at your own pace with forward/backward controls
+- **Categorized by Use Case** - Developer, writer, and general editing workflows
+- **Difficulty Progression** - From beginner-friendly to advanced VIM mastery
+- **Time Estimates** - Know how long each workflow takes to master
 
 ### 📚 Integrated VIM Documentation
 - **16 Official VIM Help Files** - Complete offline documentation
@@ -223,7 +252,7 @@ Perfect for offline and air-gapped environments:
 
 #### Option 1: Download Release
 1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-2. Extract `vim-cheatsheet-v3.1.1-gitlab-pages.zip`
+2. Extract `vim-cheatsheet-v3.1.3-gitlab-pages.zip`
 3. Upload contents to your GitLab Pages repository
 4. Enable GitLab Pages in project settings
 
@@ -396,6 +425,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.1.1 | 315+ Commands | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.1.3 | 315+ Commands • 6 Workflow Demos | Performance Optimized</sub>
   </p>
 </div>
