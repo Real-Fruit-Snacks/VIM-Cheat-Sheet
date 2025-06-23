@@ -17,12 +17,19 @@ npm run preview
 # Linting (ESLint with TypeScript rules)
 npm run lint
 
+# Type checking without emitting files
+npx tsc --noEmit
+
 # Deployment to GitHub Pages  
 npm run deploy
 
 # GitLab Pages build (for offline GitLab Pages)
 npm run build:gitlab
 ```
+
+## Testing
+
+This project currently has no automated test suite. Interactive testing is done through the development server and manual verification of VIM command accuracy.
 
 ## Architecture Overview
 
@@ -131,3 +138,22 @@ Current performance metrics:
 - `VimCommandExampleAnimated` syncs internal state with prop changes for demo progression
 - React.memo optimization prevents unnecessary re-renders during step transitions
 - Component follows VIM principles with instant state transitions (no animations)
+
+## Development Notes
+
+**Code Quality:**
+- Always run `npm run lint` and `npx tsc --noEmit` before committing
+- Maintain TypeScript strict mode compliance
+- Follow existing component patterns and naming conventions
+
+**Adding New VIM Commands:**
+1. Add command definition to `src/data/vim-commands.ts`
+2. Add interactive example to `src/data/vim-examples.ts` 
+3. Ensure both before/after states are VIM-accurate
+4. Test the example renders correctly in the application
+
+**Adding New Workflow Demos:**
+1. Define demo structure in `src/data/vim-demos.ts`
+2. Create step-by-step `DemoStep` array with realistic scenarios
+3. Test auto-play and manual navigation work correctly
+4. Verify all steps display for full 3-second duration
