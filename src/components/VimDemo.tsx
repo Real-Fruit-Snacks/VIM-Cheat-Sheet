@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Play, RotateCcw, ChevronLeft, ChevronRight, Clock, Target } from 'lucide-react'
 import VimCommandExampleAnimated, { type ExampleState } from './VimCommandExampleAnimated'
 
@@ -29,6 +29,17 @@ interface VimDemoProps {
 const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Cleanup interval on unmount or when isPlaying changes
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [])
 
   const nextStep = () => {
     if (currentStep < demo.steps.length - 1) {
@@ -43,23 +54,36 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   }
 
   const reset = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
     setCurrentStep(0)
     setIsPlaying(false)
   }
 
   const playDemo = () => {
-    setIsPlaying(true)
-    setCurrentStep(0)
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
     
-    // Auto-advance through steps
+    setIsPlaying(true)
+    
+    // Auto-advance through steps starting from step 0
     let stepIndex = 0
-    const interval = setInterval(() => {
+    setCurrentStep(stepIndex)
+    
+    intervalRef.current = setInterval(() => {
       stepIndex++
       if (stepIndex < demo.steps.length) {
         setCurrentStep(stepIndex)
       } else {
         setIsPlaying(false)
-        clearInterval(interval)
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
+        }
       }
     }, 3000) // 3 seconds per step
   }
