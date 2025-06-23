@@ -28,8 +28,6 @@ export default function VimCheatsheetEnhanced() {
   const [sortBy, setSortBy] = useState<SortType>('category')
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null)
-  const [commandBuilder, setCommandBuilder] = useState<string>('')
-  const [showCommandBuilder, setShowCommandBuilder] = useState(false)
   const [showExamples, setShowExamples] = useState<Set<string>>(new Set())
   const [showHelpViewer, setShowHelpViewer] = useState(false)
   const [helpFile, setHelpFile] = useState<string>('index.txt')
@@ -219,13 +217,6 @@ export default function VimCheatsheetEnhanced() {
     }
   }
 
-  const addToCommandBuilder = (command: string) => {
-    setCommandBuilder(prev => prev + command)
-    if (!showCommandBuilder) {
-      setShowCommandBuilder(true)
-    }
-  }
-
   const toggleExample = (command: string) => {
     const newShowExamples = new Set(showExamples)
     if (newShowExamples.has(command)) {
@@ -243,10 +234,6 @@ export default function VimCheatsheetEnhanced() {
     setShowHelpViewer(true)
   }
 
-  const clearCommandBuilder = () => {
-    setCommandBuilder('')
-  }
-  
   // Add search to history
   const addToSearchHistory = (term: string) => {
     if (!term.trim()) return
@@ -264,17 +251,6 @@ export default function VimCheatsheetEnhanced() {
     if (term.trim()) {
       addToSearchHistory(term)
       setShowSearchHistory(false)
-    }
-  }
-
-  const copyCommandBuilder = async () => {
-    const result = await safeCopyToClipboard(commandBuilder)
-    if (result.success) {
-      setCopiedCommand(commandBuilder)
-      setTimeout(() => setCopiedCommand(null), 2000)
-    } else {
-      // Show error toast or fallback UI
-      alert(`Copy command sequence manually: ${commandBuilder}`)
     }
   }
 
@@ -787,33 +763,6 @@ export default function VimCheatsheetEnhanced() {
           </div>
         </div>
 
-        {/* Command Builder */}
-        {showCommandBuilder && (
-          <div className="border-t border-gray-700 p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-semibold text-gray-400">Command Builder</h4>
-              <button
-                onClick={clearCommandBuilder}
-                className="text-xs text-gray-500 hover:text-gray-300"
-              >
-                Clear
-              </button>
-            </div>
-            <div className="flex items-center space-x-2">
-              <code className="flex-1 bg-gray-800 text-green-300 px-3 py-2 rounded font-mono text-sm">
-                {commandBuilder || 'Empty'}
-              </code>
-              <button
-                onClick={copyCommandBuilder}
-                className="p-2 text-gray-400 hover:text-white"
-                title="Copy command"
-              >
-                <Copy className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* View Switcher */}
         <div className="border-t border-gray-700 p-4">
           <div className="grid grid-cols-2 gap-2 mb-4">
@@ -963,7 +912,6 @@ export default function VimCheatsheetEnhanced() {
                         height={600}
                         onCopyCommand={copyCommand}
                         onToggleFavorite={toggleFavorite}
-                        onAddToBuilder={addToCommandBuilder}
                         onToggleExample={toggleExample}
                         onOpenHelp={openHelpViewer}
                         favorites={favorites}
@@ -988,10 +936,9 @@ export default function VimCheatsheetEnhanced() {
                               }}
                               className={`
                                 bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 
-                                transition-colors cursor-pointer group
+                                transition-colors group
                                 ${isSelected ? 'ring-2 ring-green-500' : ''}
                               `}
-                              onClick={() => addToCommandBuilder(cmd.command)}
                             >
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center space-x-3">

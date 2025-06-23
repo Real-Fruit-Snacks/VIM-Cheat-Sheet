@@ -9,7 +9,6 @@ interface VirtualCommandListProps {
   height: number
   onCopyCommand: (command: string) => void
   onToggleFavorite: (command: string) => void
-  onAddToBuilder: (command: string) => void
   onToggleExample: (command: string) => void
   onOpenHelp: (command: string, category: string) => void
   favorites: Set<string>
@@ -26,7 +25,6 @@ interface CommandRowProps {
     commands: (ExpandedCommand & { category: string })[]
     onCopyCommand: (command: string) => void
     onToggleFavorite: (command: string) => void
-    onAddToBuilder: (command: string) => void
     onToggleExample: (command: string) => void
     onOpenHelp: (command: string, category: string) => void
     favorites: Set<string>
@@ -50,10 +48,9 @@ const CommandRow = memo(({ index, style, data }: CommandRowProps) => {
   return (
     <div style={style} className="px-4">
       <div
-        className={`bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 transition-colors cursor-pointer group ${
+        className={`bg-gray-800/50 rounded-lg p-4 hover:bg-gray-800 transition-colors group ${
           isSelected ? 'ring-2 ring-green-500' : ''
         }`}
-        onClick={() => data.onAddToBuilder(cmd.command)}
       >
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-center space-x-3">
@@ -171,7 +168,6 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
   height,
   onCopyCommand,
   onToggleFavorite,
-  onAddToBuilder,
   onToggleExample,
   onOpenHelp,
   favorites,
@@ -204,7 +200,6 @@ const VirtualCommandList: React.FC<VirtualCommandListProps> = ({
     commands,
     onCopyCommand,
     onToggleFavorite,
-    onAddToBuilder,
     onToggleExample,
     onOpenHelp,
     favorites,
