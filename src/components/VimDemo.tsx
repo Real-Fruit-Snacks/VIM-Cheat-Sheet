@@ -50,10 +50,23 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       
       // Continue from current step with new speed
       const advanceToNextStep = () => {
-        if (currentStep < demo.steps.length - 1) {
-          setCurrentStep(prev => prev + 1)
-          intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+        const nextStepIndex = currentStep + 1
+        if (nextStepIndex < demo.steps.length) {
+          // Move to next step
+          setCurrentStep(nextStepIndex)
+          
+          // Check if this is the last step
+          if (nextStepIndex === demo.steps.length - 1) {
+            // This is the last step - schedule demo stop after full duration
+            intervalRef.current = setTimeout(() => {
+              setIsPlaying(false)
+            }, 3000 / playbackSpeed)
+          } else {
+            // Not the last step - schedule another advance
+            intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+          }
         } else {
+          // Already on last step - just wait for it to finish
           intervalRef.current = setTimeout(() => {
             setIsPlaying(false)
           }, 3000 / playbackSpeed)
@@ -103,14 +116,22 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     const advanceToNextStep = () => {
       currentStepIndex++
       if (currentStepIndex < totalSteps) {
-        // Show the next step and schedule another advance
+        // Show the next step
         setCurrentStep(currentStepIndex)
-        intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+        
+        // Check if this is the last step
+        if (currentStepIndex === totalSteps - 1) {
+          // This is the last step - schedule demo stop after full duration
+          intervalRef.current = setTimeout(() => {
+            setIsPlaying(false)
+          }, 3000 / playbackSpeed)
+        } else {
+          // Not the last step - schedule another advance
+          intervalRef.current = setTimeout(advanceToNextStep, 3000 / playbackSpeed)
+        }
       } else {
-        // All steps have been shown, stop the demo after last step gets full time
-        intervalRef.current = setTimeout(() => {
-          setIsPlaying(false)
-        }, 3000 / playbackSpeed)
+        // Shouldn't reach here with the new logic, but safety fallback
+        setIsPlaying(false)
       }
     }
     

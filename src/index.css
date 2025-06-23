@@ -24,27 +24,6 @@
   --warning-color: #f59e0b;
 }
 
-[data-theme="light"] {
-  /* Light theme */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --bg-hover: #e5e7eb;
-  --border-primary: #e5e7eb;
-  --border-secondary: #d1d5db;
-  --text-primary: #111827;
-  --text-secondary: #374151;
-  --text-tertiary: #6b7280;
-  --text-muted: #9ca3af;
-  --accent-primary: #059669;
-  --accent-secondary: #047857;
-  --accent-hover: #065f46;
-  --link-color: #2563eb;
-  --link-hover: #1d4ed8;
-  --error-color: #dc2626;
-  --warning-color: #d97706;
-}
-
 /* Apply theme colors to base elements */
 body {
   background-color: var(--bg-primary);

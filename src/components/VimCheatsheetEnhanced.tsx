@@ -1,9 +1,8 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X, Zap, Sun, Moon, Download, Upload } from 'lucide-react'
+import { Search, Copy, Heart, Filter, ArrowUp, ArrowDown, PlayCircle, HelpCircle, Keyboard, X, Zap, Download, Upload } from 'lucide-react'
 import { useDebounce } from '../hooks/useDebounce'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 import { useSwipeGesture } from '../hooks/useSwipeGesture'
-import { useTheme } from '../hooks/useTheme'
 import MobileSidebar from './MobileSidebar'
 import VirtualCommandList from './VirtualCommandList'
 import SearchSuggestions from './SearchSuggestions'
@@ -52,9 +51,6 @@ export default function VimCheatsheetEnhanced() {
 
   // Initialize enhanced search
   const enhancedSearch = useMemo(() => new EnhancedSearch(vimCommands), [])
-  
-  // Theme management
-  const { theme, toggleTheme } = useTheme()
 
   // Load favorites and search history from localStorage with fallback
   useEffect(() => {
@@ -793,24 +789,10 @@ export default function VimCheatsheetEnhanced() {
         <div className="border-t border-gray-700 p-4">
           <button
             onClick={toggleKeyboardHelp}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors mb-2"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
           >
             <Keyboard className="h-4 w-4" />
             <span className="text-sm">Keyboard Shortcuts</span>
-          </button>
-          
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
-          >
-            {theme === 'dark' ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-            <span className="text-sm">
-              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            </span>
           </button>
         </div>
       </MobileSidebar>
