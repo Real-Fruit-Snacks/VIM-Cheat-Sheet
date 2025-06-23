@@ -513,6 +513,32 @@ export default function VimCheatsheetEnhanced() {
         className="w-64 md:w-80 border-r border-theme-border-primary flex flex-col"
       >
         <div className="p-4 space-y-4">
+          {/* View Switcher */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setCurrentView('commands')}
+              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
+                currentView === 'commands' 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+              }`}
+            >
+              <Search className="h-4 w-4" />
+              <span className="text-sm">Commands</span>
+            </button>
+            <button
+              onClick={() => setCurrentView('demos')}
+              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
+                currentView === 'demos' 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              <span className="text-sm">Demos</span>
+            </button>
+          </div>
+          
           {/* Search Bar */}
           <div className="relative">
             <div className="relative">
@@ -763,33 +789,8 @@ export default function VimCheatsheetEnhanced() {
           </div>
         </div>
 
-        {/* View Switcher */}
+        {/* Settings */}
         <div className="border-t border-gray-700 p-4">
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <button
-              onClick={() => setCurrentView('commands')}
-              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
-                currentView === 'commands' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
-              }`}
-            >
-              <Search className="h-4 w-4" />
-              <span className="text-sm">Commands</span>
-            </button>
-            <button
-              onClick={() => setCurrentView('demos')}
-              className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
-                currentView === 'demos' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
-              }`}
-            >
-              <Zap className="h-4 w-4" />
-              <span className="text-sm">Demos</span>
-            </button>
-          </div>
-          
           <button
             onClick={toggleKeyboardHelp}
             className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded transition-colors mb-2"
