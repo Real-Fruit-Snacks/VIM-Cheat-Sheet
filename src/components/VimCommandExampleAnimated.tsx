@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Play, RotateCcw } from 'lucide-react'
 
 export interface ExampleState {
@@ -23,6 +23,12 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
   const [isAnimating, setIsAnimating] = useState(false)
   const [showBefore, setShowBefore] = useState(true)
 
+  // Update internal state when props change (for demo auto-play and reset)
+  useEffect(() => {
+    setCurrentState(before)
+    setShowBefore(true)
+    setIsAnimating(false)
+  }, [before, after, command])
 
   const runExample = () => {
     if (isAnimating) return
