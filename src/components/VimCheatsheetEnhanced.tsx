@@ -500,7 +500,7 @@ export default function VimCheatsheetEnhanced() {
   }
 
   return (
-    <div className="h-screen bg-theme-bg-primary text-theme-text-primary flex overflow-hidden">
+    <div className="h-screen bg-theme-bg-secondary text-theme-text-primary flex overflow-hidden">
       {/* Sidebar */}
       <MobileSidebar
         ref={sidebarRef}
