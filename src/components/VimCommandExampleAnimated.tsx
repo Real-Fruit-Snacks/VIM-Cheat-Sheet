@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Play, RotateCcw } from 'lucide-react'
 
 export interface ExampleState {
@@ -23,14 +23,18 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
   const [currentState, setCurrentState] = useState<ExampleState>(before)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showBefore, setShowBefore] = useState(true)
-  const [hasAutoPlayed, setHasAutoPlayed] = useState(false)
+  const playbackRef = useRef<string>('')
+
+  // Create a unique key for the current state
+  const stateKey = `${command}-${JSON.stringify(before)}-${JSON.stringify(after)}`
 
   // Update internal state when props change (for demo auto-play and reset)
   useEffect(() => {
     setCurrentState(before)
     setShowBefore(true)
     setIsAnimating(false)
-    setHasAutoPlayed(false)
+    // Reset playback ref when state changes
+    playbackRef.current = ''
   }, [before, after, command])
 
   const runExample = useCallback(() => {
@@ -50,21 +54,21 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
 
   // Trigger animation when autoPlay prop is true
   useEffect(() => {
-    if (autoPlay && !isAnimating && !hasAutoPlayed) {
-      setHasAutoPlayed(true)
+    if (autoPlay && !isAnimating && playbackRef.current !== stateKey) {
+      playbackRef.current = stateKey
       // Small delay to ensure the component renders the before state first
       const timeoutId = setTimeout(() => {
         runExample()
       }, 100)
       return () => clearTimeout(timeoutId)
     }
-  }, [autoPlay, before, after, command, isAnimating, hasAutoPlayed, runExample])
+  }, [autoPlay, isAnimating, stateKey, runExample])
 
   const reset = () => {
     setIsAnimating(false)
     setShowBefore(true)
     setCurrentState(before)
-    setHasAutoPlayed(false)
+    playbackRef.current = ''
   }
 
   const getModeColor = (mode: string) => {
