@@ -31,17 +31,6 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
     setIsAnimating(false)
   }, [before, after, command])
 
-  // Trigger animation when autoPlay prop is true
-  useEffect(() => {
-    if (autoPlay && !isAnimating) {
-      // Small delay to ensure the component renders the before state first
-      const timeoutId = setTimeout(() => {
-        runExample()
-      }, 100)
-      return () => clearTimeout(timeoutId)
-    }
-  }, [autoPlay, before, after, command, isAnimating, runExample])
-
   const runExample = useCallback(() => {
     if (isAnimating) return
     
@@ -56,6 +45,17 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       setIsAnimating(false)
     }, 150) // Brief pause to show the command execution
   }, [isAnimating, before, after])
+
+  // Trigger animation when autoPlay prop is true
+  useEffect(() => {
+    if (autoPlay && !isAnimating) {
+      // Small delay to ensure the component renders the before state first
+      const timeoutId = setTimeout(() => {
+        runExample()
+      }, 100)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [autoPlay, before, after, command, isAnimating, runExample])
 
   const reset = () => {
     setIsAnimating(false)
