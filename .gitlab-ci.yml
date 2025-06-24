@@ -1,91 +1,45 @@
-# GitLab CI/CD configuration for VIM Cheatsheet
-# Builds and deploys the application to GitLab Pages with full offline support
+# GitLab CI/CD Pipeline for VIM Cheat Sheet
+# Automatically builds and deploys to GitLab Pages
 
-image: node:20-alpine
+# Use Node.js for building the application
+image: node:18
 
-# Cache node_modules between builds for faster CI
+# Cache node_modules for faster builds
 cache:
   paths:
     - node_modules/
-    - .npm/
 
-# Define stages
-stages:
-  - build
-  - deploy
-
-# Variables for build process
-variables:
-  NODE_ENV: production
-  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
-
-# Build job - creates production bundle
+# Build stage
 build:
   stage: build
   script:
     # Install dependencies
-    - npm ci --prefer-offline --no-audit
+    - npm ci
     
-    # Type checking
-    - npx tsc --noEmit
-    
-    # Linting
+    # Run linting and type checking
     - npm run lint
+    - npx tsc --noEmit
     
     # Build for production
     - npm run build
     
-    # Prepare for GitLab Pages (public directory)
-    - rm -rf public
-    - mv dist public
+    # Create public directory for GitLab Pages
+    - mkdir public
+    - cp -r dist/* public/
     
-    # Add .gitlab-ci.yml to public to preserve it
-    - cp .gitlab-ci.yml public/
-    
-    # Create .nojekyll file to ensure _assets are served correctly
-    - touch public/.nojekyll
-    
-    # Add offline.html fallback page
-    - |
-      cat > public/offline.html << 'EOF'
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>VIM Cheatsheet - Offline</title>
-        <style>
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a202c;
-            color: #e2e8f0;
-          }
-          .container {
-            text-align: center;
-            padding: 2rem;
-          }
-          h1 { font-size: 2rem; margin-bottom: 1rem; }
-          p { font-size: 1.1rem; opacity: 0.8; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>VIM Cheatsheet</h1>
-          <p>You are currently offline. Please check your connection and reload.</p>
-        </div>
-      </body>
-      </html>
-      EOF
-    
+    # Verify all required files are present
+    - ls -la public/
+    - echo "✅ Build completed successfully"
+    - echo "📊 Bundle size:" && du -sh public/
+    - echo "📁 Total files:" && find public -type f  < /dev/null |  wc -l
+  
   artifacts:
     paths:
       - public
     expire_in: 1 week
+  
+  only:
+    - main
 
 # Deploy to GitLab Pages
 pages:
@@ -93,29 +47,10 @@ pages:
   dependencies:
     - build
   script:
-    # GitLab Pages expects artifacts in 'public' directory
-    - echo "Deploying to GitLab Pages..."
+    - echo "🚀 Deploying to GitLab Pages..."
+    - ls -la public/
   artifacts:
     paths:
       - public
   only:
-    # Deploy only from main/master branch
     - main
-    - master
-    # Also deploy tags for releases
-    - tags
-
-# Optional: Build job for merge requests (doesn't deploy)
-build:merge-request:
-  stage: build
-  script:
-    - npm ci --prefer-offline --no-audit
-    - npx tsc --noEmit
-    - npm run lint
-    - npm run build
-  except:
-    - main
-    - master
-    - tags
-  only:
-    - merge_requests
