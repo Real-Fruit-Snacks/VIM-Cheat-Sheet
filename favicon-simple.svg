@@ -1,25 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- Dark background with subtle gradient -->
-  <rect width="32" height="32" rx="7" fill="#111827"/>
-  
-  <!-- Terminal-style border -->
-  <rect x="1" y="1" width="30" height="30" rx="6" fill="none" stroke="#10b981" stroke-width="1" opacity="0.8"/>
-  
-  <!-- VIM text with enhanced visibility -->
-  <text x="16" y="22" font-family="monospace" font-size="11" fill="#10b981" font-weight="bold" text-anchor="middle">VIM</text>
-  
-  <!-- Cursor block -->
-  <rect x="14" y="8" width="4" height="6" fill="#10b981"/>
-  
-  <!-- Command prompt -->
-  <circle cx="8" cy="11" r="1" fill="#10b981" opacity="0.7"/>
-  <circle cx="24" cy="11" r="1" fill="#10b981" opacity="0.7"/>
-  
-  <!-- Subtle grid pattern for terminal feel -->
   <defs>
-    <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
-      <path d="M 4 0 L 0 0 0 4" fill="none" stroke="#10b981" stroke-width="0.2" opacity="0.3"/>
-    </pattern>
+    <!-- Simple shadow -->
+    <filter id="shadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="0.5" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
   </defs>
-  <rect x="2" y="2" width="28" height="28" fill="url(#grid)"/>
+  
+  <!-- Dark background -->
+  <rect width="32" height="32" rx="7" fill="#0f172a"/>
+  
+  <!-- Document representation -->
+  <rect x="4" y="4" width="24" height="24" rx="3" fill="#ffffff" stroke="#e5e7eb" stroke-width="0.5" filter="url(#shadow)"/>
+  
+  <!-- Header -->
+  <rect x="4" y="4" width="24" height="8" rx="3" rx-bottom="0" fill="#f8fafc"/>
+  
+  <!-- VIM text -->
+  <text x="16" y="10" font-family="monospace" font-size="5" fill="#10b981" font-weight="bold" text-anchor="middle">VIM</text>
+  
+  <!-- Content lines -->
+  <rect x="6" y="14" width="10" height="1" fill="#10b981" rx="0.5"/>
+  <rect x="17" y="14" width="9" height="1" fill="#6b7280" rx="0.5"/>
+  
+  <rect x="6" y="17" width="8" height="1" fill="#6b7280" rx="0.5"/>
+  <rect x="15" y="17" width="11" height="1" fill="#9ca3af" rx="0.5"/>
+  
+  <rect x="6" y="20" width="12" height="1" fill="#10b981" rx="0.5"/>
+  <rect x="19" y="20" width="7" height="1" fill="#6b7280" rx="0.5"/>
+  
+  <rect x="6" y="23" width="9" height="1" fill="#6b7280" rx="0.5"/>
+  <rect x="16" y="23" width="10" height="1" fill="#9ca3af" rx="0.5"/>
+  
+  <!-- Interactive indicator -->
+  <circle cx="25" cy="16" r="2" fill="#10b981" opacity="0.9"/>
+  <path d="M24 15 L26 16 L24 17 Z" fill="#ffffff" stroke="none"/>
+  
+  <!-- Command bullets -->
+  <circle cx="7" cy="14.5" r="0.5" fill="#10b981"/>
+  <circle cx="7" cy="20.5" r="0.5" fill="#10b981"/>
 </svg>

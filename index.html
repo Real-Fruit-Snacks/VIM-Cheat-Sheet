@@ -2,20 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/VIM.io/favicon-simple.svg" />
-    <link rel="alternate icon" href="/VIM.io/favicon-detailed.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/VIM.io/favicon-detailed.svg" />
+    <link rel="icon" type="image/x-icon" href="/VIM/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/VIM/favicon-simple.svg" />
+    <link rel="alternate icon" href="/VIM/favicon-detailed.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/VIM/favicon-detailed.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VIM.io - Interactive VIM Learning Platform</title>
-    <script src="/VIM.io/coi-serviceworker.js"></script>
-    <script type="module" src="/VIM.io/vim-wasm-wrapper.js"></script>
-    <script type="module" crossorigin src="/VIM.io/assets/index-DzVQqcOP.js"></script>
-    <link rel="modulepreload" crossorigin href="/VIM.io/assets/react-vendor--LiB1GGk.js">
-    <link rel="modulepreload" crossorigin href="/VIM.io/assets/monaco-BAmLzoF6.js">
-    <link rel="stylesheet" crossorigin href="/VIM.io/assets/monaco-CQpBiZrI.css">
-    <link rel="stylesheet" crossorigin href="/VIM.io/assets/index-xRFBKsMW.css">
+    <title>VIM Cheatsheet - Interactive Commands & Workflow Demos</title>
+    <meta name="description" content="Master VIM with 315+ animated commands and 30 real-world workflow demos. Interactive tutorials for developers, writers, and power users." />
+    <link rel="manifest" href="/VIM/manifest.json" />
+    <meta name="theme-color" content="#2d3748" />
+    <link rel="stylesheet" href="./loading.css" />
+    <script type="module" crossorigin src="/VIM/assets/index-BLsu-Fej.js"></script>
+    <link rel="modulepreload" crossorigin href="/VIM/assets/react-vendor-BI3NJeJA.js">
+    <link rel="modulepreload" crossorigin href="/VIM/assets/lucide-icons-CDKSCHcf.js">
+    <link rel="modulepreload" crossorigin href="/VIM/assets/virtual-list-ClG89pmT.js">
+    <link rel="modulepreload" crossorigin href="/VIM/assets/vim-data-CHOkHQGo.js">
+    <link rel="modulepreload" crossorigin href="/VIM/assets/search-utils-Dy8evkUE.js">
+    <link rel="stylesheet" crossorigin href="/VIM/assets/index-RcK5RgFl.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Immediate loading feedback while app initializes -->
+      <div class="loading-container">
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Loading VIM Cheatsheet...</div>
+          <div class="loading-subtext">Interactive mastery platform</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main app entry point -->
+    
+    <!-- Service Worker Registration for Offline Support -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/VIM/sw.js')
+            .then((registration) => {
+              console.log('ServiceWorker registered:', registration.scope);
+              
+              // Check for updates periodically
+              setInterval(() => {
+                registration.update();
+              }, 60 * 60 * 1000); // Check every hour
+            })
+            .catch((error) => {
+              console.log('ServiceWorker registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
