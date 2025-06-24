@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VIM Cheatsheet - Interactive Commands & Workflow Demos</title>
     <meta name="description" content="Master VIM with 315+ animated commands and 30 real-world workflow demos. Interactive tutorials for developers, writers, and power users." />
+    <link rel="manifest" href="/VIM/manifest.json" />
+    <meta name="theme-color" content="#2d3748" />
     <link rel="stylesheet" href="./loading.css" />
   </head>
   <body>
@@ -25,5 +27,25 @@
     
     <!-- Main app entry point -->
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Service Worker Registration for Offline Support -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/VIM/sw.js')
+            .then((registration) => {
+              console.log('ServiceWorker registered:', registration.scope);
+              
+              // Check for updates periodically
+              setInterval(() => {
+                registration.update();
+              }, 60 * 60 * 1000); // Check every hour
+            })
+            .catch((error) => {
+              console.log('ServiceWorker registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

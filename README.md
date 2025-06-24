@@ -12,12 +12,21 @@
   </p>
   
   <p>
-    <img src="https://img.shields.io/badge/version-3.7.0-blue.svg" alt="Version 3.7.0" />
+    <img src="https://img.shields.io/badge/version-4.0.0-blue.svg" alt="Version 4.0.0" />
     <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg" alt="React 19.1" />
     <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6.svg" alt="TypeScript 5.8" />
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
   </p>
 </div>
+
+## 🎉 Version 4.0.0 - Offline GitLab Pages Release
+
+### What's New
+- **Full Offline Support** - Service Worker with comprehensive caching strategy
+- **GitLab CI/CD** - Automated deployment pipeline for GitLab Pages
+- **PWA Ready** - Installable with offline functionality and app manifest
+- **Enhanced Performance** - Improved caching for faster load times
+- **Offline Documentation** - All VIM help files cached for offline access
 
 ## Features
 
@@ -25,8 +34,9 @@
 - **30 Workflow Demos** - Multi-step real-world VIM workflows with auto-play
 - **VIM-Style Navigation** - Use `j/k`, `/`, `gg/G` just like VIM
 - **Performance Optimized** - 216KB bundle with virtual scrolling
-- **Offline Ready** - Complete offline support with integrated VIM documentation
+- **Offline Ready** - Complete offline support with Service Worker caching
 - **Mobile Friendly** - Touch gestures and responsive design
+- **PWA Support** - Install as app on desktop or mobile
 
 ## Quick Start
 
@@ -84,15 +94,45 @@ src/
 
 ## Deployment Options
 
-### GitHub Pages (Current)
+### GitHub Pages
 Automatically deployed at [real-fruit-snacks.github.io/VIM](https://real-fruit-snacks.github.io/VIM/)
 
-### GitLab Pages / Self-Hosting
-Perfect for offline environments:
 ```bash
-npm run build:gitlab  # Creates gitlab-public/ directory
+npm run deploy  # Deploy to GitHub Pages
 ```
-Upload contents to any static hosting service.
+
+### GitLab Pages (NEW in v4.0.0)
+Full CI/CD pipeline included for GitLab Pages deployment:
+
+1. **Push to GitLab:**
+   ```bash
+   git remote add gitlab https://gitlab.com/your-username/vim-cheatsheet.git
+   git push gitlab main
+   ```
+
+2. **Automatic Deployment:**
+   - GitLab CI/CD automatically builds and deploys on push
+   - Available at: `https://your-username.gitlab.io/vim-cheatsheet`
+
+3. **Manual Build:**
+   ```bash
+   npm run build:gitlab  # Creates gitlab-public/ directory
+   ```
+
+### Self-Hosting / Offline Deployment
+Perfect for corporate or offline environments:
+
+```bash
+# Build for production
+npm run build
+
+# Contents in dist/ are fully self-contained
+# - No external dependencies
+# - Service Worker for offline support
+# - All VIM help files included
+```
+
+Serve the `dist/` directory with any static file server.
 
 ### Docker (Optional)
 ```dockerfile
@@ -118,14 +158,27 @@ EXPOSE 80
 2. Create step-by-step workflow with realistic scenarios
 3. Test auto-play and manual navigation
 
+## Offline Support (NEW in v4.0.0)
+
+### Service Worker Features
+- **Automatic Caching** - All assets cached on first visit
+- **Offline Fallback** - Graceful offline page when network unavailable  
+- **Background Updates** - Checks for updates hourly
+- **Smart Caching** - Network-first for HTML, cache-first for assets
+
+### PWA Installation
+1. Visit the site in Chrome/Edge/Firefox
+2. Click "Install" in address bar or menu
+3. Use fully offline as desktop/mobile app
+
 ## Browser Support
 
-| Browser | Version | Support |
-|---------|---------|---------|
-| Chrome  | 88+     | ✅ Full |
-| Firefox | 85+     | ✅ Full |
-| Safari  | 14+     | ✅ Full |
-| Edge    | 88+     | ✅ Full |
+| Browser | Version | Support | PWA |
+|---------|---------|---------|-----|
+| Chrome  | 88+     | ✅ Full | ✅ |
+| Firefox | 85+     | ✅ Full | ✅ |
+| Safari  | 14+     | ✅ Full | ⚠️  |
+| Edge    | 88+     | ✅ Full | ✅ |
 
 ES2015 target ensures optimal performance on modern browsers.
 
@@ -145,6 +198,8 @@ ES2015 target ensures optimal performance on modern browsers.
 - **Tailwind CSS** for styling
 - **Fuse.js** for fuzzy search
 - **react-window** for virtual scrolling
+- **Service Worker** for offline support
+- **GitLab CI/CD** for automated deployment
 
 ## Contributing
 
