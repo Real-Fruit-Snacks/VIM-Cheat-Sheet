@@ -49,7 +49,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       clearAllTimeouts()
     }
   }, [])
-  
+
   const nextStep = () => {
     if (currentStep < demo.steps.length - 1) {
       setCurrentStep(prev => prev + 1)
@@ -101,7 +101,6 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     }, totalSteps * stepDuration + stepDuration)
     timeoutsRef.current.push(resetTimeout)
   }
-
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
