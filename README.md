@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.5.0-blue.svg" alt="Version 3.5.0" />
+      <img src="https://img.shields.io/badge/version-3.6.0-blue.svg" alt="Version 3.6.0" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -75,6 +75,22 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
     </td>
   </tr>
 </table>
+
+## 🚀 Version 3.6.0 - Complete Demo Playback System Revamp
+
+### 🎯 Bulletproof Demo Playback
+- **Complete System Redesign**: Replaced timeout-based system with interval-based state machine
+- **Three-State Architecture**: 'idle', 'playing', 'completed' states ensure proper timing
+- **Guaranteed Last Step Display**: Last step now displays for full duration plus completion pause
+- **Visual Feedback**: "Completing..." status during final pause before reset
+- **Elapsed Time Tracking**: Simple, reliable timing based on elapsed time calculations
+- **No More Skipping**: Every step, especially the last one, displays for its complete duration
+
+### 🔧 Technical Implementation
+- **Single Interval System**: One interval handles all timing logic (no race conditions)
+- **State Machine Approach**: Clear state transitions prevent premature resets
+- **Completion Pause**: Additional step duration after last step before reset
+- **Clean Architecture**: Simplified codebase with improved maintainability
 
 ## 🚀 Version 3.5.0 - UX Improvements & Demo Playback Fix
 
@@ -275,7 +291,7 @@ Perfect for offline and air-gapped environments:
 
 #### Option 1: Download Release
 1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-2. Extract `vim-cheatsheet-v3.5.0-gitlab-pages.zip`
+2. Extract `vim-cheatsheet-v3.6.0-gitlab-pages.zip`
 3. Upload contents to your GitLab Pages repository
 4. Enable GitLab Pages in project settings
 
@@ -448,6 +464,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.5.0 | 315+ Commands • 30 Workflow Demos | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.6.0 | 315+ Commands • 30 Workflow Demos | Performance Optimized</sub>
   </p>
 </div>
