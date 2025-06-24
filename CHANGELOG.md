@@ -5,6 +5,32 @@ All notable changes to the VIM Cheatsheet project will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2025-01-24
+
+### Added
+- **Custom Modal Components** with dark theme styling
+  - Reusable Modal, ConfirmModal, and AlertModal components
+  - Escape key support and focus management
+  - Consistent with application's design system
+- **Enhanced Export/Import Experience**
+  - Clipboard copy functionality with visual feedback
+  - Better error handling with styled error messages
+  - Fallback modal for manual JSON input when file picker is blocked
+
+### Fixed
+- **Demo Playback Issues**
+  - Last step of demo examples now plays correctly
+  - Prevented animations from playing multiple times per step
+  - Improved state tracking with ref-based approach
+- **UI Consistency**
+  - Export/import dialogs now match dark theme
+  - Removed jarring native browser dialogs
+
+### Changed
+- Replaced all native browser dialogs (alert/confirm) with custom modals
+- Updated application description to emphasize interactive features
+- Improved modal animations and transitions
+
 ## [4.0.0] - 2025-01-24
 
 ### Added
