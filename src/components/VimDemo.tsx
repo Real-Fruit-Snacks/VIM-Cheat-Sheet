@@ -73,33 +73,50 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setDemoState('idle')
   }
 
-  // PLAYBACK SYSTEM - Sequential step playback and loop
+  // PLAYBACK SYSTEM - Chain-based sequential playback for reliable timing
   const playDemo = () => {
     clearAllTimeouts()
-
+    
     const totalSteps = demo.steps.length
     const stepDuration = 3000 / playbackSpeed
-
+    
+    // Start from the beginning
     setCurrentStep(0)
     setIsPlaying(true)
     setDemoState('playing')
-
-    // Schedule each step
-    demo.steps.forEach((_, index) => {
-      const timeoutId = setTimeout(() => {
-        setCurrentStep(index)
-        if (index === totalSteps - 1) {
-          setDemoState('completed')
+    
+    // Helper function to play one step and schedule the next
+    const playStep = (stepIndex: number) => {
+      if (stepIndex >= totalSteps) {
+        // All steps completed, wait a bit then reset
+        const resetTimeout = setTimeout(() => {
+          reset()
+        }, 1000 / playbackSpeed)
+        timeoutsRef.current.push(resetTimeout)
+        return
+      }
+      
+      // If this is the last step, mark as completed
+      if (stepIndex === totalSteps - 1) {
+        setDemoState('completed')
+      }
+      
+      // Wait for this step's duration, then move to next
+      const nextStepTimeout = setTimeout(() => {
+        if (stepIndex < totalSteps - 1) {
+          setCurrentStep(stepIndex + 1)
+          playStep(stepIndex + 1)
+        } else {
+          // Last step - just wait then trigger completion
+          playStep(stepIndex + 1)
         }
-      }, index * stepDuration)
-      timeoutsRef.current.push(timeoutId)
-    })
-
-    // After showing last step for one duration, reset to start
-    const resetTimeout = setTimeout(() => {
-      reset()
-    }, totalSteps * stepDuration + stepDuration)
-    timeoutsRef.current.push(resetTimeout)
+      }, stepDuration)
+      
+      timeoutsRef.current.push(nextStepTimeout)
+    }
+    
+    // Start playing from step 0
+    playStep(0)
   }
 
   const getCategoryIcon = (category: string) => {
