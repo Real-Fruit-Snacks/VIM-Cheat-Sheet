@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clipboard copy functionality with visual feedback
   - Better error handling with styled error messages
   - Fallback modal for manual JSON input when file picker is blocked
+- **New Demo Categories for IT Professionals**
+  - 4 System Administrator demos: log analysis, config management, batch updates, service files
+  - 4 Security Professional demos: firewall auditing, incident response, vulnerability management, policy updates
+  - Total demos increased from 56 to 64
 
 ### Fixed
 - **Demo Playback Issues**
@@ -30,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced all native browser dialogs (alert/confirm) with custom modals
 - Updated application description to emphasize interactive features
 - Improved modal animations and transitions
+- Added 'sysadmin' and 'security' categories to demo system
 
 ## [4.0.0] - 2025-01-24
 

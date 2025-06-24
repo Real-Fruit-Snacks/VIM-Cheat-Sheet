@@ -54,7 +54,11 @@ This is a React 19.1 + TypeScript VIM cheatsheet application with **315+ interac
 **Data Layer:**
 - `src/data/vim-commands.ts` - 399 lines of structured command definitions
 - `src/data/vim-examples.ts` - 8,583 lines of interactive example states
-- `src/data/vim-demos.ts` - 30 comprehensive workflow demonstrations (beginner to advanced)
+- `src/data/vim-demos.ts` - 64 comprehensive workflow demonstrations
+  - Developer demos: refactoring, debugging, testing workflows
+  - Writer demos: document editing, formatting, spell-checking
+  - SysAdmin demos: log analysis, config management, batch updates, service files
+  - Security demos: firewall auditing, incident response, vulnerability management, policy updates
 - `public/vim-help/` - 16 official VIM help files for offline documentation
 - `utils/enhancedSearch.ts` - Command synonyms, typo correction, related commands
 

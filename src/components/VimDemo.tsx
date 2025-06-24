@@ -14,7 +14,7 @@ export interface VimDemoData {
   id: string
   title: string
   description: string
-  category: 'developer' | 'writer' | 'general'
+  category: 'developer' | 'writer' | 'general' | 'sysadmin' | 'security'
   difficulty: 'beginner' | 'intermediate' | 'advanced'
   timeToMaster: string
   useCase: string
@@ -119,6 +119,8 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       case 'developer': return '👨‍💻'
       case 'writer': return '✍️'
       case 'general': return '⚡'
+      case 'sysadmin': return '🖥️'
+      case 'security': return '🔒'
       default: return '📝'
     }
   }

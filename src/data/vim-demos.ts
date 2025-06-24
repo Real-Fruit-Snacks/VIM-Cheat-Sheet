@@ -6596,5 +6596,1690 @@ export const vimDemos: VimDemoData[] = [
         explanation: 'Always return to normal mode when finished'
       }
     ]
+  },
+  // System Administrator Demos
+  {
+    id: 'analyze-log-files',
+    title: 'Analyzing System Logs',
+    description: 'Efficiently search, filter, and analyze system log files to identify issues and patterns.',
+    category: 'sysadmin',
+    difficulty: 'intermediate',
+    timeToMaster: '10-15 min',
+    useCase: 'Log analysis',
+    steps: [
+      {
+        command: '/ERROR\\|CRITICAL',
+        description: 'Search for error patterns',
+        before: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'System log with various severity levels'
+        },
+        after: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'First ERROR match highlighted'
+        },
+        explanation: 'Use regex patterns with \\| (OR) to search for multiple severity levels.'
+      },
+      {
+        command: ':g/ERROR\\|CRITICAL/d',
+        description: 'Delete all error lines',
+        before: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Log file with errors'
+        },
+        after: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Error lines removed'
+        },
+        explanation: 'Global command :g// can delete all matching lines to filter logs.'
+      },
+      {
+        command: 'u',
+        description: 'Undo deletion',
+        before: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Filtered log'
+        },
+        after: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Original log restored'
+        },
+        explanation: 'Undo brings back deleted lines for further analysis.'
+      },
+      {
+        command: ':v/ERROR\\|CRITICAL/d',
+        description: 'Keep only error lines',
+        before: {
+          text: [
+            '2025-01-24 10:23:45 INFO Starting backup process',
+            '2025-01-24 10:23:46 INFO Connecting to database',
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:48 INFO Retrying connection',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable',
+            '2025-01-24 10:23:50 INFO Backup failed'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Full log file'
+        },
+        after: {
+          text: [
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Only error lines remain'
+        },
+        explanation: ':v// (inverse of :g//) keeps only non-matching lines, perfect for isolating errors.'
+      },
+      {
+        command: ':w errors.log',
+        description: 'Save filtered errors',
+        before: {
+          text: [
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Filtered error lines'
+        },
+        after: {
+          text: [
+            '2025-01-24 10:23:47 ERROR Failed to connect: timeout',
+            '2025-01-24 10:23:49 CRITICAL Database unreachable'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Errors saved to new file'
+        },
+        explanation: 'Save filtered results to a separate file for reporting.'
+      }
+    ]
+  },
+  {
+    id: 'edit-config-files',
+    title: 'Managing Server Configuration',
+    description: 'Edit system configuration files with precision, using VIM\'s powerful features to prevent errors.',
+    category: 'sysadmin',
+    difficulty: 'advanced',
+    timeToMaster: '15-20 min',
+    useCase: 'Config management',
+    steps: [
+      {
+        command: ':set backup',
+        description: 'Enable backup before editing',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 768;',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Nginx configuration file'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 768;',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Backup enabled'
+        },
+        explanation: 'Always enable backup when editing critical config files.'
+      },
+      {
+        command: '/worker_connections',
+        description: 'Find setting to modify',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 768;',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Need to find worker_connections'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 768;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Found the setting'
+        },
+        explanation: 'Use search to quickly locate configuration parameters.'
+      },
+      {
+        command: 'f7cw2048',
+        description: 'Change value precisely',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 768;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 4,
+          mode: 'normal',
+          description: 'Ready to change value'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 27,
+          mode: 'normal',
+          description: 'Value updated to 2048'
+        },
+        explanation: 'f7 finds the "7", cw changes to the semicolon, allowing precise value updates.'
+      },
+      {
+        command: 'yy',
+        description: 'Copy the line',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 27,
+          mode: 'normal',
+          description: 'Copy current line'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 27,
+          mode: 'normal',
+          description: 'Line copied to buffer'
+        },
+        explanation: 'Copy configuration lines before modifying as a safety measure.'
+      },
+      {
+        command: 'O    # Previous value: ',
+        description: 'Add comment above',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 27,
+          mode: 'normal',
+          description: 'Ready to add comment'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    # Previous value: ',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 23,
+          mode: 'insert',
+          description: 'Comment line added'
+        },
+        explanation: 'O opens a line above and enters insert mode, perfect for adding comments.'
+      },
+      {
+        command: '768<Esc>',
+        description: 'Document old value',
+        before: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    # Previous value: ',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 23,
+          mode: 'insert',
+          description: 'Type old value'
+        },
+        after: {
+          text: [
+            '# /etc/nginx/nginx.conf',
+            'user www-data;',
+            'worker_processes auto;',
+            'pid /run/nginx.pid;',
+            '',
+            'events {',
+            '    # Previous value: 768',
+            '    worker_connections 2048;',
+            '}'
+          ],
+          cursorRow: 6,
+          cursorCol: 25,
+          mode: 'normal',
+          description: 'Change documented'
+        },
+        explanation: 'Always document configuration changes for rollback purposes.'
+      }
+    ]
+  },
+  {
+    id: 'batch-server-updates',
+    title: 'Batch Update Server Lists',
+    description: 'Update multiple server entries across configuration files using macros and substitutions.',
+    category: 'sysadmin',
+    difficulty: 'advanced',
+    timeToMaster: '20-25 min',
+    useCase: 'Batch updates',
+    steps: [
+      {
+        command: 'qa',
+        description: 'Start recording macro',
+        before: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:80',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Server list to update'
+        },
+        after: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:80',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Recording macro to register a'
+        },
+        explanation: 'qa starts recording a macro to register "a" for repeatable edits.'
+      },
+      {
+        command: '0f:llr3',
+        description: 'Change port 80 to 8443',
+        before: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:80',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'On first web server'
+        },
+        after: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 1,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Port changed to 8443'
+        },
+        explanation: '0 goes to line start, f: finds colon, ll moves to last digit, r3 replaces with 3.'
+      },
+      {
+        command: 'j',
+        description: 'Move to next line',
+        before: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 1,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Ready to move down'
+        },
+        after: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'On next server line'
+        },
+        explanation: 'Move down to prepare macro for next execution.'
+      },
+      {
+        command: 'q',
+        description: 'Stop recording macro',
+        before: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Macro recording complete'
+        },
+        after: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Macro saved to register a'
+        },
+        explanation: 'q stops recording. The macro is now ready to replay.'
+      },
+      {
+        command: '2@a',
+        description: 'Apply macro to next 2 lines',
+        before: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:80',
+            'web03.example.com:80',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 2,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'Ready to apply macro'
+        },
+        after: {
+          text: [
+            '# Server inventory',
+            'web01.example.com:8443',
+            'web02.example.com:8443',
+            'web03.example.com:8443',
+            'api01.example.com:8080',
+            'api02.example.com:8080'
+          ],
+          cursorRow: 4,
+          cursorCol: 20,
+          mode: 'normal',
+          description: 'All web servers updated!'
+        },
+        explanation: '2@a runs the macro in register "a" twice, updating both remaining web servers.'
+      }
+    ]
+  },
+  {
+    id: 'systemd-service-edit',
+    title: 'Create SystemD Service File',
+    description: 'Create and edit a systemd service file with proper structure and permissions.',
+    category: 'sysadmin',
+    difficulty: 'intermediate',
+    timeToMaster: '10-15 min',
+    useCase: 'Service management',
+    steps: [
+      {
+        command: 'i[Unit]',
+        description: 'Start with Unit section',
+        before: {
+          text: [''],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Empty service file'
+        },
+        after: {
+          text: ['[Unit]'],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'insert',
+          description: 'Unit section header added'
+        },
+        explanation: 'SystemD service files start with the [Unit] section.'
+      },
+      {
+        command: '<Enter>Description=Custom App Service<Enter>After=network.target<Esc>',
+        description: 'Add unit details',
+        before: {
+          text: ['[Unit]'],
+          cursorRow: 0,
+          cursorCol: 6,
+          mode: 'insert',
+          description: 'Ready for unit details'
+        },
+        after: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target'
+          ],
+          cursorRow: 2,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Unit section complete'
+        },
+        explanation: 'Define service description and dependencies.'
+      },
+      {
+        command: 'o<Enter>[Service]',
+        description: 'Add Service section',
+        before: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target'
+          ],
+          cursorRow: 2,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Ready for Service section'
+        },
+        after: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]'
+          ],
+          cursorRow: 4,
+          cursorCol: 9,
+          mode: 'insert',
+          description: 'Service section started'
+        },
+        explanation: 'o opens a new line below for the Service configuration.'
+      },
+      {
+        command: '<Enter>Type=simple<Enter>User=appuser<Enter>WorkingDirectory=/opt/app',
+        description: 'Configure service parameters',
+        before: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]'
+          ],
+          cursorRow: 4,
+          cursorCol: 9,
+          mode: 'insert',
+          description: 'Adding service config'
+        },
+        after: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]',
+            'Type=simple',
+            'User=appuser',
+            'WorkingDirectory=/opt/app'
+          ],
+          cursorRow: 7,
+          cursorCol: 25,
+          mode: 'insert',
+          description: 'Service configuration added'
+        },
+        explanation: 'Define service type, user, and working directory.'
+      },
+      {
+        command: '<Enter>ExecStart=/opt/app/run.sh<Enter>Restart=always<Esc>',
+        description: 'Add execution commands',
+        before: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]',
+            'Type=simple',
+            'User=appuser',
+            'WorkingDirectory=/opt/app'
+          ],
+          cursorRow: 7,
+          cursorCol: 25,
+          mode: 'insert',
+          description: 'Ready for exec commands'
+        },
+        after: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]',
+            'Type=simple',
+            'User=appuser',
+            'WorkingDirectory=/opt/app',
+            'ExecStart=/opt/app/run.sh',
+            'Restart=always'
+          ],
+          cursorRow: 9,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Execution configuration complete'
+        },
+        explanation: 'ExecStart defines the command to run, Restart ensures service recovery.'
+      },
+      {
+        command: ':w /etc/systemd/system/customapp.service',
+        description: 'Save service file',
+        before: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]',
+            'Type=simple',
+            'User=appuser',
+            'WorkingDirectory=/opt/app',
+            'ExecStart=/opt/app/run.sh',
+            'Restart=always'
+          ],
+          cursorRow: 9,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Ready to save'
+        },
+        after: {
+          text: [
+            '[Unit]',
+            'Description=Custom App Service',
+            'After=network.target',
+            '',
+            '[Service]',
+            'Type=simple',
+            'User=appuser',
+            'WorkingDirectory=/opt/app',
+            'ExecStart=/opt/app/run.sh',
+            'Restart=always'
+          ],
+          cursorRow: 9,
+          cursorCol: 13,
+          mode: 'normal',
+          description: 'Service file saved!'
+        },
+        explanation: 'Save directly to systemd directory (requires sudo in practice).'
+      }
+    ]
+  },
+  // Security Professional Demos
+  {
+    id: 'audit-firewall-rules',
+    title: 'Auditing Firewall Rules',
+    description: 'Review and modify firewall rules, identifying security issues and documenting changes.',
+    category: 'security',
+    difficulty: 'advanced',
+    timeToMaster: '15-20 min',
+    useCase: 'Security audit',
+    steps: [
+      {
+        command: ':set number',
+        description: 'Enable line numbers for reference',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Firewall rules to audit'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Line numbers enabled'
+        },
+        explanation: 'Line numbers help when documenting specific rule issues.'
+      },
+      {
+        command: '/3306',
+        description: 'Find database port',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Looking for MySQL port'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 24,
+          mode: 'normal',
+          description: 'Found MySQL port - security risk!'
+        },
+        explanation: 'Database ports should never be exposed to the internet.'
+      },
+      {
+        command: 'I# SECURITY ISSUE: ',
+        description: 'Add security comment',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 24,
+          mode: 'normal',
+          description: 'Ready to add comment'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '# SECURITY ISSUE: -A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 18,
+          mode: 'insert',
+          description: 'Security issue marked'
+        },
+        explanation: 'I inserts at beginning of line, perfect for adding comment markers.'
+      },
+      {
+        command: 'MySQL should not be exposed<Esc>',
+        description: 'Complete security note',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '# SECURITY ISSUE: -A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 18,
+          mode: 'insert',
+          description: 'Adding explanation'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '# SECURITY ISSUE: MySQL should not be exposed-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 45,
+          mode: 'normal',
+          description: 'Issue documented'
+        },
+        explanation: 'Document security issues inline for immediate visibility.'
+      },
+      {
+        command: 'dd',
+        description: 'Delete the risky rule',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '# SECURITY ISSUE: MySQL should not be exposed-A INPUT -p tcp --dport 3306 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 45,
+          mode: 'normal',
+          description: 'Remove the risky rule'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Risky rule removed'
+        },
+        explanation: 'dd deletes entire line - quick way to remove problematic rules.'
+      },
+      {
+        command: 'O# Rule removed: MySQL port 3306 - security risk',
+        description: 'Document the change',
+        before: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to document'
+        },
+        after: {
+          text: [
+            '# iptables rules',
+            '-A INPUT -p tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp --dport 80 -j ACCEPT',
+            '-A INPUT -p tcp --dport 443 -j ACCEPT',
+            '# Rule removed: MySQL port 3306 - security risk',
+            '-A INPUT -p tcp --dport 8080 -j ACCEPT',
+            '-A INPUT -j DROP'
+          ],
+          cursorRow: 4,
+          cursorCol: 47,
+          mode: 'insert',
+          description: 'Change documented'
+        },
+        explanation: 'Always document security-related changes for audit trails.'
+      }
+    ]
+  },
+  {
+    id: 'incident-response-log',
+    title: 'Incident Response Documentation',
+    description: 'Document a security incident with timestamps, actions taken, and evidence preservation.',
+    category: 'security',
+    difficulty: 'intermediate',
+    timeToMaster: '10-15 min',
+    useCase: 'Incident response',
+    steps: [
+      {
+        command: ':r !date +\\%Y-\\%m-\\%d\\ \\%H:\\%M:\\%S',
+        description: 'Insert current timestamp',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:'
+          ],
+          cursorRow: 3,
+          cursorCol: 9,
+          mode: 'normal',
+          description: 'Starting incident log'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Timestamp inserted'
+        },
+        explanation: ':r !command reads output from shell command into the buffer.'
+      },
+      {
+        command: 'A - Initial detection: Multiple failed SSH attempts<Esc>',
+        description: 'Document first observation',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15'
+          ],
+          cursorRow: 4,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to add details'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts'
+          ],
+          cursorRow: 4,
+          cursorCol: 68,
+          mode: 'normal',
+          description: 'First event documented'
+        },
+        explanation: 'A appends to end of line - perfect for adding to timestamps.'
+      },
+      {
+        command: 'o:r !date +\\%H:\\%M:%S',
+        description: 'Add new timestamp',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts'
+          ],
+          cursorRow: 4,
+          cursorCol: 68,
+          mode: 'normal',
+          description: 'Ready for next entry'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'New timestamp added'
+        },
+        explanation: 'o opens new line, then :r ! inserts command output.'
+      },
+      {
+        command: 'A - Blocked source IP: 192.168.1.100<Esc>',
+        description: 'Document action taken',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42'
+          ],
+          cursorRow: 5,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Adding response action'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42 - Blocked source IP: 192.168.1.100'
+          ],
+          cursorRow: 5,
+          cursorCol: 43,
+          mode: 'normal',
+          description: 'Action documented'
+        },
+        explanation: 'Build a chronological record of all incident response actions.'
+      },
+      {
+        command: 'Go<Enter>## Evidence Collected:',
+        description: 'Start evidence section',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42 - Blocked source IP: 192.168.1.100'
+          ],
+          cursorRow: 5,
+          cursorCol: 43,
+          mode: 'normal',
+          description: 'Adding evidence section'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42 - Blocked source IP: 192.168.1.100',
+            '',
+            '## Evidence Collected:'
+          ],
+          cursorRow: 7,
+          cursorCol: 21,
+          mode: 'insert',
+          description: 'Evidence section started'
+        },
+        explanation: 'G goes to end of file, o opens new line for new section.'
+      },
+      {
+        command: '<Enter>- auth.log: /evidence/auth.log.2025-01-24<Enter>- iptables rules: /evidence/iptables.backup<Esc>',
+        description: 'List evidence files',
+        before: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42 - Blocked source IP: 192.168.1.100',
+            '',
+            '## Evidence Collected:'
+          ],
+          cursorRow: 7,
+          cursorCol: 21,
+          mode: 'insert',
+          description: 'Listing evidence'
+        },
+        after: {
+          text: [
+            '# Security Incident Response Log',
+            '## Incident: Suspicious Login Activity',
+            '',
+            'Timeline:',
+            '2025-01-24 14:32:15 - Initial detection: Multiple failed SSH attempts',
+            '14:33:42 - Blocked source IP: 192.168.1.100',
+            '',
+            '## Evidence Collected:',
+            '- auth.log: /evidence/auth.log.2025-01-24',
+            '- iptables rules: /evidence/iptables.backup'
+          ],
+          cursorRow: 9,
+          cursorCol: 42,
+          mode: 'normal',
+          description: 'Evidence documented'
+        },
+        explanation: 'Document all collected evidence with file locations for the investigation.'
+      }
+    ]
+  },
+  {
+    id: 'security-scan-analysis',
+    title: 'Analyzing Security Scan Results',
+    description: 'Process and prioritize vulnerability scan results, creating actionable remediation tasks.',
+    category: 'security',
+    difficulty: 'advanced',
+    timeToMaster: '15-20 min',
+    useCase: 'Vulnerability management',
+    steps: [
+      {
+        command: ':sort /CRITICAL\\|HIGH\\|MEDIUM\\|LOW/',
+        description: 'Sort by severity',
+        before: {
+          text: [
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library',
+            'CVE-2024-9101 | LOW | Python urllib3',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-5161 | MEDIUM | nginx'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Unsorted scan results'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Sorted by severity!'
+        },
+        explanation: 'VIM\'s sort command can use regex patterns to sort by specific fields.'
+      },
+      {
+        command: '/CRITICAL',
+        description: 'Focus on critical issues',
+        before: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Looking for critical items'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 16,
+          mode: 'normal',
+          description: 'Critical vulnerability found'
+        },
+        explanation: 'Search helps quickly locate the most severe vulnerabilities.'
+      },
+      {
+        command: 'A [URGENT - Patch immediately]<Esc>',
+        description: 'Mark for immediate action',
+        before: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 16,
+          mode: 'normal',
+          description: 'Ready to mark'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'Urgency marked'
+        },
+        explanation: 'Add actionable notes directly to scan results.'
+      },
+      {
+        command: ':g/HIGH/s/$/ [Schedule for next maintenance]/',
+        description: 'Batch annotate HIGH severity',
+        before: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel',
+            'CVE-2024-3141 | HIGH | PostgreSQL',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'Ready to annotate HIGH items'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'HIGH severity items annotated'
+        },
+        explanation: 'Global substitute command adds notes to all matching lines at once.'
+      },
+      {
+        command: ':1,3y',
+        description: 'Copy priority items',
+        before: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'Copy critical and high items'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'Priority items copied'
+        },
+        explanation: ':1,3y yanks lines 1-3 for creating priority task list.'
+      },
+      {
+        command: 'Go<Enter>## Priority Remediation Tasks:<Enter><Esc>p',
+        description: 'Create task list',
+        before: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3'
+          ],
+          cursorRow: 0,
+          cursorCol: 70,
+          mode: 'normal',
+          description: 'Ready to create tasks'
+        },
+        after: {
+          text: [
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]',
+            'CVE-2024-1234 | MEDIUM | Apache HTTP Server',
+            'CVE-2024-5161 | MEDIUM | nginx',
+            'CVE-2024-9101 | LOW | Python urllib3',
+            '',
+            '## Priority Remediation Tasks:',
+            'CVE-2024-5678 | CRITICAL | OpenSSL Library [URGENT - Patch immediately]',
+            'CVE-2024-1121 | HIGH | Linux Kernel [Schedule for next maintenance]',
+            'CVE-2024-3141 | HIGH | PostgreSQL [Schedule for next maintenance]'
+          ],
+          cursorRow: 10,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Priority task list created!'
+        },
+        explanation: 'G goes to end, o creates new line, p pastes the copied priority items.'
+      }
+    ]
+  },
+  {
+    id: 'security-policy-update',
+    title: 'Update Security Policy Document',
+    description: 'Modify security policies with proper versioning and change tracking.',
+    category: 'security',
+    difficulty: 'intermediate',
+    timeToMaster: '10-15 min',
+    useCase: 'Policy management',
+    steps: [
+      {
+        command: '/Version:',
+        description: 'Find version number',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.3',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 0,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Security policy document'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.3',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Found version line'
+        },
+        explanation: 'Locate version information before making changes.'
+      },
+      {
+        command: 'f.lr4',
+        description: 'Update version to 2.4',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.3',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 1,
+          cursorCol: 0,
+          mode: 'normal',
+          description: 'Ready to update version'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 1,
+          cursorCol: 11,
+          mode: 'normal',
+          description: 'Version updated'
+        },
+        explanation: 'f. finds decimal point, l moves right, r4 replaces with 4.'
+      },
+      {
+        command: 'j$',
+        description: 'Move to date line end',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 1,
+          cursorCol: 11,
+          mode: 'normal',
+          description: 'Moving to date'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'At end of date line'
+        },
+        explanation: 'j moves down, $ goes to end of line.'
+      },
+      {
+        command: 'C2025-01-24',
+        description: 'Update date',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2024-12-01',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'Ready to change date'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'insert',
+          description: 'Date updated'
+        },
+        explanation: 'C changes from cursor to end of line.'
+      },
+      {
+        command: '<Esc>/Minimum length',
+        description: 'Find password length rule',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 2,
+          cursorCol: 23,
+          mode: 'insert',
+          description: 'Looking for length requirement'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 5,
+          cursorCol: 2,
+          mode: 'normal',
+          description: 'Found minimum length'
+        },
+        explanation: 'Search to quickly navigate to specific policy items.'
+      },
+      {
+        command: 'f8r1r2',
+        description: 'Change 8 to 12 characters',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 8 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 5,
+          cursorCol: 2,
+          mode: 'normal',
+          description: 'Updating length requirement'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 12 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 5,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Length increased to 12'
+        },
+        explanation: 'f8 finds 8, r1 replaces with 1, r2 replaces next char with 2.'
+      },
+      {
+        command: 'Go- Must contain special characters (!@#$%)<Esc>',
+        description: 'Add new requirement',
+        before: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 12 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers'
+          ],
+          cursorRow: 5,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Adding new rule'
+        },
+        after: {
+          text: [
+            '# Corporate Security Policy',
+            'Version: 2.4',
+            'Last Updated: 2025-01-24',
+            '',
+            '## Password Requirements',
+            '- Minimum length: 12 characters',
+            '- Must contain uppercase and lowercase',
+            '- Must contain numbers',
+            '- Must contain special characters (!@#$%)'
+          ],
+          cursorRow: 8,
+          cursorCol: 40,
+          mode: 'normal',
+          description: 'New requirement added!'
+        },
+        explanation: 'G goes to end, o opens new line for additional security requirements.'
+      }
+    ]
   }
 ]

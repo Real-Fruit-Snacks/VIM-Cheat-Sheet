@@ -31,7 +31,11 @@
 ## Features
 
 - **315+ Interactive Commands** - Animated examples with before/after states
-- **30 Workflow Demos** - Multi-step real-world VIM workflows with auto-play
+- **64 Workflow Demos** - Multi-step real-world VIM workflows with auto-play
+  - Developer workflows (refactoring, debugging, testing)
+  - Writer workflows (editing, formatting, spell-checking)
+  - SysAdmin workflows (log analysis, config management, automation)
+  - Security workflows (auditing, incident response, vulnerability management)
 - **VIM-Style Navigation** - Use `j/k`, `/`, `gg/G` just like VIM
 - **Performance Optimized** - 216KB bundle with virtual scrolling
 - **Offline Ready** - Complete offline support with Service Worker caching
