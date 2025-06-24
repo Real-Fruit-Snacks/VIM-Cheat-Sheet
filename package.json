@@ -1,9 +1,9 @@
 {
   "name": "VIM-Cheatsheet",
   "private": true,
-  "version": "4.1.0",
+  "version": "4.2.0",
   "type": "module",
-  "description": "Interactive VIM mastery platform with 315+ animated commands and 30 real-world workflow demos",
+  "description": "Interactive VIM mastery platform with 315+ animated commands and 64 real-world workflow demos",
   "homepage": "https://Real-Fruit-Snacks.github.io/VIM",
   "scripts": {
     "dev": "vite",

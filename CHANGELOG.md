@@ -5,6 +5,21 @@ All notable changes to the VIM Cheatsheet project will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2025-01-24
+
+### Added
+- **8 New Professional Workflow Demos** (64 total demos, up from 56)
+  - 4 System Administrator demos: log analysis, config management, batch updates, service files
+  - 4 Security Professional demos: firewall auditing, incident response, vulnerability management, policy updates
+- **New Demo Categories** in sidebar navigation
+  - "System Admin" category with 🖥️ icon
+  - "Security" category with 🔒 icon
+  - Categories properly filter demos in the UI
+
+### Changed
+- Updated demo count from 56 to 64 across documentation
+- Enhanced sidebar to display new professional categories
+
 ## [4.1.0] - 2025-01-24
 
 ### Added
