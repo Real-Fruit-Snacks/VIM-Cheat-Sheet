@@ -14,6 +14,16 @@
     <link rel="stylesheet" href="./loading.css" />
   </head>
   <body>
+    <!-- NoScript fallback for environments where JavaScript is completely disabled -->
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/VIM-Cheat-Sheet/noscript.html">
+      <div style="text-align: center; padding: 40px; font-family: Arial, sans-serif; background: #0a0a0a; color: #e2e2e2; min-height: 100vh;">
+        <h1 style="color: #22c55e;">JavaScript Required</h1>
+        <p>This VIM Cheatsheet requires JavaScript for the full interactive experience.</p>
+        <p><a href="/VIM-Cheat-Sheet/noscript.html" style="color: #3b82f6; text-decoration: none; font-weight: bold;">Click here for a basic HTML version with essential VIM commands</a></p>
+      </div>
+    </noscript>
+    
     <div id="root">
       <!-- Immediate loading feedback while app initializes -->
       <div class="loading-container">
@@ -29,23 +39,7 @@
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Service Worker Registration for Offline Support -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/VIM-Cheat-Sheet/sw.js')
-            .then((registration) => {
-              console.log('ServiceWorker registered:', registration.scope);
-              
-              // Check for updates periodically
-              setInterval(() => {
-                registration.update();
-              }, 60 * 60 * 1000); // Check every hour
-            })
-            .catch((error) => {
-              console.log('ServiceWorker registration failed:', error);
-            });
-        });
-      }
-    </script>
+    <!-- External script to avoid CSP violations in restricted environments -->
+    <script src="/VIM-Cheat-Sheet/sw-register.js" defer></script>
   </body>
 </html>
