@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Play, RotateCcw, ChevronLeft, ChevronRight, Clock, Target } from 'lucide-react'
 import VimCommandExampleAnimated, { type ExampleState } from './VimCommandExampleAnimated'
 
@@ -32,19 +32,45 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Cleanup timeout on unmount
+  // Cleanup interval on unmount
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
-        clearTimeout(intervalRef.current)
+        clearInterval(intervalRef.current)
         intervalRef.current = null
       }
     }
   }, [])
   
-  // Note: Speed changes take effect on the next step transition
-  // This keeps the logic simple and avoids complex dependency issues
-
+  // Handle speed changes during playback
+  useEffect(() => {
+    if (isPlaying && intervalRef.current) {
+      // Restart the interval with new speed from current step
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+      
+      // Continue playing from current step with new speed
+      let stepCounter = currentStep
+      const totalSteps = demo.steps.length
+      const stepDuration = 3000 / playbackSpeed
+      
+      intervalRef.current = setInterval(() => {
+        stepCounter++
+        
+        if (stepCounter < totalSteps) {
+          // Move to next step
+          setCurrentStep(stepCounter)
+        } else {
+          // We've shown all steps including the last one - reset to beginning
+          clearInterval(intervalRef.current!)
+          intervalRef.current = null
+          setCurrentStep(0)
+          setIsPlaying(false)
+        }
+      }, stepDuration)
+    }
+  }, [playbackSpeed, isPlaying, currentStep, demo.steps.length])
+  
   const nextStep = () => {
     if (currentStep < demo.steps.length - 1) {
       setCurrentStep(prev => prev + 1)
@@ -59,42 +85,17 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
 
   const reset = () => {
     if (intervalRef.current) {
-      clearTimeout(intervalRef.current)
+      clearInterval(intervalRef.current)
       intervalRef.current = null
     }
     setCurrentStep(0)
     setIsPlaying(false)
   }
 
-  // Function to continue playback from a specific step
-  const continuePlaybackFromStep = useCallback((stepIndex: number) => {
-    const totalSteps = demo.steps.length
-    const nextStepIndex = stepIndex + 1
-    
-    if (nextStepIndex < totalSteps) {
-      // Schedule advance to next step
-      intervalRef.current = setTimeout(() => {
-        setCurrentStep(nextStepIndex)
-        
-        // Check if this was the last step
-        if (nextStepIndex === totalSteps - 1) {
-          // This is the last step - schedule stop after full duration
-          intervalRef.current = setTimeout(() => {
-            setIsPlaying(false)
-          }, 3000 / playbackSpeed)
-        } else {
-          // Continue to next step
-          continuePlaybackFromStep(nextStepIndex)
-        }
-      }, 3000 / playbackSpeed)
-    }
-  }, [demo.steps.length, playbackSpeed])
-
-
   const playDemo = () => {
-    // Clear any existing timeout
+    // Clear any existing interval
     if (intervalRef.current) {
-      clearTimeout(intervalRef.current)
+      clearInterval(intervalRef.current)
       intervalRef.current = null
     }
     
@@ -102,8 +103,25 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setCurrentStep(0)
     setIsPlaying(true)
     
-    // Start the playback sequence
-    continuePlaybackFromStep(0)
+    // Create interval to advance through steps
+    let stepCounter = 0
+    const totalSteps = demo.steps.length
+    const stepDuration = 3000 / playbackSpeed
+    
+    intervalRef.current = setInterval(() => {
+      stepCounter++
+      
+      if (stepCounter < totalSteps) {
+        // Move to next step
+        setCurrentStep(stepCounter)
+      } else {
+        // We've shown all steps including the last one - reset to beginning
+        clearInterval(intervalRef.current!)
+        intervalRef.current = null
+        setCurrentStep(0)
+        setIsPlaying(false)
+      }
+    }, stepDuration)
   }
 
   const getCategoryIcon = (category: string) => {
