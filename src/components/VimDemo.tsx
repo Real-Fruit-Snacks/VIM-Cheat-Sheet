@@ -69,12 +69,12 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     timeoutsRef.current.forEach(clearTimeout)
     timeoutsRef.current = []
     
-    // If starting from the last step, just schedule stop
+    // If starting from the last step, give it extra time before stopping
     if (startStep === totalSteps - 1) {
       const stopTimeout = setTimeout(() => {
         setIsPlaying(false)
         setCurrentStep(0)
-      }, stepDuration)
+      }, stepDuration * 2) // Give last step double time to be safe
       timeoutsRef.current.push(stopTimeout)
       return
     }
@@ -88,11 +88,12 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       timeoutsRef.current.push(timeout)
     }
     
-    // Schedule demo stop after all steps have been shown for full duration
+    // BULLETPROOF FIX: Schedule stop AFTER last step gets its full duration  
+    // Give the last step an extra stepDuration to ensure it's fully visible
     const stopTimeout = setTimeout(() => {
       setIsPlaying(false)
       setCurrentStep(0)
-    }, remainingSteps * stepDuration)
+    }, (remainingSteps + 1) * stepDuration)
     timeoutsRef.current.push(stopTimeout)
   }, [demo.steps.length, playbackSpeed])
 
@@ -128,11 +129,12 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       timeoutsRef.current.push(timeout)
     }
     
-    // Schedule demo stop after all steps have been shown for full duration
+    // BULLETPROOF FIX: Schedule stop AFTER last step gets its full duration
+    // Give the last step an extra stepDuration to ensure it's fully visible
     const stopTimeout = setTimeout(() => {
       setIsPlaying(false)
       setCurrentStep(0)
-    }, totalSteps * stepDuration)
+    }, (totalSteps + 1) * stepDuration)
     timeoutsRef.current.push(stopTimeout)
   }
 
