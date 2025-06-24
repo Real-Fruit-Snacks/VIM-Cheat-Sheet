@@ -185,7 +185,7 @@ export default function VimCheatsheetEnhanced() {
   }, [filteredCommands, activeCategory])
 
   const commandCategories = Object.keys(enhancedCommands)
-  const demoCategories = ['developer', 'writer', 'general']
+  const demoCategories = ['developer', 'writer', 'general', 'sysadmin', 'security']
   const categories = currentView === 'commands' ? commandCategories : demoCategories
 
   // Search suggestions
@@ -778,6 +778,8 @@ export default function VimCheatsheetEnhanced() {
                   : vimDemos.filter(d => d.category === category).length
                 const displayName = currentView === 'commands'
                   ? category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1')
+                  : category === 'sysadmin' ? 'System Admin'
+                  : category === 'security' ? 'Security'
                   : category.charAt(0).toUpperCase() + category.slice(1)
                   
                 return (
