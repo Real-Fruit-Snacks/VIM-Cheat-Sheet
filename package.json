@@ -3,7 +3,7 @@
   "private": true,
   "version": "3.7.0",
   "type": "module",
-  "description": "The ultimate VIM cheatsheet - comprehensive, searchable, and interactive",
+  "description": "Interactive VIM mastery platform with 315+ animated commands and 30 real-world workflow demos",
   "homepage": "https://Real-Fruit-Snacks.github.io/VIM",
   "scripts": {
     "dev": "vite",
