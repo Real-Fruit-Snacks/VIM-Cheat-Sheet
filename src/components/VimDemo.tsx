@@ -32,6 +32,12 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [playbackSpeed, setPlaybackSpeed] = useState(1)
   const [demoState, setDemoState] = useState<'idle' | 'playing' | 'completed'>('idle')
   const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([])
+
+  const clearAllTimeouts = () => {
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout))
+    timeoutsRef.current = []
+  }
 
   // Cleanup on unmount
   useEffect(() => {
@@ -40,6 +46,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
         clearInterval(playbackIntervalRef.current)
         playbackIntervalRef.current = null
       }
+      clearAllTimeouts()
     }
   }, [])
   
@@ -56,6 +63,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   }
 
   const reset = () => {
+    clearAllTimeouts()
     if (playbackIntervalRef.current) {
       clearInterval(playbackIntervalRef.current)
       playbackIntervalRef.current = null
@@ -65,54 +73,33 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setDemoState('idle')
   }
 
-  // COMPLETELY NEW PLAYBACK SYSTEM - Simple and Reliable
+  // PLAYBACK SYSTEM - Sequential step playback and loop
   const playDemo = () => {
-    // Clear any existing interval
-    if (playbackIntervalRef.current) {
-      clearInterval(playbackIntervalRef.current)
-      playbackIntervalRef.current = null
-    }
-    
-    // Initialize state
+    clearAllTimeouts()
+
+    const totalSteps = demo.steps.length
+    const stepDuration = 3000 / playbackSpeed
+
     setCurrentStep(0)
     setIsPlaying(true)
     setDemoState('playing')
-    
-    const totalSteps = demo.steps.length
-    const stepDuration = 3000 / playbackSpeed
-    let currentIndex = 0
-    let elapsedTime = 0
-    
-    // Use a simple interval that tracks elapsed time
-    playbackIntervalRef.current = setInterval(() => {
-      elapsedTime += 100
-      
-      // Calculate which step we should be showing
-      const targetStepIndex = Math.floor(elapsedTime / stepDuration)
-      
-      // Check if we need to advance to next step
-      if (targetStepIndex > currentIndex && targetStepIndex < totalSteps) {
-        currentIndex = targetStepIndex
-        setCurrentStep(currentIndex)
-      }
-      
-      // Check if all steps have been shown for their full duration
-      if (elapsedTime >= totalSteps * stepDuration) {
-        // Keep showing last step for one more duration
-        if (elapsedTime >= (totalSteps + 1) * stepDuration) {
-          clearInterval(playbackIntervalRef.current!)
-          playbackIntervalRef.current = null
-          setCurrentStep(0)
-          setIsPlaying(false)
-          setDemoState('idle')
-        } else {
-          // We're in the "completion pause" - last step still visible
-          if (currentIndex === totalSteps - 1) {
-            setDemoState('completed')
-          }
+
+    // Schedule each step
+    demo.steps.forEach((_, index) => {
+      const timeoutId = setTimeout(() => {
+        setCurrentStep(index)
+        if (index === totalSteps - 1) {
+          setDemoState('completed')
         }
-      }
-    }, 100)
+      }, index * stepDuration)
+      timeoutsRef.current.push(timeoutId)
+    })
+
+    // After showing last step for one duration, reset to start
+    const resetTimeout = setTimeout(() => {
+      reset()
+    }, totalSteps * stepDuration + stepDuration)
+    timeoutsRef.current.push(resetTimeout)
   }
 
 
