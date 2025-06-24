@@ -9,6 +9,7 @@ import SearchSuggestions from './SearchSuggestions'
 import VimCommandExampleAnimated from './VimCommandExampleAnimated'
 import VimHelpViewer from './VimHelpViewer'
 import VimDemo from './VimDemo'
+import { Modal, ConfirmModal, AlertModal } from './Modal'
 import { vimCommands } from '../data/vim-commands'
 import { vimExamples } from '../data/vim-examples'
 import { vimDemos } from '../data/vim-demos'
@@ -38,6 +39,16 @@ export default function VimCheatsheetEnhanced() {
   const [currentView, setCurrentView] = useState<'commands' | 'demos'>('commands')
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const [showSearchHistory, setShowSearchHistory] = useState(false)
+  
+  // Modal states
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showImportSuccess, setShowImportSuccess] = useState(false)
+  const [showImportError, setShowImportError] = useState(false)
+  const [importedCount, setImportedCount] = useState(0)
+  const [exportData, setExportData] = useState('')
+  const [importData, setImportData] = useState('')
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -289,11 +300,13 @@ export default function VimCheatsheetEnhanced() {
   }
 
   const clearFavorites = () => {
-    if (confirm('Are you sure you want to clear all favorites? This cannot be undone.')) {
-      setFavorites(new Set())
-      if (selectedFilter === 'favorites') {
-        setSelectedFilter('all')
-      }
+    setShowClearConfirm(true)
+  }
+  
+  const handleClearFavoritesConfirm = () => {
+    setFavorites(new Set())
+    if (selectedFilter === 'favorites') {
+      setSelectedFilter('all')
     }
   }
   
@@ -306,6 +319,7 @@ export default function VimCheatsheetEnhanced() {
     }
     
     const dataStr = JSON.stringify(favoritesData, null, 2)
+    setExportData(dataStr)
     
     try {
       // Try modern Blob download approach
@@ -320,22 +334,9 @@ export default function VimCheatsheetEnhanced() {
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
     } catch (error) {
-      // Fallback: Show data in a text area for manual copying
-      console.warn('Blob download blocked, using text fallback:', error)
-      const fallbackModal = document.createElement('div')
-      fallbackModal.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
-          <div style="background: #1f2937; color: white; padding: 20px; border-radius: 8px; max-width: 600px; width: 90%;">
-            <h3 style="margin-top: 0;">Export Favorites (Manual Copy)</h3>
-            <p>Copy the JSON data below and save it as a .json file:</p>
-            <textarea style="width: 100%; height: 300px; background: #374151; color: white; border: 1px solid #6b7280; padding: 10px; font-family: monospace;" readonly>${dataStr}</textarea>
-            <div style="margin-top: 15px; text-align: right;">
-              <button onclick="this.closest('div').parentElement.remove()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Close</button>
-            </div>
-          </div>
-        </div>
-      `
-      document.body.appendChild(fallbackModal)
+      // Fallback: Show data in modal for manual copying
+      console.warn('Blob download blocked, using modal fallback:', error)
+      setShowExportModal(true)
     }
   }
   
@@ -359,77 +360,42 @@ export default function VimCheatsheetEnhanced() {
             throw new Error('Invalid favorites file format')
           }
           
-          // Merge with existing favorites or replace (safe confirm fallback)
-          let shouldMerge = true
-          try {
-            shouldMerge = confirm(
-              `Import ${data.favorites.length} favorites?\n\n` +
-              `Choose OK to merge with existing favorites, or Cancel to replace them.`
-            )
-          } catch {
-            // If confirm is blocked, default to merge
-            shouldMerge = true
-          }
-          
-          if (shouldMerge) {
-            setFavorites(prev => new Set([...prev, ...data.favorites]))
-          } else {
-            setFavorites(new Set(data.favorites))
-          }
-          
-          // Show imported count (safe alert fallback)
-          try {
-            alert(`Successfully imported ${data.favorites.length} favorites!`)
-          } catch {
-            console.log(`Successfully imported ${data.favorites.length} favorites!`)
-          }
+          // Merge with existing favorites
+          setFavorites(prev => new Set([...prev, ...data.favorites]))
+          setImportedCount(data.favorites.length)
+          setShowImportSuccess(true)
         } catch (error) {
-          try {
-            alert('Failed to import favorites. Please ensure the file is a valid JSON export.')
-          } catch {
-            console.error('Failed to import favorites:', error)
-          }
+          console.error('Failed to import favorites:', error)
+          setShowImportError(true)
         }
       }
       
       input.click()
     } catch (error) {
       // Fallback: Show paste interface for manual JSON input
-      console.warn('File input blocked, using paste fallback:', error)
-      const pasteModal = document.createElement('div')
-      pasteModal.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
-          <div style="background: #1f2937; color: white; padding: 20px; border-radius: 8px; max-width: 600px; width: 90%;">
-            <h3 style="margin-top: 0;">Import Favorites (Paste JSON)</h3>
-            <p>Paste your exported favorites JSON data below:</p>
-            <textarea id="pasteArea" style="width: 100%; height: 300px; background: #374151; color: white; border: 1px solid #6b7280; padding: 10px; font-family: monospace;" placeholder="Paste JSON data here..."></textarea>
-            <div style="margin-top: 15px; text-align: right;">
-              <button onclick="this.closest('div').parentElement.remove()" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px;">Cancel</button>
-              <button onclick="
-                try {
-                  const data = JSON.parse(document.getElementById('pasteArea').value);
-                  if (!data.favorites || !Array.isArray(data.favorites)) throw new Error('Invalid format');
-                  window.vimImportCallback(data.favorites);
-                  this.closest('div').parentElement.remove();
-                } catch(e) {
-                  alert('Invalid JSON format. Please check your data.');
-                }
-              " style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Import</button>
-            </div>
-          </div>
-        </div>
-      `
+      console.warn('File input blocked, using modal fallback:', error)
+      setShowImportModal(true)
+    }
+  }
+  
+  const handleImportFromText = () => {
+    try {
+      const data = JSON.parse(importData)
       
-      // Set up callback for manual import
-      interface WindowWithCallback extends Window {
-        vimImportCallback?: (favoritesArray: string[]) => void
-      }
-      ;(window as WindowWithCallback).vimImportCallback = (favoritesArray: string[]) => {
-        setFavorites(prev => new Set([...prev, ...favoritesArray]))
-        console.log(`Successfully imported ${favoritesArray.length} favorites!`)
+      // Validate the data
+      if (!data.favorites || !Array.isArray(data.favorites)) {
+        throw new Error('Invalid favorites file format')
       }
       
-      document.body.appendChild(pasteModal)
+      // Merge with existing favorites
+      setFavorites(prev => new Set([...prev, ...data.favorites]))
+      setImportedCount(data.favorites.length)
+      setImportData('')
+      setShowImportModal(false)
+      setShowImportSuccess(true)
+    } catch (error) {
+      console.error('Failed to import favorites:', error)
+      setShowImportError(true)
     }
   }
 
@@ -1149,6 +1115,121 @@ export default function VimCheatsheetEnhanced() {
         onClose={() => setShowHelpViewer(false)}
         initialFile={helpFile}
         initialTag={helpTag}
+      />
+      
+      {/* Custom Modals */}
+      {/* Clear Favorites Confirmation */}
+      <ConfirmModal
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={handleClearFavoritesConfirm}
+        title="Clear All Favorites"
+        message="Are you sure you want to clear all favorites? This action cannot be undone."
+        confirmText="Clear All"
+        cancelText="Cancel"
+        confirmStyle="danger"
+      />
+      
+      {/* Export Modal (Fallback) */}
+      <Modal 
+        isOpen={showExportModal} 
+        onClose={() => setShowExportModal(false)}
+        title="Export Favorites"
+      >
+        <div className="space-y-4">
+          <p className="text-gray-300">
+            Copy the JSON data below and save it as a .json file:
+          </p>
+          <textarea
+            className="w-full h-64 bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={exportData}
+            readOnly
+            onClick={(e) => (e.target as HTMLTextAreaElement).select()}
+          />
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(exportData)
+                  .then(() => {
+                    const textarea = document.querySelector('textarea')
+                    if (textarea) {
+                      textarea.style.borderColor = '#10b981'
+                      setTimeout(() => {
+                        textarea.style.borderColor = '#4b5563'
+                      }, 1000)
+                    }
+                  })
+                  .catch(console.error)
+              }}
+              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
+            >
+              Copy to Clipboard
+            </button>
+            <button
+              onClick={() => setShowExportModal(false)}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </Modal>
+      
+      {/* Import Modal (Fallback) */}
+      <Modal
+        isOpen={showImportModal}
+        onClose={() => {
+          setShowImportModal(false)
+          setImportData('')
+        }}
+        title="Import Favorites"
+      >
+        <div className="space-y-4">
+          <p className="text-gray-300">
+            Paste your exported favorites JSON data below:
+          </p>
+          <textarea
+            className="w-full h-64 bg-gray-700 text-gray-100 border border-gray-600 rounded-md p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+            value={importData}
+            onChange={(e) => setImportData(e.target.value)}
+            placeholder="Paste JSON data here..."
+          />
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => {
+                setShowImportModal(false)
+                setImportData('')
+              }}
+              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleImportFromText}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+            >
+              Import
+            </button>
+          </div>
+        </div>
+      </Modal>
+      
+      {/* Import Success */}
+      <AlertModal
+        isOpen={showImportSuccess}
+        onClose={() => setShowImportSuccess(false)}
+        title="Import Successful"
+        message={`Successfully imported ${importedCount} favorites!`}
+        type="success"
+      />
+      
+      {/* Import Error */}
+      <AlertModal
+        isOpen={showImportError}
+        onClose={() => setShowImportError(false)}
+        title="Import Failed"
+        message="Failed to import favorites. Please ensure the file is a valid JSON export."
+        type="error"
       />
 
     </div>
