@@ -28,7 +28,7 @@
       <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
     </a>
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest">
-      <img src="https://img.shields.io/badge/version-3.2.0-blue.svg" alt="Version 3.2.0" />
+      <img src="https://img.shields.io/badge/version-3.5.0-blue.svg" alt="Version 3.5.0" />
     </a>
     <a href="https://reactjs.org/">
       <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg?logo=react" alt="React 19.1" />
@@ -75,6 +75,27 @@ This isn't just another VIM reference—it's a **performance-optimized, interact
     </td>
   </tr>
 </table>
+
+## 🚀 Version 3.5.0 - UX Improvements & Demo Playback Fix
+
+### 🎯 Critical Demo Playback Fix
+- **Perfect Demo Timing**: Fixed critical issue where the last step of every demo wasn't playing
+- **Complete Step Display**: All demo steps now display for full 3-second duration
+- **Auto-Reset Functionality**: Demos automatically reset to beginning when complete
+- **Improved Timing Logic**: Simplified interval-based approach eliminates race conditions
+- **Comprehensive Testing**: Verified with demos of all lengths (1-5+ steps)
+
+### 🎨 Enhanced User Interface
+- **Improved Background Styling**: Fixed pure black background issue with cohesive dark theme
+- **Streamlined Theme System**: Removed light mode toggle for simplified, consistent dark experience  
+- **Better Visual Consistency**: Unified color scheme across all components
+- **Performance Optimized**: Cleaner component architecture with reduced complexity
+
+### 🔧 Technical Improvements
+- **Simplified Demo Logic**: Replaced complex recursive setTimeout with predictable setInterval
+- **Better Error Handling**: More robust state management and cleanup
+- **Code Quality**: Enhanced TypeScript compliance and linting
+- **Build Optimization**: Maintained excellent bundle size and performance metrics
 
 ## 🚀 Version 3.2.0 - Comprehensive Demo Collection
 
@@ -254,7 +275,7 @@ Perfect for offline and air-gapped environments:
 
 #### Option 1: Download Release
 1. Download the latest release from [GitHub Releases](https://github.com/Real-Fruit-Snacks/VIM/releases/latest)
-2. Extract `vim-cheatsheet-v3.1.3-gitlab-pages.zip`
+2. Extract `vim-cheatsheet-v3.5.0-gitlab-pages.zip`
 3. Upload contents to your GitLab Pages repository
 4. Enable GitLab Pages in project settings
 
@@ -427,6 +448,6 @@ Built with ❤️ for the VIM community:
     <a href="https://github.com/Real-Fruit-Snacks/VIM/releases/latest"><strong>📦 Download for Offline Use →</strong></a>
   </p>
   <p>
-    <sub>Made by VIM users, for VIM users | Version 3.2.0 | 315+ Commands • 16 Workflow Demos | Performance Optimized</sub>
+    <sub>Made by VIM users, for VIM users | Version 3.5.0 | 315+ Commands • 30 Workflow Demos | Performance Optimized</sub>
   </p>
 </div>
