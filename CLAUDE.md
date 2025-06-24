@@ -177,3 +177,9 @@ Current performance metrics:
 - Functions: `safeGetItem`, `safeSetItem`, `safeCopyToClipboard`
 - Falls back to in-memory storage when localStorage is blocked
 - Critical for enterprise/restricted browser environments
+
+**Dynamic Category Display:**
+- Problem: Categories in sidebar stayed fixed when switching between Commands and Demos views
+- Solution: Dynamic category switching based on `currentView` state
+- Implementation: Categories now show command categories (basicMovement, documentNavigation, etc.) for Commands view and demo categories (developer, writer, general) for Demos view
+- Features: Demo filtering by category, context-aware UI elements, proper state reset when switching views
