@@ -4,27 +4,27 @@
   "description": "Master VIM with 315+ animated commands and 30 real-world workflow demos",
   "version": "4.0.0",
   "manifest_version": 3,
-  "start_url": "/VIM/",
-  "scope": "/VIM/",
+  "start_url": "/VIM-Cheat-Sheet/",
+  "scope": "/VIM-Cheat-Sheet/",
   "display": "standalone",
   "background_color": "#1a202c",
   "theme_color": "#2d3748",
   "orientation": "any",
   "icons": [
     {
-      "src": "/VIM/favicon-simple.svg",
+      "src": "/VIM-Cheat-Sheet/favicon-simple.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/VIM/favicon-detailed.svg",
+      "src": "/VIM-Cheat-Sheet/favicon-detailed.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "/VIM/favicon.ico",
+      "src": "/VIM-Cheat-Sheet/favicon.ico",
       "sizes": "16x16 32x32 48x48",
       "type": "image/x-icon"
     }
@@ -32,13 +32,13 @@
   "categories": ["education", "productivity", "developer"],
   "screenshots": [
     {
-      "src": "/VIM/assets/screenshot-commands.png",
+      "src": "/VIM-Cheat-Sheet/assets/screenshot-commands.png",
       "sizes": "1280x720",
       "type": "image/png",
       "label": "Interactive VIM Commands"
     },
     {
-      "src": "/VIM/assets/screenshot-demos.png",
+      "src": "/VIM-Cheat-Sheet/assets/screenshot-demos.png",
       "sizes": "1280x720",
       "type": "image/png",
       "label": "Workflow Demos"
@@ -47,12 +47,12 @@
   "shortcuts": [
     {
       "name": "VIM Commands",
-      "url": "/VIM/?view=commands",
+      "url": "/VIM-Cheat-Sheet/?view=commands",
       "description": "Browse all VIM commands"
     },
     {
       "name": "Workflow Demos",
-      "url": "/VIM/?view=demos",
+      "url": "/VIM-Cheat-Sheet/?view=demos",
       "description": "Interactive workflow demonstrations"
     }
   ],

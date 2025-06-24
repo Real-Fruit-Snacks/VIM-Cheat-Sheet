@@ -4,7 +4,7 @@
   "version": "4.2.0",
   "type": "module",
   "description": "Interactive VIM mastery platform with 315+ animated commands and 64 real-world workflow demos",
-  "homepage": "https://Real-Fruit-Snacks.github.io/VIM",
+  "homepage": "https://Real-Fruit-Snacks.github.io/VIM-Cheat-Sheet",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -2,17 +2,17 @@
 // Provides comprehensive offline support for GitLab Pages deployment
 
 const CACHE_NAME = 'vim-cheatsheet-v4.0.0';
-const OFFLINE_URL = '/VIM/offline.html';
+const OFFLINE_URL = '/VIM-Cheat-Sheet/offline.html';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  '/VIM/',
-  '/VIM/index.html',
-  '/VIM/offline.html',
-  '/VIM/favicon.ico',
-  '/VIM/favicon-simple.svg',
-  '/VIM/favicon-detailed.svg',
-  '/VIM/loading.css'
+  '/VIM-Cheat-Sheet/',
+  '/VIM-Cheat-Sheet/index.html',
+  '/VIM-Cheat-Sheet/offline.html',
+  '/VIM-Cheat-Sheet/favicon.ico',
+  '/VIM-Cheat-Sheet/favicon-simple.svg',
+  '/VIM-Cheat-Sheet/favicon-detailed.svg',
+  '/VIM-Cheat-Sheet/loading.css'
 ];
 
 // VIM help files to cache
@@ -21,7 +21,7 @@ const HELP_FILES = [
   'index.txt', 'insert.txt', 'map.txt', 'motion.txt',
   'options.txt', 'pattern.txt', 'repeat.txt', 'scroll.txt',
   'undo.txt', 'various.txt', 'visual.txt', 'windows.txt'
-].map(file => `/VIM/vim-help/${file}`);
+].map(file => `/VIM-Cheat-Sheet/vim-help/${file}`);
 
 // Install event - cache all static assets
 self.addEventListener('install', (event) => {
@@ -76,7 +76,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   
   // Skip external requests
-  if (!url.pathname.startsWith('/VIM/')) {
+  if (!url.pathname.startsWith('/VIM-Cheat-Sheet/')) {
     return;
   }
 

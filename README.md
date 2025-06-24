@@ -1,14 +1,14 @@
 # VIM Cheat Sheet
 
 <div align="center">
-  <a href="https://real-fruit-snacks.github.io/VIM/">
+  <a href="https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/">
     <img src="public/favicon-detailed.svg" alt="VIM Cheat Sheet" width="100" />
   </a>
   
   <p><strong>Interactive VIM reference with 315+ commands and 30 workflow demos</strong></p>
   
   <p>
-    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>🚀 Open VIM Cheat Sheet →</strong></a>
+    <a href="https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/"><strong>🚀 Open VIM Cheat Sheet →</strong></a>
   </p>
   
   <p>
@@ -45,14 +45,14 @@
 ## Quick Start
 
 ### Online (Recommended)
-Visit **[real-fruit-snacks.github.io/VIM](https://real-fruit-snacks.github.io/VIM/)** in any modern browser.
+Visit **[real-fruit-snacks.github.io/VIM-Cheat-Sheet](https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/)** in any modern browser.
 
 ### Local Development
 ```bash
-git clone https://github.com/Real-Fruit-Snacks/VIM.git
-cd VIM
+git clone https://github.com/Real-Fruit-Snacks/VIM-Cheat-Sheet.git
+cd VIM-Cheat-Sheet
 npm install
-npm run dev  # Opens at localhost:5173/VIM/
+npm run dev  # Opens at localhost:5173/VIM-Cheat-Sheet/
 ```
 
 ### Build & Deploy
@@ -99,7 +99,7 @@ src/
 ## Deployment Options
 
 ### GitHub Pages
-Automatically deployed at [real-fruit-snacks.github.io/VIM](https://real-fruit-snacks.github.io/VIM/)
+Automatically deployed at [real-fruit-snacks.github.io/VIM-Cheat-Sheet](https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/)
 
 ```bash
 npm run deploy  # Deploy to GitHub Pages
@@ -223,5 +223,5 @@ MIT License - see [LICENSE](LICENSE) file.
 
 <div align="center">
   <p><strong>Made by VIM users, for VIM users</strong></p>
-  <p><a href="https://real-fruit-snacks.github.io/VIM/">🚀 Start using VIM Cheatsheet</a></p>
+  <p><a href="https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/">🚀 Start using VIM Cheat Sheet</a></p>
 </div>

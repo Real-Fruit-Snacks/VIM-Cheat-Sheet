@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // For GitHub/GitLab Pages, use the project name as base path
-  base: '/VIM/',
+  base: '/VIM-Cheat-Sheet/',
   build: {
     // Optimize bundle size
     target: 'es2015',
