@@ -74,7 +74,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 26,
+          cursorCol: 31,
           mode: 'insert',
           description: 'Parameter renamed to "products"'
         },
@@ -94,7 +94,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 26,
+          cursorCol: 31,
           mode: 'insert',
           description: 'Currently in insert mode'
         },
@@ -109,7 +109,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 25,
+          cursorCol: 30,
           mode: 'normal',
           description: 'Back in normal mode'
         },
@@ -1086,7 +1086,7 @@ export const vimDemos: VimDemoData[] = [
           cursorRow: 0,
           cursorCol: 7,
           mode: 'insert',
-          description: 'Position cursor on "fox" to copy it'
+          description: 'In insert mode after changing "brown" to "red"'
         },
         after: {
           text: [
@@ -2181,7 +2181,7 @@ export const vimDemos: VimDemoData[] = [
             'ssl_enabled=true'
           ],
           cursorRow: 2,
-          cursorCol: 11,
+          cursorCol: 10,
           mode: 'normal',
           description: 'At end of debug line'
         },
@@ -2316,7 +2316,7 @@ export const vimDemos: VimDemoData[] = [
             'log_level=info'
           ],
           cursorRow: 6,
-          cursorCol: 13,
+          cursorCol: 12,
           mode: 'normal',
           description: 'Back in normal mode'
         },
