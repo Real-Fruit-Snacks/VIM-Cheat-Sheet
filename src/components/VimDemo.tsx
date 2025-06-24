@@ -73,49 +73,36 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setDemoState('idle')
   }
 
-  // PLAYBACK SYSTEM - Chain-based sequential playback for reliable timing
+  // PLAYBACK SYSTEM - Recursive scheduler to ensure final step shows
   const playDemo = () => {
     clearAllTimeouts()
-    
+
     const totalSteps = demo.steps.length
     const stepDuration = 3000 / playbackSpeed
-    
-    // Start from the beginning
-    setCurrentStep(0)
+
     setIsPlaying(true)
     setDemoState('playing')
-    
-    // Helper function to play one step and schedule the next
-    const playStep = (stepIndex: number) => {
-      if (stepIndex >= totalSteps) {
-        // All steps completed, wait a bit then reset
-        const resetTimeout = setTimeout(() => {
-          reset()
-        }, 1000 / playbackSpeed)
-        timeoutsRef.current.push(resetTimeout)
-        return
-      }
-      
-      // If this is the last step, mark as completed
-      if (stepIndex === totalSteps - 1) {
+
+    const playStep = (index: number) => {
+      setCurrentStep(index)
+
+      if (index === totalSteps - 1) {
+        // Last step – mark completed then reset after a pause
         setDemoState('completed')
+        const resetId = setTimeout(() => {
+          reset()
+        }, stepDuration)
+        timeoutsRef.current.push(resetId)
+      } else {
+        // Schedule next step
+        const nextId = setTimeout(() => {
+          playStep(index + 1)
+        }, stepDuration)
+        timeoutsRef.current.push(nextId)
       }
-      
-      // Wait for this step's duration, then move to next
-      const nextStepTimeout = setTimeout(() => {
-        if (stepIndex < totalSteps - 1) {
-          setCurrentStep(stepIndex + 1)
-          playStep(stepIndex + 1)
-        } else {
-          // Last step - just wait then trigger completion
-          playStep(stepIndex + 1)
-        }
-      }, stepDuration)
-      
-      timeoutsRef.current.push(nextStepTimeout)
     }
-    
-    // Start playing from step 0
+
+    // Kick off from step 0
     playStep(0)
   }
 
