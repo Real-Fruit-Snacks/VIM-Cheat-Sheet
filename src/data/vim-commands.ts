@@ -36,7 +36,7 @@ export const vimCommands: Record<string, VimCommand[]> = {
     { command: 'G', description: 'Move to last line of file', mode: 'normal' },
     { command: '5G', description: 'Move to line 5', mode: 'normal', example: 'Replace 5 with any line number' },
     { command: '50%', description: 'Go to 50% of file', mode: 'normal', example: 'Jump to middle of file' },
-    { command: '{', description: 'Move to previous paragraph', mode: 'normal' },
+    { command: '{', description: 'Move to beginning of current/previous paragraph', mode: 'normal' },
     { command: '}', description: 'Move to next paragraph', mode: 'normal' },
     { command: 'H', description: 'Move to top of screen', mode: 'normal' },
     { command: 'M', description: 'Move to middle of screen', mode: 'normal' },
@@ -90,7 +90,7 @@ export const vimCommands: Record<string, VimCommand[]> = {
   copyPasteAndRegisters: [
     { command: 'yy', description: 'Copy (yank) entire line', mode: 'normal' },
     { command: 'Y', description: 'Copy entire line (same as yy)', mode: 'normal' },
-    { command: 'yw', description: 'Copy to beginning of next word', mode: 'normal' },
+    { command: 'yw', description: 'Copy word from cursor to beginning of next word', mode: 'normal' },
     { command: 'y$', description: 'Copy from cursor to end of line', mode: 'normal' },
     { command: 'p', description: 'Paste after cursor', mode: 'normal' },
     { command: 'P', description: 'Paste before cursor', mode: 'normal' },

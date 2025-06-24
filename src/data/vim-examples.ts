@@ -57,7 +57,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 6,
       mode: 'normal',
-      description: 'Cursor moved down to "l" in "line" (second line)'
+      description: 'Cursor moved down, maintaining column 6 position'
     },
     explanation: 'Moves cursor down one line. Tries to maintain the same column position when possible.'
   },
@@ -73,7 +73,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 7,
       mode: 'normal',
-      description: 'Cursor on "i" in "line" (second line)'
+      description: 'Cursor on "l" in "line" (second line)'
     },
     afterState: {
       text: [
@@ -170,7 +170,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['    Hello world from VIM!'],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 11,
       mode: 'normal',
       description: 'Cursor on "o" in "world"'
     },
@@ -189,7 +189,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['    Hello world from VIM!'],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 11,
       mode: 'normal',
       description: 'Cursor on "o" in "world"'
     },
@@ -215,7 +215,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: ['Hello world from VIM!'],
       cursorRow: 0,
-      cursorCol: 19,
+      cursorCol: 20,
       mode: 'normal',
       description: 'Cursor on "!" (last character of line)'
     },
@@ -253,32 +253,32 @@ export const vimExamples: Record<string, VimCommandExample> = {
     command: '(',
     beforeState: {
       text: [
-        'This is the first sentence. This is the second one.',
+        'This is the first sentence.  This is the second one.',
         'Here starts a new sentence after paragraph.'
       ],
       cursorRow: 0,
-      cursorCol: 35,
+      cursorCol: 37,
       mode: 'normal',
       description: 'Cursor in the middle of second sentence'
     },
     afterState: {
       text: [
-        'This is the first sentence. This is the second one.',
+        'This is the first sentence.  This is the second one.',
         'Here starts a new sentence after paragraph.'
       ],
       cursorRow: 0,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Cursor at beginning of first sentence'
+      description: 'Cursor moved to beginning of previous (first) sentence'
     },
-    explanation: 'Moves to the beginning of the current sentence. Sentences are separated by periods, exclamation marks, or question marks followed by spaces.'
+    explanation: 'Moves to the beginning of the previous sentence. Sentences are separated by periods, exclamation marks, or question marks followed by two spaces or newline.'
   },
 
   ')': {
     command: ')',
     beforeState: {
       text: [
-        'This is the first sentence. This is the second one.',
+        'This is the first sentence.  This is the second one.',
         'Here starts a new sentence after paragraph.'
       ],
       cursorRow: 0,
@@ -288,15 +288,15 @@ export const vimExamples: Record<string, VimCommandExample> = {
     },
     afterState: {
       text: [
-        'This is the first sentence. This is the second one.',
+        'This is the first sentence.  This is the second one.',
         'Here starts a new sentence after paragraph.'
       ],
       cursorRow: 0,
-      cursorCol: 28,
+      cursorCol: 29,
       mode: 'normal',
-      description: 'Cursor at beginning of second sentence'
+      description: 'Cursor at beginning of next (second) sentence'
     },
-    explanation: 'Moves to the beginning of the next sentence. Useful for navigating through paragraphs of text.'
+    explanation: 'Moves to the beginning of the next sentence. Sentences are separated by periods, exclamation marks, or question marks followed by two spaces or newline.'
   },
 
   // Editing Commands
@@ -433,7 +433,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       mode: 'normal',
       description: 'Character deleted, cursor stays in place'
     },
-    explanation: 'Deletes the character under the cursor. If at end of line, deletes the previous character.'
+    explanation: 'Deletes the character under the cursor. If cursor is at end of line, command has no effect.'
   },
 
   // Insert Mode Commands
@@ -663,8 +663,9 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Third line of text'
       ],
       cursorRow: 1,
-      cursorCol: 8,
+      cursorCol: 0,
       mode: 'visual',
+      visualEnd: { row: 1, col: 22 },
       description: 'Line-wise visual mode, entire line selected'
     },
     explanation: 'Enters line-wise visual mode, selecting the entire current line. Move up/down to select multiple lines.'
@@ -994,12 +995,12 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Third paragraph is where cursor',
         'is currently located.'
       ],
-      cursorRow: 3,
+      cursorRow: 6,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Cursor moved to start of previous paragraph'
+      description: 'Cursor moved to start of current paragraph'
     },
-    explanation: 'Moves to the beginning of the previous paragraph. Paragraphs are separated by blank lines.'
+    explanation: 'Moves to the beginning of the current paragraph. If already at the beginning, moves to previous paragraph. Paragraphs are separated by blank lines.'
   },
 
   '}': {
@@ -1190,12 +1191,12 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Line 1 (above viewport)',
         'Line 2 (above viewport)',
         'Line 3 (top of screen now)',
-        'Line 4 (cursor here now)',
-        'Line 5 (visible)',
+        'Line 4 (visible)',
+        'Line 5 (cursor here now)',
         'Line 6 (visible now)',
         'Line 7 (bottom of screen)'
       ],
-      cursorRow: 3,
+      cursorRow: 4,
       cursorCol: 8,
       mode: 'normal',
       description: 'Scrolled down half page, cursor adjusted'
@@ -1226,8 +1227,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Line 2 (top of screen)',
         'Line 3 (cursor centered now)',
         'Line 4 (visible)',
-        'Line 5 (visible)',
-        'Line 6 (bottom of screen)',
+        'Line 5 (bottom of screen)',
+        'Line 6 (below screen)',
         'Line 7 (below screen)'
       ],
       cursorRow: 2,
@@ -1286,7 +1287,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Line 7 (bottom of screen)'
       ],
       cursorRow: 4,
-      cursorCol: 6,
+      cursorCol: 8,
       mode: 'normal',
       description: 'Cursor in middle of viewport'
     },
@@ -1301,7 +1302,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Line 7 (below screen)'
       ],
       cursorRow: 4,
-      cursorCol: 6,
+      cursorCol: 8,
       mode: 'normal',
       description: 'Current line moved to bottom of screen'
     },
@@ -1314,16 +1315,16 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Remove the extra character here'],
       cursorRow: 0,
-      cursorCol: 17,
+      cursorCol: 16,
       mode: 'normal',
-      description: 'Cursor on "c" in "character"'
+      description: 'Cursor on space after "a" in "extra"'
     },
     afterState: {
       text: ['Remove the extr character here'],
       cursorRow: 0,
-      cursorCol: 16,
+      cursorCol: 15,
       mode: 'normal',
-      description: 'Character before cursor deleted'
+      description: 'Character "a" deleted, cursor moved left to position 15'
     },
     explanation: 'Deletes the character before the cursor (to the left). Opposite of "x" which deletes under cursor.'
   },
@@ -1333,14 +1334,14 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Keep this part, delete rest of line'],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 14,
       mode: 'normal',
       description: 'Cursor on comma'
     },
     afterState: {
       text: ['Keep this part'],
       cursorRow: 0,
-      cursorCol: 14,
+      cursorCol: 13,
       mode: 'normal',
       description: 'Everything from cursor to end deleted'
     },
@@ -1356,7 +1357,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Third line stays'
       ],
       cursorRow: 1,
-      cursorCol: 12,
+      cursorCol: 13,
       mode: 'normal',
       description: 'Cursor on line to replace'
     },
@@ -1379,16 +1380,16 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Keep beginning, change rest of line'],
       cursorRow: 0,
-      cursorCol: 16,
+      cursorCol: 14,
       mode: 'normal',
       description: 'Cursor on comma'
     },
     afterState: {
       text: ['Keep beginning'],
       cursorRow: 0,
-      cursorCol: 15,
+      cursorCol: 13,
       mode: 'insert',
-      description: 'Ready to type new ending'
+      description: 'Cursor at end of remaining text, ready to insert'
     },
     explanation: 'Changes from cursor to end of line - deletes to end and enters insert mode. Like D but enters insert mode.'
   },
@@ -1398,14 +1399,14 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Replace this x character with text'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 13,
       mode: 'normal',
       description: 'Cursor on "x" to replace'
     },
     afterState: {
       text: ['Replace this  character with text'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 13,
       mode: 'insert',
       description: 'Character deleted, insert mode active'
     },
@@ -1421,7 +1422,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Third line'
       ],
       cursorRow: 1,
-      cursorCol: 8,
+      cursorCol: 4,
       mode: 'normal',
       description: 'Cursor on line to substitute'
     },
@@ -1444,14 +1445,14 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Replace this x with y character'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 13,
       mode: 'normal',
       description: 'Cursor on "x", will type "y"'
     },
     afterState: {
       text: ['Replace this y with y character'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 13,
       mode: 'normal',
       description: 'Character replaced, stayed in normal mode'
     },
@@ -1582,9 +1583,9 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 5,
       mode: 'normal',
-      description: 'Word "this" copied to register'
+      description: 'Text "this " (with space) copied to register'
     },
-    explanation: 'Copies the word from cursor position to end of word. No visual change, but word is in register for pasting.'
+    explanation: 'Copies from cursor position to beginning of next word, including any trailing whitespace. No visual change, but "this " is now in register for pasting.'
   },
 
   'Y': {
@@ -1646,12 +1647,12 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 17,
       mode: 'normal',
-      description: 'Cursor on hyphen in "file-paths"'
+      description: 'Cursor on "f" in "file-paths"'
     },
     afterState: {
       text: ['Navigate through file-paths, URLs, and text-strings easily'],
       cursorRow: 0,
-      cursorCol: 27,
+      cursorCol: 29,
       mode: 'normal',
       description: 'Cursor moved to "U" in "URLs"'
     },
@@ -1670,7 +1671,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: ['Navigate through file-paths, URLs, and text-strings easily'],
       cursorRow: 0,
-      cursorCol: 27,
+      cursorCol: 29,
       mode: 'normal',
       description: 'Cursor moved to "U" in "URLs"'
     },
@@ -1682,14 +1683,14 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Navigate through file-paths, URLs, and text-strings easily'],
       cursorRow: 0,
-      cursorCol: 27,
+      cursorCol: 29,
       mode: 'normal',
       description: 'Cursor on "U" in "URLs"'
     },
     afterState: {
       text: ['Navigate through file-paths, URLs, and text-strings easily'],
       cursorRow: 0,
-      cursorCol: 30,
+      cursorCol: 32,
       mode: 'normal',
       description: 'Cursor moved to "s" at end of "URLs"'
     },
@@ -2010,9 +2011,10 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Before deselecting it'
       ],
       cursorRow: 1,
-      cursorCol: 12,
+      cursorCol: 0,
       mode: 'visual',
-      description: 'Previous selection restored'
+      visualEnd: { row: 1, col: 25 },
+      description: 'Previous selection restored (entire line 2)'
     },
     explanation: 'Reselects the last visual selection. Useful when you accidentally exit visual mode and want the selection back.'
   },
@@ -3216,7 +3218,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: [
         'The new is in this line',
-        'But sword and password contain new too',
+        'But sword and password contain word too',
         'Only exact new matches should change'
       ],
       cursorRow: 0,
@@ -3474,7 +3476,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
 
   // More advanced text objects
   'it': {
-    command: 'it',
+    command: 'dit',
     beforeState: {
       text: ['<div>Hello <span>world</span></div>'],
       cursorRow: 0,
@@ -3493,7 +3495,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'at': {
-    command: 'at',
+    command: 'dat',
     beforeState: {
       text: ['<div>Hello <span>world</span> there</div>'],
       cursorRow: 0,
@@ -3519,7 +3521,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 0,
       mode: 'visual',
-      description: 'Text selected in visual mode'
+      visualEnd: { row: 0, col: 33 },
+      description: 'Entire line selected in visual mode'
     },
     afterState: {
       text: ['Copy this text to system clipboard'],
@@ -3557,7 +3560,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 0,
       mode: 'visual',
-      description: 'Text selected for copying'
+      visualEnd: { row: 0, col: 23 },
+      description: 'Entire line selected for copying to register "a"'
     },
     afterState: {
       text: ['Store this in register a'],
@@ -3967,6 +3971,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 0,
       mode: 'visual',
+      visualEnd: { row: 3, col: 0 },
       description: 'Code selected with poor indentation'
     },
     afterState: {
@@ -4037,7 +4042,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: ['Find all a letters in this line'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 9,
       mode: 'normal',
       description: 'Cursor moved to next "a"'
     },
@@ -4049,7 +4054,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     beforeState: {
       text: ['Find all a letters in this line'],
       cursorRow: 0,
-      cursorCol: 12,
+      cursorCol: 9,
       mode: 'normal',
       description: 'After fa;, cursor on second "a"'
     },
@@ -4431,7 +4436,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 0,
       cursorCol: 0,
       mode: 'visual',
-      description: 'Text selected in visual mode'
+      visualEnd: { row: 0, col: 23 },
+      description: 'Entire text selected in visual mode'
     },
     afterState: {
       text: ['MAKE THIS TEXT UPPERCASE'],
@@ -4471,7 +4477,32 @@ export const vimExamples: Record<string, VimCommandExample> = {
     explanation: 'In insert mode, indents the current line. Very useful for adjusting indentation while typing.'
   },
 
-  // Ctrl-d duplicate removed (insert mode unindent)
+  'i_Ctrl-d': {
+    command: 'Ctrl-d',
+    beforeState: {
+      text: [
+        'function example() {',
+        '        overindented code',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 8,
+      mode: 'insert',
+      description: 'In insert mode on overindented line'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '    overindented code',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 4,
+      mode: 'insert',
+      description: 'Line unindented, still in insert mode'
+    },
+    explanation: 'In insert mode, unindents the current line by one shiftwidth. Perfect for fixing indentation while typing.'
+  },
 
   // Page scrolling operations
   'Ctrl-b': {
@@ -4771,7 +4802,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: ['Move to before the letter a'],
       cursorRow: 0,
-      cursorCol: 22,
+      cursorCol: 25,
       mode: 'normal',
       description: 'Cursor positioned before "a"'
     },
@@ -4790,11 +4821,11 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: ['Move backward before the letter a'],
       cursorRow: 0,
-      cursorCol: 26,
+      cursorCol: 6,
       mode: 'normal',
-      description: 'Cursor positioned before "a"'
+      description: 'Cursor positioned after "a" (from backward direction)'
     },
-    explanation: 'Moves cursor backward to just before the previous occurrence of character "a" on the line.'
+    explanation: 'Moves cursor backward to just after the previous occurrence of character "a" on the line. Stops one position after the target when moving backward.'
   },
 
   // More percentage operations
@@ -4819,7 +4850,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
 
   // More complex text objects  
   'i`': {
-    command: 'i`',
+    command: 'di`',
     beforeState: {
       text: ['Code with `backtick content` here'],
       cursorRow: 0,
@@ -4838,7 +4869,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a`': {
-    command: 'a`',
+    command: 'da`',
     beforeState: {
       text: ['Code with `backtick content` here'],
       cursorRow: 0,
@@ -4857,7 +4888,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'is': {
-    command: 'is',
+    command: 'dis',
     beforeState: {
       text: [
         'First sentence here. Second sentence follows. Third one too.'
@@ -4880,7 +4911,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'as': {
-    command: 'as',
+    command: 'das',
     beforeState: {
       text: [
         'First sentence here. Second sentence follows. Third one too.'
@@ -4903,7 +4934,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'ip': {
-    command: 'ip',
+    command: 'dip',
     beforeState: {
       text: [
         'First paragraph line one.',
@@ -4932,7 +4963,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'ap': {
-    command: 'ap',
+    command: 'dap',
     beforeState: {
       text: [
         'First paragraph line one.',
@@ -4964,32 +4995,32 @@ export const vimExamples: Record<string, VimCommandExample> = {
     command: '5u',
     beforeState: {
       text: [
-        'After 5 changes made',
-        'Each change can be undone',
-        'Multiple undo levels available'
+        'File with recent change',
+        'This line was just modified',
+        'Ready to undo'
       ],
-      cursorRow: 0,
+      cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'File after making 5 changes'
+      description: 'After making a change'
     },
     afterState: {
       text: [
-        'Original state restored',
-        'Before any changes',
-        'Clean starting point'
+        'File with recent change',
+        'This line before modification',
+        'Ready to undo'
       ],
-      cursorRow: 0,
+      cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: '5 changes undone'
+      description: 'One change undone (count ignored)'
     },
-    explanation: 'Undoes the last 5 changes. Each u command undoes one change level, so 5u undoes 5 separate changes.'
+    explanation: 'Undoes only one change. VIM ignores the count for u command - 5u behaves exactly like u.'
   },
 
   // More register operations  
-  '"_d': {
-    command: '"_d',
+  '"_dd': {
+    command: '"_dd',
     beforeState: {
       text: [
         'Keep this in register',
@@ -5034,9 +5065,9 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Paste original here: Original copied text'
       ],
       cursorRow: 2,
-      cursorCol: 39,
+      cursorCol: 40,
       mode: 'normal',
-      description: 'Original copied text pasted'
+      description: 'Original copied text pasted, cursor after text'
     },
     explanation: 'Pastes from yank register "0", which contains the last copied (not deleted) text. Useful when deletions have overwritten default register.'
   },
@@ -5361,7 +5392,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
 
   // Missing Text Objects (Critical Priority)
   'iw': {
-    command: 'iw',
+    command: 'diw',
     beforeState: {
       text: ['The quick brown fox jumps'],
       cursorRow: 0,
@@ -5380,7 +5411,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'aw': {
-    command: 'aw',
+    command: 'daw',
     beforeState: {
       text: ['The quick brown fox jumps'],
       cursorRow: 0,
@@ -5399,7 +5430,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i"': {
-    command: 'i"',
+    command: 'di"',
     beforeState: {
       text: ['console.log("Hello World");'],
       cursorRow: 0,
@@ -5418,7 +5449,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a"': {
-    command: 'a"',
+    command: 'da"',
     beforeState: {
       text: ['console.log("Hello World");'],
       cursorRow: 0,
@@ -5437,7 +5468,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   "i'": {
-    command: "i'",
+    command: "di'",
     beforeState: {
       text: ["const msg = 'Hello VIM';"],
       cursorRow: 0,
@@ -5456,7 +5487,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   "a'": {
-    command: "a'",
+    command: "da'",
     beforeState: {
       text: ["const msg = 'Hello VIM';"],
       cursorRow: 0,
@@ -5475,7 +5506,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i(': {
-    command: 'i(',
+    command: 'di(',
     beforeState: {
       text: ['function call(arg1, arg2, arg3)'],
       cursorRow: 0,
@@ -5494,7 +5525,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a(': {
-    command: 'a(',
+    command: 'da(',
     beforeState: {
       text: ['function call(arg1, arg2, arg3)'],
       cursorRow: 0,
@@ -5513,7 +5544,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i[': {
-    command: 'i[',
+    command: 'di[',
     beforeState: {
       text: ['array[index1, index2, index3]'],
       cursorRow: 0,
@@ -5532,7 +5563,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a[': {
-    command: 'a[',
+    command: 'da[',
     beforeState: {
       text: ['array[index1, index2, index3]'],
       cursorRow: 0,
@@ -5551,7 +5582,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i{': {
-    command: 'i{',
+    command: 'di{',
     beforeState: {
       text: [
         'object = {',
@@ -5578,7 +5609,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a{': {
-    command: 'a{',
+    command: 'da{',
     beforeState: {
       text: [
         'object = {',
@@ -5603,7 +5634,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
 
   // Alternative notations for the same text objects
   'i)': {
-    command: 'i)',
+    command: 'di)',
     beforeState: {
       text: ['if (condition && other_condition)'],
       cursorRow: 0,
@@ -5622,7 +5653,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a)': {
-    command: 'a)',
+    command: 'da)',
     beforeState: {
       text: ['if (condition && other_condition)'],
       cursorRow: 0,
@@ -5641,7 +5672,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i]': {
-    command: 'i]',
+    command: 'di]',
     beforeState: {
       text: ['list[item1, item2, item3]'],
       cursorRow: 0,
@@ -5660,7 +5691,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a]': {
-    command: 'a]',
+    command: 'da]',
     beforeState: {
       text: ['list[item1, item2, item3]'],
       cursorRow: 0,
@@ -5679,7 +5710,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'i}': {
-    command: 'i}',
+    command: 'di}',
     beforeState: {
       text: [
         'function() {',
@@ -5706,7 +5737,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'a}': {
-    command: 'a}',
+    command: 'da}',
     beforeState: {
       text: [
         'function() {',
@@ -6611,56 +6642,65 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   '\\n': {
-    command: '\\n',
+    command: ':%s/ /\\n/g',
     beforeState: {
       text: [
-        'Find: word1 word2',
-        'Replace with: :%s/word1 word2/word1\\nword2/g'
+        'word1 word2 word3',
+        'split these words',
+        'onto separate lines'
       ],
-      cursorRow: 1,
-      cursorCol: 30,
+      cursorRow: 0,
+      cursorCol: 0,
       mode: 'normal',
-      description: 'Pattern with newline escape'
+      description: 'Text with spaces to replace'
     },
     afterState: {
       text: [
-        'Find: word1 word2',
-        'Replace with: word1',
-        'word2'
+        'word1',
+        'word2',
+        'word3',
+        'split',
+        'these',
+        'words',
+        'onto',
+        'separate',
+        'lines'
       ],
-      cursorRow: 1,
+      cursorRow: 0,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Newline inserted in replacement'
+      description: 'Spaces replaced with newlines'
     },
-    explanation: 'Newline character in search/replace patterns. In replacement strings, \\n creates a new line. Essential for formatting and text restructuring.'
+    explanation: 'Newline character in replacement patterns. \\n creates a new line when used in the replacement string. Essential for text restructuring.'
   },
 
   '\\t': {
-    command: '\\t',
+    command: ':%s/^    /\\t/g',
     beforeState: {
       text: [
-        'Replace spaces with tabs:',
+        'Replace 4 spaces with tabs:',
         '    indented line',
-        '        more indented'
+        '        double indented',
+        '    another line'
       ],
-      cursorRow: 1,
+      cursorRow: 0,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Lines with space indentation'
+      description: 'Lines with 4-space indentation'
     },
     afterState: {
       text: [
-        'Replace spaces with tabs:',
+        'Replace 4 spaces with tabs:',
         '\tindented line',
-        '\t\tmore indented'
+        '\t    double indented',
+        '\tanother line'
       ],
-      cursorRow: 1,
+      cursorRow: 0,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Converted to tab indentation'
+      description: 'First 4 spaces converted to tab'
     },
-    explanation: 'Tab character in patterns. \\t matches or inserts a tab character. Commonly used for indentation conversion and whitespace formatting.'
+    explanation: 'Tab character in replacement patterns. \\t inserts a tab character. This example replaces 4 spaces at line start with a tab.'
   },
 
   '\\s': {
@@ -6782,7 +6822,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 0,
       mode: 'visual',
-      description: 'Text selected in visual mode'
+      visualEnd: { row: 1, col: 10 },
+      description: '"hello world" selected in visual mode'
     },
     afterState: {
       text: [
@@ -7148,7 +7189,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorCol: 4,
       mode: 'visual',
       description: 'Selected text: "quick brown" in visual mode',
-      visualEnd: { row: 1, col: 15 },
+      visualEnd: { row: 1, col: 14 },
       commandLine: '-- VISUAL --'
     },
     afterState: {
@@ -7177,6 +7218,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 6,
       mode: 'visual',
+      visualEnd: { row: 1, col: 8 },
       description: 'Selected text: "old" in visual mode'
     },
     afterState: {
@@ -7186,7 +7228,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
         'Goodbye old world'
       ],
       cursorRow: 1,
-      cursorCol: 9,
+      cursorCol: 8,
       mode: 'insert',
       description: 'Replaced "old" with "new", now in insert mode'
     },
@@ -7204,6 +7246,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 0,
       mode: 'visual',
+      visualEnd: { row: 1, col: 13 },
       description: 'Selected text: "important text" in visual mode'
     },
     afterState: {
@@ -7233,6 +7276,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 2,
       cursorCol: 0,
       mode: 'visual',
+      visualEnd: { row: 3, col: 11 },
       description: 'Lines 2-3 selected in visual line mode'
     },
     afterState: {
@@ -7264,6 +7308,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 2,
       cursorCol: 8,
       mode: 'visual',
+      visualEnd: { row: 3, col: 19 },
       description: 'Over-indented lines selected'
     },
     afterState: {
@@ -7511,7 +7556,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
   },
 
   'm{letter}': {
-    command: 'm{letter}',
+    command: 'mt',
     beforeState: {
       text: [
         'Mark important locations:',
@@ -7529,20 +7574,20 @@ export const vimExamples: Record<string, VimCommandExample> = {
       text: [
         'Mark important locations:',
         'function processData() {',
-        '  // TODO: implement this  [mark "t" set]',
+        '  // TODO: implement this',
         '  return result;',
         '}'
       ],
       cursorRow: 2,
       cursorCol: 8,
       mode: 'normal',
-      description: 'Mark "t" set at current position'
+      description: 'Mark "t" set at current position (invisible)'
     },
     explanation: 'Sets a mark at current cursor position. Use a-z for file-local marks, A-Z for global marks. Example: "mt" sets mark "t", jump back with \'t or `t.'
   },
 
   '`{letter}': {
-    command: '`{letter}',
+    command: '`t',
     beforeState: {
       text: [
         'Jump to exact mark position:',
@@ -8189,13 +8234,14 @@ export const vimExamples: Record<string, VimCommandExample> = {
       text: [
         'First instance of word',
         'Second instance here',
-        '?instance',
-        '[Found at line 2, col 7]'
+        'Third instance below',
+        'Search backwards from here'
       ],
       cursorRow: 1,
       cursorCol: 7,
       mode: 'normal',
-      description: 'Found previous occurrence'
+      description: 'Found previous occurrence',
+      commandLine: '?instance'
     },
     explanation: 'Searches backward for pattern. Type ?pattern and press Enter. Cursor jumps to previous match. Use n/N to continue searching.'
   },
@@ -8217,14 +8263,15 @@ export const vimExamples: Record<string, VimCommandExample> = {
     afterState: {
       text: [
         'Replace new text with new',
-        'This new method is outdated',
-        'replace with new (y/n/a/q/l/^E/^Y)?',
-        '[Asking for confirmation]'
+        'This old method is outdated',
+        'Use the old approach here',
+        'Old code needs updating'
       ],
-      cursorRow: 0,
-      cursorCol: 8,
+      cursorRow: 1,
+      cursorCol: 5,
       mode: 'normal',
-      description: 'Confirming each replacement'
+      description: 'First replacement confirmed, cursor on next match',
+      commandLine: 'replace with new (y/n/a/q/l/^E/^Y)?'
     },
     explanation: 'Global search and replace with confirmation. Shows each match and asks: y=yes, n=no, a=all remaining, q=quit, l=last then quit.'
   },
@@ -8241,6 +8288,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 0,
       mode: 'visual',
+      visualEnd: { row: 2, col: 12 },
       description: 'Lines 2-3 selected in visual mode'
     },
     afterState: {
@@ -8270,6 +8318,7 @@ export const vimExamples: Record<string, VimCommandExample> = {
       cursorRow: 1,
       cursorCol: 8,
       mode: 'visual',
+      visualEnd: { row: 2, col: 15 },
       description: 'Over-indented lines selected'
     },
     afterState: {
@@ -8439,33 +8488,31 @@ export const vimExamples: Record<string, VimCommandExample> = {
     command: '2Ctrl-r',
     beforeState: {
       text: [
-        'Made multiple changes:',
-        'Original text',
-        'After undo: back to original',
-        'Want to redo twice'
+        'File state after undo',
+        'Original line restored',
+        'Ready to redo'
       ],
-      cursorRow: 2,
+      cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Undid changes, want to redo 2 times'
+      description: 'After undoing a change'
     },
     afterState: {
       text: [
-        'Made multiple changes:',
-        'Modified once',
-        'Modified twice',
-        'Redid 2 changes'
+        'File state after undo',
+        'Modified line again',
+        'Ready to redo'
       ],
-      cursorRow: 2,
+      cursorRow: 1,
       cursorCol: 0,
       mode: 'normal',
-      description: 'Redid exactly 2 changes'
+      description: 'One change redone (count ignored)'
     },
-    explanation: 'Redoes 2 changes. The count (2) must be typed separately - press 2, then Ctrl-r. Each Ctrl-r redoes one undo.'
+    explanation: 'Redoes only one change. VIM ignores the count for Ctrl-r command - 2Ctrl-r behaves exactly like Ctrl-r.'
   },
 
-  'q{letter}': {
-    command: 'q{letter}',
+  'qa': {
+    command: 'qa',
     beforeState: {
       text: [
         'Record a macro:',
@@ -8495,8 +8542,8 @@ export const vimExamples: Record<string, VimCommandExample> = {
     explanation: 'Starts recording macro to register (a-z). Press qa to record to "a". All keystrokes recorded until pressing q again. Replay with @a.'
   },
 
-  '@{letter}': {
-    command: '@{letter}',
+  '@a': {
+    command: '@a',
     beforeState: {
       text: [
         'Replay recorded macro:',
@@ -8580,5 +8627,459 @@ export const vimExamples: Record<string, VimCommandExample> = {
       description: 'Omni-completion menu shown'
     },
     explanation: 'Omni-completion - smart, context-aware completion. Shows methods, properties based on language. Requires filetype plugins.'
+  },
+
+  // Character Finding Examples (f/F/t/T)
+  'f': {
+    command: 'f',
+    beforeState: {
+      text: ['Find the letter a in this line'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cursor at beginning, type "fa" to find "a"'
+    },
+    afterState: {
+      text: ['Find the letter a in this line'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor moved to first "a" in "letter"'
+    },
+    explanation: 'Finds and moves cursor to next occurrence of specified character on current line. Use ";" to repeat forward, "," to repeat backward.'
+  },
+
+  'F': {
+    command: 'F',
+    beforeState: {
+      text: ['Find the letter a in this line'],
+      cursorRow: 0,
+      cursorCol: 25,
+      mode: 'normal',
+      description: 'Cursor near end, type "Fa" to find "a" backward'
+    },
+    afterState: {
+      text: ['Find the letter a in this line'],
+      cursorRow: 0,
+      cursorCol: 12,
+      mode: 'normal',
+      description: 'Cursor moved backward to "a" in "letter"'
+    },
+    explanation: 'Finds and moves cursor to previous occurrence of specified character on current line. Searches backward from cursor position.'
+  },
+
+  't': {
+    command: 't',
+    beforeState: {
+      text: ['Move till before the comma, here'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Cursor at start, type "t," to move till comma'
+    },
+    afterState: {
+      text: ['Move till before the comma, here'],
+      cursorRow: 0,
+      cursorCol: 24,
+      mode: 'normal',
+      description: 'Cursor positioned before comma (till comma)'
+    },
+    explanation: 'Moves cursor till (just before) next occurrence of specified character. Useful for operations like "dt," (delete till comma).'
+  },
+
+  'T': {
+    command: 'T',
+    beforeState: {
+      text: ['Move till after the comma, here'],
+      cursorRow: 0,
+      cursorCol: 30,
+      mode: 'normal',
+      description: 'Cursor near end, type "T," to move till after comma'
+    },
+    afterState: {
+      text: ['Move till after the comma, here'],
+      cursorRow: 0,
+      cursorCol: 26,
+      mode: 'normal',
+      description: 'Cursor positioned after comma (till comma backward)'
+    },
+    explanation: 'Moves cursor till (just after) previous occurrence of specified character, searching backward. Complements "t" command.'
+  },
+
+  // Marks and Jumps
+  'mt': {
+    command: 'mt',
+    beforeState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 0,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Cursor on "t" in "this", ready to set mark'
+    },
+    afterState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 0,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Mark "t" set at this position (invisible)'
+    },
+    explanation: 'Sets mark "t" at current cursor position. Marks are invisible but can be jumped to later. Use lowercase for file-local marks.'
+  },
+
+  "'t": {
+    command: "'t",
+    beforeState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor elsewhere, mark "t" on line 1'
+    },
+    afterState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Jumped to beginning of marked line'
+    },
+    explanation: 'Jumps to the beginning of the line containing mark "t". Note it goes to start of line, not exact mark position.'
+  },
+
+  '`t': {
+    command: '`t',
+    beforeState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'Cursor elsewhere, mark "t" at row 0 col 5'
+    },
+    afterState: {
+      text: [
+        'Mark this position for later',
+        'Navigate elsewhere in file',
+        'Then jump back to marked line'
+      ],
+      cursorRow: 0,
+      cursorCol: 5,
+      mode: 'normal',
+      description: 'Jumped to exact mark position'
+    },
+    explanation: 'Jumps to the exact cursor position of mark "t". More precise than single quote version.'
+  },
+
+  "''": {
+    command: "''",
+    beforeState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 1,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'After jumping from line 3'
+    },
+    afterState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Back to beginning of previous line'
+    },
+    explanation: 'Jumps back to the line where you were before the last jump. Goes to start of line.'
+  },
+
+  '``': {
+    command: '``',
+    beforeState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 1,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'After jumping from line 3 col 20'
+    },
+    afterState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 2,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Back to exact previous position'
+    },
+    explanation: 'Jumps back to the exact cursor position before the last jump. More precise than double single quote.'
+  },
+
+  'gi': {
+    command: 'gi',
+    beforeState: {
+      text: [
+        'function example() {',
+        '  // Last insert was here: ',
+        '  return value;',
+        '}'
+      ],
+      cursorRow: 3,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Last insert was after colon on line 2'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '  // Last insert was here: ',
+        '  return value;',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 27,
+      mode: 'insert',
+      description: 'At last insert position, in insert mode'
+    },
+    explanation: 'Goes to the last place you were in insert mode and enters insert mode. Great for resuming typing.'
+  },
+
+  '`.': {
+    command: '`.',
+    beforeState: {
+      text: [
+        'Made a change here earlier',
+        'Moved to different location',
+        'Want to see last change'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Last change was at "here" in line 1'
+    },
+    afterState: {
+      text: [
+        'Made a change here earlier',
+        'Moved to different location',
+        'Want to see last change'
+      ],
+      cursorRow: 0,
+      cursorCol: 14,
+      mode: 'normal',
+      description: 'At exact position of last change'
+    },
+    explanation: 'Jumps to the exact position of the last change. Useful for reviewing what you just modified.'
+  },
+
+  'g;': {
+    command: 'g;',
+    beforeState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 0,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'At latest change, changelist has history'
+    },
+    afterState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 2,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'Moved to previous (older) change position'
+    },
+    explanation: 'Moves backward through the change list. Each edit creates a change entry you can navigate.'
+  },
+
+  'g,': {
+    command: 'g,',
+    beforeState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 1,
+      cursorCol: 24,
+      mode: 'normal',
+      description: 'At older change, can go forward in list'
+    },
+    afterState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 2,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'Moved to newer change position'
+    },
+    explanation: 'Moves forward through the change list. Complements g; for navigating edit history.'
+  },
+
+  'Ctrl-o': {
+    command: 'Ctrl-o',
+    beforeState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'After multiple jumps, at line 3'
+    },
+    afterState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 1,
+      cursorCol: 23,
+      mode: 'normal',
+      description: 'Back to previous jump location'
+    },
+    explanation: 'Goes back in the jump list. Each significant cursor movement creates a jump entry.'
+  },
+
+  'Ctrl-i': {
+    command: 'Ctrl-i',
+    beforeState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 0,
+      cursorCol: 8,
+      mode: 'normal',
+      description: 'After using Ctrl-o to go back'
+    },
+    afterState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 1,
+      cursorCol: 23,
+      mode: 'normal',
+      description: 'Forward to next jump location'
+    },
+    explanation: 'Goes forward in the jump list. Opposite of Ctrl-o, useful for retracing your navigation.'
+  },
+
+  ':marks': {
+    command: ':marks',
+    beforeState: {
+      text: ['Checking what marks are set'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode, marks a and t are set'
+    },
+    afterState: {
+      text: [
+        'mark line  col file/text',
+        ' a     5   10 Some text at mark a',
+        ' t     1    5 Mark this position',
+        " '     3    0 Previous position",
+        ' .    10   15 Last change',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'List of all marks displayed'
+    },
+    explanation: 'Shows all marks including user marks (a-z), special marks like last change (.), and previous position (\').'
+  },
+
+  ':jumps': {
+    command: ':jumps',
+    beforeState: {
+      text: ['Viewing jump history'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode with jump history'
+    },
+    afterState: {
+      text: [
+        ' jump line  col file/text',
+        '   3     1    0 Started here on line 1',
+        '   2    10    5 Searched to line 10',
+        '   1    25   15 Jumped to function',
+        '>  0    15    8 Current position',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Jump list displayed with > marking current'
+    },
+    explanation: 'Displays the jump list showing your navigation history. The > indicates current position in the list.'
+  },
+
+  ':changes': {
+    command: ':changes',
+    beforeState: {
+      text: ['Viewing change history'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode with edit history'
+    },
+    afterState: {
+      text: [
+        'change line  col text',
+        '    3     5   10 Added new function',
+        '    2    12    0 Fixed typo in comment',
+        '>   1    20   15 Updated variable name',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Change list displayed'
+    },
+    explanation: 'Shows the change list with all positions where you made edits. Navigate with g; and g,'
   }
 }

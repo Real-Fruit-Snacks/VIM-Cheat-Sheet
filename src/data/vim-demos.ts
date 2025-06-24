@@ -39,11 +39,46 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 17,
+          cursorCol: 23,
           mode: 'normal',
           description: 'Cursor moves to opening parenthesis'
         },
         explanation: 'Use f( to quickly jump to the opening parenthesis of function parameters.'
+      },
+      {
+        command: 'w',
+        description: 'Move to parameter name',
+        before: {
+          text: [
+            'function calculateTotal(items) {',
+            '  let sum = 0;',
+            '  for (let i = 0; i < items.length; i++) {',
+            '    sum += items[i].price * items[i].quantity;',
+            '  }',
+            '  return sum;',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 23,
+          mode: 'normal',
+          description: 'Cursor on opening parenthesis'
+        },
+        after: {
+          text: [
+            'function calculateTotal(items) {',
+            '  let sum = 0;',
+            '  for (let i = 0; i < items.length; i++) {',
+            '    sum += items[i].price * items[i].quantity;',
+            '  }',
+            '  return sum;',
+            '}'
+          ],
+          cursorRow: 0,
+          cursorCol: 24,
+          mode: 'normal',
+          description: 'Cursor on "items" parameter'
+        },
+        explanation: 'w moves to the beginning of the next word, positioning cursor on the parameter name.'
       },
       {
         command: 'ciw',
@@ -59,7 +94,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 18,
+          cursorCol: 24,
           mode: 'normal',
           description: 'Position cursor on "items" parameter'
         },
@@ -129,7 +164,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 25,
+          cursorCol: 30,
           mode: 'normal',
           description: 'Need to update all "items" references'
         },
@@ -144,7 +179,7 @@ export const vimDemos: VimDemoData[] = [
             '}'
           ],
           cursorRow: 0,
-          cursorCol: 25,
+          cursorCol: 30,
           mode: 'normal',
           description: 'All "items" replaced with "products"'
         },
@@ -695,6 +730,59 @@ export const vimDemos: VimDemoData[] = [
         explanation: 'n repeats the last search, jumping to the next occurrence of "function".'
       },
       {
+        command: 'f(',
+        description: 'Move to opening parenthesis',
+        before: {
+          text: [
+            'class Calculator {',
+            '  constructor() {',
+            '    this.history = [];',
+            '  }',
+            '',
+            '  function add(a, b) {',
+            '    const result = a + b;',
+            '    this.history.push({op: "add", result});',
+            '    return result;',
+            '  }',
+            '',
+            '  function multiply(x, y) {',
+            '    const result = x * y;',
+            '    return result;',
+            '  }',
+            '}'
+          ],
+          cursorRow: 11,
+          cursorCol: 2,
+          mode: 'normal',
+          description: 'At function keyword'
+        },
+        after: {
+          text: [
+            'class Calculator {',
+            '  constructor() {',
+            '    this.history = [];',
+            '  }',
+            '',
+            '  function add(a, b) {',
+            '    const result = a + b;',
+            '    this.history.push({op: "add", result});',
+            '    return result;',
+            '  }',
+            '',
+            '  function multiply(x, y) {',
+            '    const result = x * y;',
+            '    return result;',
+            '  }',
+            '}'
+          ],
+          cursorRow: 11,
+          cursorCol: 19,
+          mode: 'normal',
+          description: 'Cursor on opening parenthesis'
+        },
+        explanation: 'f( finds the next opening parenthesis on the current line.'
+      },
+      {
         command: '%',
         description: 'Jump to matching bracket',
         before: {
@@ -806,7 +894,7 @@ export const vimDemos: VimDemoData[] = [
             'console.log("Debug info");'
           ],
           cursorRow: 1,
-          cursorCol: 25,
+          cursorCol: 24,
           mode: 'normal',
           description: 'Positioned at second line'
         },
@@ -822,7 +910,7 @@ export const vimDemos: VimDemoData[] = [
             'console.log("Debug info");'
           ],
           cursorRow: 1,
-          cursorCol: 25,
+          cursorCol: 24,
           mode: 'normal',
           description: 'Delete the entire quoted string'
         },
@@ -1094,9 +1182,9 @@ export const vimDemos: VimDemoData[] = [
             'over the lazy dog'
           ],
           cursorRow: 0,
-          cursorCol: 8,
+          cursorCol: 6,
           mode: 'normal',
-          description: 'Word "fox" copied to register'
+          description: 'Word "red" copied to register'
         },
         explanation: 'Esc exits insert mode, yiw copies the entire word under the cursor without whitespace.'
       }
@@ -1268,7 +1356,7 @@ export const vimDemos: VimDemoData[] = [
             'Thanks'
           ],
           cursorRow: 0,
-          cursorCol: 3,
+          cursorCol: 4,
           mode: 'insert',
           description: 'Email header added'
         },
@@ -1288,7 +1376,7 @@ export const vimDemos: VimDemoData[] = [
             'Thanks'
           ],
           cursorRow: 0,
-          cursorCol: 3,
+          cursorCol: 4,
           mode: 'insert',
           description: 'Currently in insert mode at email header'
         },
@@ -1304,7 +1392,7 @@ export const vimDemos: VimDemoData[] = [
             'Thanks'
           ],
           cursorRow: 1,
-          cursorCol: 30,
+          cursorCol: 35,
           mode: 'insert',
           description: 'Subject line added'
         },
@@ -1325,7 +1413,7 @@ export const vimDemos: VimDemoData[] = [
             'Thanks'
           ],
           cursorRow: 1,
-          cursorCol: 30,
+          cursorCol: 35,
           mode: 'insert',
           description: 'Move to greeting line for improvement'
         },
@@ -1341,11 +1429,48 @@ export const vimDemos: VimDemoData[] = [
             'Thanks'
           ],
           cursorRow: 3,
-          cursorCol: 30,
+          cursorCol: 8,
           mode: 'normal',
           description: 'Positioned at greeting line'
         },
         explanation: 'Esc returns to normal mode, 2j moves down 2 lines to the greeting.'
+      },
+      {
+        command: 'b',
+        description: 'Move to start of "there"',
+        before: {
+          text: [
+            'To: john.doe@company.com',
+            'Subject: Project Timeline Follow-up',
+            '',
+            'Hi there,',
+            '',
+            'I wanted to follow up on our previous discussion about the project timeline.',
+            '',
+            'Thanks'
+          ],
+          cursorRow: 3,
+          cursorCol: 8,
+          mode: 'normal',
+          description: 'Move back to word to change'
+        },
+        after: {
+          text: [
+            'To: john.doe@company.com',
+            'Subject: Project Timeline Follow-up',
+            '',
+            'Hi there,',
+            '',
+            'I wanted to follow up on our previous discussion about the project timeline.',
+            '',
+            'Thanks'
+          ],
+          cursorRow: 3,
+          cursorCol: 3,
+          mode: 'normal',
+          description: 'Positioned at start of "there"'
+        },
+        explanation: 'b moves back to the beginning of the previous word.'
       },
       {
         command: 'cw',
