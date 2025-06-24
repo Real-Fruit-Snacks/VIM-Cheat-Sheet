@@ -73,35 +73,45 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setDemoState('idle')
   }
 
-  // PLAYBACK SYSTEM - Recursive chain to ensure final step renders before reset
+  // PLAYBACK SYSTEM - Simple interval-based approach that actually works
   const playDemo = () => {
     clearAllTimeouts()
+    if (playbackIntervalRef.current) {
+      clearInterval(playbackIntervalRef.current)
+      playbackIntervalRef.current = null
+    }
 
     const totalSteps = demo.steps.length
     const stepDuration = 3000 / playbackSpeed
+    let currentStepIndex = 0
 
+    // Start immediately with first step
+    setCurrentStep(0)
     setIsPlaying(true)
     setDemoState('playing')
 
-    const playStep = (index: number) => {
-      setCurrentStep(index)
-
-      if (index === totalSteps - 1) {
-        // Show last step for full duration, then reset
+    // Set interval to advance steps
+    const interval = setInterval(() => {
+      currentStepIndex++
+      
+      if (currentStepIndex >= totalSteps) {
+        // All steps shown, now in completion phase
+        clearInterval(interval)
         setDemoState('completed')
-        const resetId = setTimeout(() => {
+        
+        // Wait a bit longer for final step animation, then reset
+        const resetTimeout = setTimeout(() => {
           reset()
         }, stepDuration)
-        timeoutsRef.current.push(resetId)
-      } else {
-        const nextId = setTimeout(() => {
-          playStep(index + 1)
-        }, stepDuration)
-        timeoutsRef.current.push(nextId)
+        timeoutsRef.current.push(resetTimeout)
+        return
       }
-    }
-
-    playStep(0)
+      
+      // Move to next step
+      setCurrentStep(currentStepIndex)
+    }, stepDuration)
+    
+    playbackIntervalRef.current = interval
   }
 
   const getCategoryIcon = (category: string) => {
