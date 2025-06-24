@@ -173,7 +173,9 @@ export default function VimCheatsheetEnhanced() {
     return grouped
   }, [filteredCommands, activeCategory])
 
-  const categories = Object.keys(enhancedCommands)
+  const commandCategories = Object.keys(enhancedCommands)
+  const demoCategories = ['developer', 'writer', 'general']
+  const categories = currentView === 'commands' ? commandCategories : demoCategories
 
   // Search suggestions
   const searchSuggestions = useMemo(() => {
@@ -190,6 +192,34 @@ export default function VimCheatsheetEnhanced() {
     const firstCommand = filteredCommands[0]?.command
     return firstCommand ? (RELATED_COMMANDS[firstCommand] || []) : []
   }, [searchTerm, filteredCommands])
+
+  // Filter demos based on category and search
+  const filteredDemos = useMemo(() => {
+    let filtered = vimDemos
+
+    // Apply category filter
+    if (activeCategory && currentView === 'demos') {
+      filtered = filtered.filter(demo => demo.category === activeCategory)
+    }
+
+    // Apply search filter
+    if (debouncedSearchTerm) {
+      const searchLower = debouncedSearchTerm.toLowerCase()
+      filtered = filtered.filter(demo => 
+        demo.title.toLowerCase().includes(searchLower) ||
+        demo.description.toLowerCase().includes(searchLower) ||
+        demo.useCase.toLowerCase().includes(searchLower) ||
+        demo.category.toLowerCase().includes(searchLower) ||
+        demo.difficulty.toLowerCase().includes(searchLower) ||
+        demo.steps.some(step => 
+          step.command.toLowerCase().includes(searchLower) ||
+          step.description.toLowerCase().includes(searchLower)
+        )
+      )
+    }
+
+    return filtered
+  }, [activeCategory, debouncedSearchTerm, currentView])
 
   // Event handlers
   const toggleFavorite = (command: string) => {
@@ -512,7 +542,11 @@ export default function VimCheatsheetEnhanced() {
           {/* View Switcher */}
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => setCurrentView('commands')}
+              onClick={() => {
+                setCurrentView('commands')
+                setActiveCategory(null)
+                setSelectedFilter('all')
+              }}
               className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
                 currentView === 'commands' 
                   ? 'bg-green-600 text-white' 
@@ -523,7 +557,11 @@ export default function VimCheatsheetEnhanced() {
               <span className="text-sm">Commands</span>
             </button>
             <button
-              onClick={() => setCurrentView('demos')}
+              onClick={() => {
+                setCurrentView('demos')
+                setActiveCategory(null)
+                setSelectedFilter('all')
+              }}
               className={`flex items-center justify-center space-x-2 px-3 py-2 rounded transition-colors ${
                 currentView === 'demos' 
                   ? 'bg-green-600 text-white' 
@@ -559,7 +597,7 @@ export default function VimCheatsheetEnhanced() {
                     handleSearchSubmit(searchTerm)
                   }
                 }}
-                placeholder="Search commands... (press /)"
+                placeholder={currentView === 'commands' ? "Search commands... (press /)" : "Search demos..."}
                 className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500 text-sm"
               />
               {searchTerm && (
@@ -632,73 +670,77 @@ export default function VimCheatsheetEnhanced() {
             )}
           </div>
 
-          {/* Filters */}
-          <div className="space-y-3">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="w-full flex items-center justify-between px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700"
-            >
-              <div className="flex items-center space-x-2">
-                <Filter className="h-4 w-4" />
-                <span>Filters</span>
-              </div>
-              {showFilters ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
-            </button>
-
-            {showFilters && (
-              <div className="space-y-2">
-                <select
-                  value={selectedFilter}
-                  onChange={(e) => setSelectedFilter(e.target.value as FilterType)}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white"
-                >
-                  <option value="all">All Commands</option>
-                  <option value="favorites">❤️ My Favorites ({favorites.size})</option>
-                  <option value="essential">Essential</option>
-                  <option value="common">Common</option>
-                  <option value="rare">Advanced/Rare</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortType)}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white"
-                >
-                  <option value="category">Sort by Category</option>
-                  <option value="alphabetical">Sort Alphabetically</option>
-                  <option value="difficulty">Sort by Difficulty</option>
-                  <option value="frequency">Sort by Frequency</option>
-                </select>
-              </div>
-            )}
-          </div>
-          
-          {/* Favorites Management */}
-          <div className="px-4 pb-4">
-            <div className={`flex ${favorites.size > 0 ? 'space-x-2' : ''}`}>
-              {favorites.size > 0 && (
-                <button
-                  onClick={exportFavorites}
-                  className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors"
-                  title="Export favorites as JSON"
-                >
-                  <Download className="h-4 w-4" />
-                  <span>Export</span>
-                </button>
-              )}
+          {/* Filters - only show for commands */}
+          {currentView === 'commands' && (
+            <div className="space-y-3">
               <button
-                onClick={importFavorites}
-                className={`${favorites.size > 0 ? 'flex-1' : 'w-full'} flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors`}
-                title="Import favorites from JSON"
+                onClick={() => setShowFilters(!showFilters)}
+                className="w-full flex items-center justify-between px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700"
               >
-                <Upload className="h-4 w-4" />
-                <span>Import Favorites</span>
+                <div className="flex items-center space-x-2">
+                  <Filter className="h-4 w-4" />
+                  <span>Filters</span>
+                </div>
+                {showFilters ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />}
               </button>
+
+              {showFilters && (
+                <div className="space-y-2">
+                  <select
+                    value={selectedFilter}
+                    onChange={(e) => setSelectedFilter(e.target.value as FilterType)}
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white"
+                  >
+                    <option value="all">All Commands</option>
+                    <option value="favorites">❤️ My Favorites ({favorites.size})</option>
+                    <option value="essential">Essential</option>
+                    <option value="common">Common</option>
+                    <option value="rare">Advanced/Rare</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as SortType)}
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white"
+                  >
+                    <option value="category">Sort by Category</option>
+                    <option value="alphabetical">Sort Alphabetically</option>
+                    <option value="difficulty">Sort by Difficulty</option>
+                    <option value="frequency">Sort by Frequency</option>
+                  </select>
+                </div>
+              )}
             </div>
-          </div>
+          )}
+          
+          {/* Favorites Management - only show for commands */}
+          {currentView === 'commands' && (
+            <div className="px-4 pb-4">
+              <div className={`flex ${favorites.size > 0 ? 'space-x-2' : ''}`}>
+                {favorites.size > 0 && (
+                  <button
+                    onClick={exportFavorites}
+                    className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors"
+                    title="Export favorites as JSON"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Export</span>
+                  </button>
+                )}
+                <button
+                  onClick={importFavorites}
+                  className={`${favorites.size > 0 ? 'flex-1' : 'w-full'} flex items-center justify-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition-colors`}
+                  title="Import favorites from JSON"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span>Import Favorites</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Categories */}
@@ -719,51 +761,59 @@ export default function VimCheatsheetEnhanced() {
                     : 'text-gray-300 hover:bg-gray-800'
                 }`}
               >
-                All Categories ({allCommands.length})
+                All Categories ({currentView === 'commands' ? allCommands.length : vimDemos.length})
               </button>
               
-              {/* Favorites Section */}
-              <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    setSelectedFilter('favorites')
-                    setActiveCategory(null)
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded transition-colors ${
-                    selectedFilter === 'favorites'
-                      ? 'bg-red-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center space-x-2">
-                      <Heart className="h-4 w-4 fill-current" />
-                      <span>My Favorites</span>
-                    </span>
-                    <span className="text-sm">({favorites.size})</span>
-                  </div>
-                </button>
-                
-                {/* Clear Favorites Button - only show when we have favorites */}
-                {favorites.size > 0 && (
+              {/* Favorites Section - only show for commands */}
+              {currentView === 'commands' && (
+                <div className="space-y-2">
                   <button
-                    onClick={clearFavorites}
-                    className="w-full text-xs text-gray-500 hover:text-red-400 transition-colors px-3 py-1"
-                    title="Clear all favorites"
+                    onClick={() => {
+                      setSelectedFilter('favorites')
+                      setActiveCategory(null)
+                    }}
+                    className={`w-full text-left px-3 py-2 rounded transition-colors ${
+                      selectedFilter === 'favorites'
+                        ? 'bg-red-600 text-white'
+                        : 'text-gray-300 hover:bg-gray-800'
+                    }`}
                   >
-                    Clear All Favorites
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center space-x-2">
+                        <Heart className="h-4 w-4 fill-current" />
+                        <span>My Favorites</span>
+                      </span>
+                      <span className="text-sm">({favorites.size})</span>
+                    </div>
                   </button>
-                )}
-                
-                {/* Favorites tip when empty */}
-                {favorites.size === 0 && (
-                  <div className="px-3 py-2 text-xs text-gray-500">
-                    <p>Click the ❤️ icon next to commands to add them to your favorites!</p>
-                  </div>
-                )}
-              </div>
+                  
+                  {/* Clear Favorites Button - only show when we have favorites */}
+                  {favorites.size > 0 && (
+                    <button
+                      onClick={clearFavorites}
+                      className="w-full text-xs text-gray-500 hover:text-red-400 transition-colors px-3 py-1"
+                      title="Clear all favorites"
+                    >
+                      Clear All Favorites
+                    </button>
+                  )}
+                  
+                  {/* Favorites tip when empty */}
+                  {favorites.size === 0 && (
+                    <div className="px-3 py-2 text-xs text-gray-500">
+                      <p>Click the ❤️ icon next to commands to add them to your favorites!</p>
+                    </div>
+                  )}
+                </div>
+              )}
               {categories.map((category) => {
-                const count = enhancedCommands[category].length
+                const count = currentView === 'commands' 
+                  ? enhancedCommands[category].length
+                  : vimDemos.filter(d => d.category === category).length
+                const displayName = currentView === 'commands'
+                  ? category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1')
+                  : category.charAt(0).toUpperCase() + category.slice(1)
+                  
                 return (
                   <button
                     key={category}
@@ -777,7 +827,7 @@ export default function VimCheatsheetEnhanced() {
                         : 'text-gray-300 hover:bg-gray-800'
                     }`}
                   >
-                    {category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1')} ({count})
+                    {displayName} ({count})
                   </button>
                 )
               })}
@@ -817,7 +867,9 @@ export default function VimCheatsheetEnhanced() {
             )}
             {currentView === 'demos' && (
               <p className="text-gray-400">
-                {vimDemos.length} interactive workflow demonstrations
+                {filteredDemos.length} interactive workflow demonstrations
+                {searchTerm && ` matching "${searchTerm}"`}
+                {activeCategory && ` in ${activeCategory} category`}
               </p>
             )}
           </div>
@@ -1051,16 +1103,41 @@ export default function VimCheatsheetEnhanced() {
           {/* Demos View */}
           {currentView === 'demos' && (
             <div className="space-y-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-white mb-2">VIM Demos</h2>
-                <p className="text-gray-400">Learn real-world VIM workflows through interactive demonstrations</p>
-              </div>
+              {filteredDemos.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-gray-400 text-lg">No demos found</p>
+                  {searchTerm && (
+                    <p className="text-gray-500 mt-2">
+                      Try a different search term or clear the search
+                    </p>
+                  )}
+                  {activeCategory && !searchTerm && (
+                    <p className="text-gray-500 mt-2">
+                      No demos in this category
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-white mb-2">
+                      VIM Demos
+                      {activeCategory && ` - ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`}
+                    </h2>
+                    <p className="text-gray-400">
+                      {activeCategory 
+                        ? `${filteredDemos.length} ${activeCategory} demonstrations`
+                        : 'Learn real-world VIM workflows through interactive demonstrations'}
+                    </p>
+                  </div>
 
-              <div className="grid gap-6">
-                {vimDemos.map(demo => (
-                  <VimDemo key={demo.id} demo={demo} />
-                ))}
-              </div>
+                  <div className="grid gap-6">
+                    {filteredDemos.map(demo => (
+                      <VimDemo key={demo.id} demo={demo} />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
