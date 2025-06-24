@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Play, RotateCcw, ChevronLeft, ChevronRight, Clock, Target } from 'lucide-react'
 import VimCommandExampleAnimated, { type ExampleState } from './VimCommandExampleAnimated'
 
@@ -30,46 +30,15 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackSpeed, setPlaybackSpeed] = useState(1)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([])
 
-  // Cleanup interval on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-      }
+      timeoutsRef.current.forEach(clearTimeout)
+      timeoutsRef.current = []
     }
   }, [])
-  
-  // Handle speed changes during playback
-  useEffect(() => {
-    if (isPlaying && intervalRef.current) {
-      // Restart the interval with new speed from current step
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-      
-      // Continue playing from current step with new speed
-      let stepCounter = currentStep
-      const totalSteps = demo.steps.length
-      const stepDuration = 3000 / playbackSpeed
-      
-      intervalRef.current = setInterval(() => {
-        stepCounter++
-        
-        if (stepCounter < totalSteps) {
-          // Move to next step
-          setCurrentStep(stepCounter)
-        } else {
-          // We've shown all steps including the last one - reset to beginning
-          clearInterval(intervalRef.current!)
-          intervalRef.current = null
-          setCurrentStep(0)
-          setIsPlaying(false)
-        }
-      }, stepDuration)
-    }
-  }, [playbackSpeed, isPlaying, currentStep, demo.steps.length])
   
   const nextStep = () => {
     if (currentStep < demo.steps.length - 1) {
@@ -84,44 +53,87 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   }
 
   const reset = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-    }
+    timeoutsRef.current.forEach(clearTimeout)
+    timeoutsRef.current = []
     setCurrentStep(0)
     setIsPlaying(false)
   }
 
-  const playDemo = () => {
-    // Clear any existing interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+  // Start demo from a specific step (used for speed changes)
+  const startDemoFromStep = useCallback((startStep: number) => {
+    const totalSteps = demo.steps.length
+    const stepDuration = 3000 / playbackSpeed
+    const remainingSteps = totalSteps - startStep
+    
+    // Clear any existing timeouts
+    timeoutsRef.current.forEach(clearTimeout)
+    timeoutsRef.current = []
+    
+    // If starting from the last step, just schedule stop
+    if (startStep === totalSteps - 1) {
+      const stopTimeout = setTimeout(() => {
+        setIsPlaying(false)
+        setCurrentStep(0)
+      }, stepDuration)
+      timeoutsRef.current.push(stopTimeout)
+      return
     }
+    
+    // Schedule each remaining step transition
+    for (let i = 1; i < remainingSteps; i++) {
+      const targetStep = startStep + i
+      const timeout = setTimeout(() => {
+        setCurrentStep(targetStep)
+      }, i * stepDuration)
+      timeoutsRef.current.push(timeout)
+    }
+    
+    // Schedule demo stop after all steps have been shown for full duration
+    const stopTimeout = setTimeout(() => {
+      setIsPlaying(false)
+      setCurrentStep(0)
+    }, remainingSteps * stepDuration)
+    timeoutsRef.current.push(stopTimeout)
+  }, [demo.steps.length, playbackSpeed])
+
+  // Handle speed changes during playback
+  useEffect(() => {
+    if (isPlaying && timeoutsRef.current.length > 0) {
+      // Clear existing timeouts and restart from current step
+      timeoutsRef.current.forEach(clearTimeout)
+      timeoutsRef.current = []
+      
+      // Restart demo from current step with new speed
+      startDemoFromStep(currentStep)
+    }
+  }, [playbackSpeed, isPlaying, currentStep, startDemoFromStep])
+
+  const playDemo = () => {
+    // Clear any existing timeouts
+    timeoutsRef.current.forEach(clearTimeout)
+    timeoutsRef.current = []
     
     // Start from beginning
     setCurrentStep(0)
     setIsPlaying(true)
     
-    // Create interval to advance through steps
-    let stepCounter = 0
     const totalSteps = demo.steps.length
     const stepDuration = 3000 / playbackSpeed
     
-    intervalRef.current = setInterval(() => {
-      stepCounter++
-      
-      if (stepCounter < totalSteps) {
-        // Move to next step
-        setCurrentStep(stepCounter)
-      } else {
-        // We've shown all steps including the last one - reset to beginning
-        clearInterval(intervalRef.current!)
-        intervalRef.current = null
-        setCurrentStep(0)
-        setIsPlaying(false)
-      }
-    }, stepDuration)
+    // Schedule each step transition
+    for (let i = 1; i < totalSteps; i++) {
+      const timeout = setTimeout(() => {
+        setCurrentStep(i)
+      }, i * stepDuration)
+      timeoutsRef.current.push(timeout)
+    }
+    
+    // Schedule demo stop after all steps have been shown for full duration
+    const stopTimeout = setTimeout(() => {
+      setIsPlaying(false)
+      setCurrentStep(0)
+    }, totalSteps * stepDuration)
+    timeoutsRef.current.push(stopTimeout)
   }
 
   const getCategoryIcon = (category: string) => {
