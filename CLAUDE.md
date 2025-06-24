@@ -163,7 +163,7 @@ Current performance metrics:
 
 ## Key Implementation Fixes
 
-**Demo Playback Complete Revamp (v3.5.0):**
+**Demo Playback Complete Revamp (v3.6.0):**
 - Problem: Last step was being skipped because `setCurrentStep(0)` immediately changed display
 - Solution: Complete redesign using interval-based state machine with three states
   - 'playing': Normal step progression based on elapsed time
