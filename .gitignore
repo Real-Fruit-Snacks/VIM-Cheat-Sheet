@@ -63,6 +63,9 @@ vim-gitlab-offline-*/
 *.tar.gz
 *.zip
 vim-cheatsheet-*.zip
+vim-cheatsheet-*.tar.gz
+vim-cheatsheet-v*.zip
+vim-cheatsheet-v*.tar.gz
 release-checksums.txt
 checksums.txt
 RELEASE_NOTES.md
