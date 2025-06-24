@@ -23,12 +23,14 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
   const [currentState, setCurrentState] = useState<ExampleState>(before)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showBefore, setShowBefore] = useState(true)
+  const [hasAutoPlayed, setHasAutoPlayed] = useState(false)
 
   // Update internal state when props change (for demo auto-play and reset)
   useEffect(() => {
     setCurrentState(before)
     setShowBefore(true)
     setIsAnimating(false)
+    setHasAutoPlayed(false)
   }, [before, after, command])
 
   const runExample = useCallback(() => {
@@ -48,19 +50,21 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
 
   // Trigger animation when autoPlay prop is true
   useEffect(() => {
-    if (autoPlay && !isAnimating) {
+    if (autoPlay && !isAnimating && !hasAutoPlayed) {
+      setHasAutoPlayed(true)
       // Small delay to ensure the component renders the before state first
       const timeoutId = setTimeout(() => {
         runExample()
       }, 100)
       return () => clearTimeout(timeoutId)
     }
-  }, [autoPlay, before, after, command, isAnimating, runExample])
+  }, [autoPlay, before, after, command, isAnimating, hasAutoPlayed, runExample])
 
   const reset = () => {
     setIsAnimating(false)
     setShowBefore(true)
     setCurrentState(before)
+    setHasAutoPlayed(false)
   }
 
   const getModeColor = (mode: string) => {
