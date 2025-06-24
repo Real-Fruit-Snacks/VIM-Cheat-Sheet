@@ -134,7 +134,10 @@ Current performance metrics:
 - All demo data is declaratively defined in `vim-demos.ts` for easy extension
 
 **Key Implementation Details:**
-- Auto-play uses 3-second intervals with proper cleanup to prevent memory leaks
+- Auto-play uses single interval-based state machine with elapsed time tracking
+- Three states: 'idle', 'playing', 'completed' - ensures last step remains visible
+- Last step displays for full duration, then enters 'completed' state for additional pause
+- Reset only happens after `(totalSteps + 1) * stepDuration` total elapsed time
 - `VimCommandExampleAnimated` syncs internal state with prop changes for demo progression
 - React.memo optimization prevents unnecessary re-renders during step transitions
 - Component follows VIM principles with instant state transitions (no animations)
@@ -157,3 +160,20 @@ Current performance metrics:
 2. Create step-by-step `DemoStep` array with realistic scenarios
 3. Test auto-play and manual navigation work correctly
 4. Verify all steps display for full 3-second duration
+
+## Key Implementation Fixes
+
+**Demo Playback Complete Revamp (v3.5.0):**
+- Problem: Last step was being skipped because `setCurrentStep(0)` immediately changed display
+- Solution: Complete redesign using interval-based state machine with three states
+  - 'playing': Normal step progression based on elapsed time
+  - 'completed': Last step remains visible during completion pause
+  - 'idle': Demo stopped and reset to beginning
+- Implementation: Single interval tracks elapsed time, calculates current step, ensures last step gets full duration plus completion pause before reset
+- Result: Every step, especially the last one, displays for complete duration with visual confirmation
+
+**Safe Storage Utilities:**
+- `src/utils/safeStorage.ts` provides fallback strategies for restricted environments
+- Functions: `safeGetItem`, `safeSetItem`, `safeCopyToClipboard`
+- Falls back to in-memory storage when localStorage is blocked
+- Critical for enterprise/restricted browser environments

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Play, RotateCcw, ChevronLeft, ChevronRight, Clock, Target } from 'lucide-react'
 import VimCommandExampleAnimated, { type ExampleState } from './VimCommandExampleAnimated'
 
@@ -30,13 +30,16 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackSpeed, setPlaybackSpeed] = useState(1)
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([])
+  const [demoState, setDemoState] = useState<'idle' | 'playing' | 'completed'>('idle')
+  const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Cleanup timeouts on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      timeoutsRef.current.forEach(clearTimeout)
-      timeoutsRef.current = []
+      if (playbackIntervalRef.current) {
+        clearInterval(playbackIntervalRef.current)
+        playbackIntervalRef.current = null
+      }
     }
   }, [])
   
@@ -53,90 +56,65 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
   }
 
   const reset = () => {
-    timeoutsRef.current.forEach(clearTimeout)
-    timeoutsRef.current = []
+    if (playbackIntervalRef.current) {
+      clearInterval(playbackIntervalRef.current)
+      playbackIntervalRef.current = null
+    }
     setCurrentStep(0)
     setIsPlaying(false)
+    setDemoState('idle')
   }
 
-  // Start demo from a specific step (used for speed changes)
-  const startDemoFromStep = useCallback((startStep: number) => {
-    const totalSteps = demo.steps.length
-    const stepDuration = 3000 / playbackSpeed
-    const remainingSteps = totalSteps - startStep
-    
-    // Clear any existing timeouts
-    timeoutsRef.current.forEach(clearTimeout)
-    timeoutsRef.current = []
-    
-    // If starting from the last step, give it extra time before stopping
-    if (startStep === totalSteps - 1) {
-      const stopTimeout = setTimeout(() => {
-        setIsPlaying(false)
-        setCurrentStep(0)
-      }, stepDuration * 2) // Give last step double time to be safe
-      timeoutsRef.current.push(stopTimeout)
-      return
-    }
-    
-    // Schedule each remaining step transition
-    for (let i = 1; i < remainingSteps; i++) {
-      const targetStep = startStep + i
-      const timeout = setTimeout(() => {
-        setCurrentStep(targetStep)
-      }, i * stepDuration)
-      timeoutsRef.current.push(timeout)
-    }
-    
-    // BULLETPROOF FIX: Schedule stop AFTER last step gets its full duration  
-    // Give the last step an extra stepDuration to ensure it's fully visible
-    const stopTimeout = setTimeout(() => {
-      setIsPlaying(false)
-      setCurrentStep(0)
-    }, (remainingSteps + 1) * stepDuration)
-    timeoutsRef.current.push(stopTimeout)
-  }, [demo.steps.length, playbackSpeed])
-
-  // Handle speed changes during playback
-  useEffect(() => {
-    if (isPlaying && timeoutsRef.current.length > 0) {
-      // Clear existing timeouts and restart from current step
-      timeoutsRef.current.forEach(clearTimeout)
-      timeoutsRef.current = []
-      
-      // Restart demo from current step with new speed
-      startDemoFromStep(currentStep)
-    }
-  }, [playbackSpeed, isPlaying, currentStep, startDemoFromStep])
-
+  // COMPLETELY NEW PLAYBACK SYSTEM - Simple and Reliable
   const playDemo = () => {
-    // Clear any existing timeouts
-    timeoutsRef.current.forEach(clearTimeout)
-    timeoutsRef.current = []
+    // Clear any existing interval
+    if (playbackIntervalRef.current) {
+      clearInterval(playbackIntervalRef.current)
+      playbackIntervalRef.current = null
+    }
     
-    // Start from beginning
+    // Initialize state
     setCurrentStep(0)
     setIsPlaying(true)
+    setDemoState('playing')
     
     const totalSteps = demo.steps.length
     const stepDuration = 3000 / playbackSpeed
+    let currentIndex = 0
+    let elapsedTime = 0
     
-    // Schedule each step transition
-    for (let i = 1; i < totalSteps; i++) {
-      const timeout = setTimeout(() => {
-        setCurrentStep(i)
-      }, i * stepDuration)
-      timeoutsRef.current.push(timeout)
-    }
-    
-    // BULLETPROOF FIX: Schedule stop AFTER last step gets its full duration
-    // Give the last step an extra stepDuration to ensure it's fully visible
-    const stopTimeout = setTimeout(() => {
-      setIsPlaying(false)
-      setCurrentStep(0)
-    }, (totalSteps + 1) * stepDuration)
-    timeoutsRef.current.push(stopTimeout)
+    // Use a simple interval that tracks elapsed time
+    playbackIntervalRef.current = setInterval(() => {
+      elapsedTime += 100
+      
+      // Calculate which step we should be showing
+      const targetStepIndex = Math.floor(elapsedTime / stepDuration)
+      
+      // Check if we need to advance to next step
+      if (targetStepIndex > currentIndex && targetStepIndex < totalSteps) {
+        currentIndex = targetStepIndex
+        setCurrentStep(currentIndex)
+      }
+      
+      // Check if all steps have been shown for their full duration
+      if (elapsedTime >= totalSteps * stepDuration) {
+        // Keep showing last step for one more duration
+        if (elapsedTime >= (totalSteps + 1) * stepDuration) {
+          clearInterval(playbackIntervalRef.current!)
+          playbackIntervalRef.current = null
+          setCurrentStep(0)
+          setIsPlaying(false)
+          setDemoState('idle')
+        } else {
+          // We're in the "completion pause" - last step still visible
+          if (currentIndex === totalSteps - 1) {
+            setDemoState('completed')
+          }
+        }
+      }
+    }, 100)
   }
+
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -192,7 +170,11 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
               className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white rounded-lg flex items-center space-x-2 transition-colors"
             >
               <Play className="h-4 w-4" />
-              <span>{isPlaying ? 'Playing...' : 'Play Demo'}</span>
+              <span>{
+                isPlaying 
+                  ? (demoState === 'completed' ? 'Completing...' : 'Playing...') 
+                  : 'Play Demo'
+              }</span>
             </button>
             <button
               onClick={reset}
