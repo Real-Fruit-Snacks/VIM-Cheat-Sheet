@@ -66,6 +66,8 @@ debug-*.cjs
 test-*.cjs
 debug-*.cjs
 audit-*.cjs
+accuracy-check-*.js
+demo-validator-*.js
 
 # Reports
 AUDIT_*.md
@@ -73,6 +75,7 @@ COMPREHENSIVE_*.md
 *-audit-report.json
 audit-report-*.json
 browser-test-report-*.json
+VIM_ACCURACY_AUDIT_RESULTS.md
 
 # Generated docs (keep only README.md, LICENSE, CLAUDE.md)
 BROWSER-COMPATIBILITY-GUIDE.md

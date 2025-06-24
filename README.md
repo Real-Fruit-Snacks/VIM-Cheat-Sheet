@@ -5,23 +5,30 @@
     <img src="public/favicon-detailed.svg" alt="VIM Cheat Sheet" width="100" />
   </a>
   
-  <p><strong>Interactive VIM reference with 315+ commands and 30 workflow demos</strong></p>
+  <p><strong>Interactive VIM reference with 315+ commands and 64 workflow demos</strong></p>
   
   <p>
     <a href="https://real-fruit-snacks.github.io/VIM-Cheat-Sheet/"><strong>🚀 Open VIM Cheat Sheet →</strong></a>
   </p>
   
   <p>
-    <img src="https://img.shields.io/badge/version-4.0.0-blue.svg" alt="Version 4.0.0" />
+    <img src="https://img.shields.io/badge/version-4.2.0-blue.svg" alt="Version 4.2.0" />
     <img src="https://img.shields.io/badge/React-19.1-61DAFB.svg" alt="React 19.1" />
     <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6.svg" alt="TypeScript 5.8" />
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
   </p>
 </div>
 
-## 🎉 Version 4.0.0 - Offline GitLab Pages Release
+## 🎉 Version 4.2.0 - Professional Workflow Demos
 
-### What's New
+### What's New in 4.2.0
+- **64 Comprehensive Workflow Demos** - Doubled demo content with professional workflows
+- **SysAdmin Demos** - Log analysis, config management, batch updates, service files
+- **Security Professional Demos** - Firewall auditing, incident response, vulnerability management
+- **100% VIM Accuracy** - All commands and demos verified for precise VIM behavior
+- **Enhanced Search** - Improved fuzzy search with command synonyms and typo correction
+
+### Previous: Version 4.0.0 Features
 - **Full Offline Support** - Service Worker with comprehensive caching strategy
 - **GitLab CI/CD** - Automated deployment pipeline for GitLab Pages
 - **PWA Ready** - Installable with offline functionality and app manifest
@@ -83,7 +90,7 @@ src/
 ├── data/
 │   ├── vim-commands.ts                # 315+ command definitions
 │   ├── vim-examples.ts                # Interactive example states
-│   └── vim-demos.ts                   # 30 workflow demonstrations
+│   └── vim-demos.ts                   # 64 workflow demonstrations
 └── hooks/
     ├── useDebounce.ts                 # Search optimization
     ├── useKeyboardNavigation.ts       # VIM-style navigation
@@ -93,7 +100,7 @@ src/
 ### Data Layer
 - **399 lines** of structured command definitions
 - **8,583 lines** of interactive example states  
-- **30 comprehensive demos** from beginner to advanced
+- **8,410 lines** of workflow demos (64 comprehensive demos)
 - **16 official VIM help files** for offline documentation
 
 ## Deployment Options
@@ -210,10 +217,18 @@ ES2015 target ensures optimal performance on modern browsers.
 1. **Fork** the repository
 2. **Create** a feature branch
 3. **Add/improve** commands or demos
-4. **Test** your changes
+4. **Test** your changes thoroughly:
+   - Verify cursor positions are accurate (0-based column indexing)
+   - Ensure all demo steps flow logically
+   - Test VIM behavior matches exactly
 5. **Submit** a pull request
 
-All 315 commands have been verified for VIM accuracy. Please maintain this standard.
+### Accuracy Standards
+- All 315+ commands have been verified for VIM accuracy
+- All 64 workflow demos have been audited for correctness
+- Cursor positions must be precise (VIM uses 0-based column indexing)
+- Demo descriptions must match the actual VIM operations shown
+- Please maintain these high accuracy standards in any contributions
 
 ## License
 

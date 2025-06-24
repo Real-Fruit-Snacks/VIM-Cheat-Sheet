@@ -8511,6 +8511,66 @@ export const vimExamples: Record<string, VimCommandExample> = {
     explanation: 'Redoes only one change. VIM ignores the count for Ctrl-r command - 2Ctrl-r behaves exactly like Ctrl-r.'
   },
 
+  'qa': {
+    command: 'qa',
+    beforeState: {
+      text: [
+        'Record a macro:',
+        'item1: TODO',
+        'item2: TODO',
+        'item3: TODO'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'About to record macro to register "a"',
+      commandLine: ''
+    },
+    afterState: {
+      text: [
+        'Record a macro:',
+        'item1: TODO',
+        'item2: TODO',
+        'item3: TODO'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Recording macro to register "a"',
+      commandLine: 'recording @a'
+    },
+    explanation: 'Starts recording macro to register (a-z). Press qa to record to "a". All keystrokes recorded until pressing q again. Replay with @a.'
+  },
+
+  '@a': {
+    command: '@a',
+    beforeState: {
+      text: [
+        'Replay recorded macro:',
+        'item1: DONE',
+        'item2: TODO',
+        'item3: TODO'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Macro "a" changes TODO to DONE'
+    },
+    afterState: {
+      text: [
+        'Replay recorded macro:',
+        'item1: DONE',
+        'item2: DONE',
+        'item3: TODO'
+      ],
+      cursorRow: 2,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Macro executed, TODO changed to DONE'
+    },
+    explanation: 'Plays macro from register. @a plays macro recorded in "a". Use @@ to repeat last macro. Powerful for repetitive edits.'
+  },
+
   'Ctrl-x Ctrl-l': {
     command: 'Ctrl-x Ctrl-l',
     beforeState: {
@@ -8753,5 +8813,273 @@ export const vimExamples: Record<string, VimCommandExample> = {
       description: 'Back to beginning of previous line'
     },
     explanation: 'Jumps back to the line where you were before the last jump. Goes to start of line.'
+  },
+
+  '``': {
+    command: '``',
+    beforeState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 1,
+      cursorCol: 10,
+      mode: 'normal',
+      description: 'After jumping from line 3 col 20'
+    },
+    afterState: {
+      text: [
+        'Started editing here',
+        'Jumped to another location',
+        'Want to go back to previous position'
+      ],
+      cursorRow: 2,
+      cursorCol: 20,
+      mode: 'normal',
+      description: 'Back to exact previous position'
+    },
+    explanation: 'Jumps back to the exact cursor position before the last jump. More precise than double single quote.'
+  },
+
+  'gi': {
+    command: 'gi',
+    beforeState: {
+      text: [
+        'function example() {',
+        '  // Last insert was here: ',
+        '  return value;',
+        '}'
+      ],
+      cursorRow: 3,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Last insert was after colon on line 2'
+    },
+    afterState: {
+      text: [
+        'function example() {',
+        '  // Last insert was here: ',
+        '  return value;',
+        '}'
+      ],
+      cursorRow: 1,
+      cursorCol: 27,
+      mode: 'insert',
+      description: 'At last insert position, in insert mode'
+    },
+    explanation: 'Goes to the last place you were in insert mode and enters insert mode. Great for resuming typing.'
+  },
+
+  '`.': {
+    command: '`.',
+    beforeState: {
+      text: [
+        'Made a change here earlier',
+        'Moved to different location',
+        'Want to see last change'
+      ],
+      cursorRow: 1,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Last change was at "here" in line 1'
+    },
+    afterState: {
+      text: [
+        'Made a change here earlier',
+        'Moved to different location',
+        'Want to see last change'
+      ],
+      cursorRow: 0,
+      cursorCol: 14,
+      mode: 'normal',
+      description: 'At exact position of last change'
+    },
+    explanation: 'Jumps to the exact position of the last change. Useful for reviewing what you just modified.'
+  },
+
+  'g;': {
+    command: 'g;',
+    beforeState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 0,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'At latest change, changelist has history'
+    },
+    afterState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 2,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'Moved to previous (older) change position'
+    },
+    explanation: 'Moves backward through the change list. Each edit creates a change entry you can navigate.'
+  },
+
+  'g,': {
+    command: 'g,',
+    beforeState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 1,
+      cursorCol: 24,
+      mode: 'normal',
+      description: 'At older change, can go forward in list'
+    },
+    afterState: {
+      text: [
+        'Edit 3: Latest change here',
+        'Edit 1: First change was here',
+        'Edit 2: Second change here'
+      ],
+      cursorRow: 2,
+      cursorCol: 21,
+      mode: 'normal',
+      description: 'Moved to newer change position'
+    },
+    explanation: 'Moves forward through the change list. Complements g; for navigating edit history.'
+  },
+
+  'Ctrl-o': {
+    command: 'Ctrl-o',
+    beforeState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 2,
+      cursorCol: 15,
+      mode: 'normal',
+      description: 'After multiple jumps, at line 3'
+    },
+    afterState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 1,
+      cursorCol: 23,
+      mode: 'normal',
+      description: 'Back to previous jump location'
+    },
+    explanation: 'Goes back in the jump list. Each significant cursor movement creates a jump entry.'
+  },
+
+  'Ctrl-i': {
+    command: 'Ctrl-i',
+    beforeState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 0,
+      cursorCol: 8,
+      mode: 'normal',
+      description: 'After using Ctrl-o to go back'
+    },
+    afterState: {
+      text: [
+        'Started here on line 1',
+        'Searched and jumped to line 2',
+        'Then jumped to line 3'
+      ],
+      cursorRow: 1,
+      cursorCol: 23,
+      mode: 'normal',
+      description: 'Forward to next jump location'
+    },
+    explanation: 'Goes forward in the jump list. Opposite of Ctrl-o, useful for retracing your navigation.'
+  },
+
+  ':marks': {
+    command: ':marks',
+    beforeState: {
+      text: ['Checking what marks are set'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode, marks a and t are set'
+    },
+    afterState: {
+      text: [
+        'mark line  col file/text',
+        ' a     5   10 Some text at mark a',
+        ' t     1    5 Mark this position',
+        " '     3    0 Previous position",
+        ' .    10   15 Last change',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'List of all marks displayed'
+    },
+    explanation: 'Shows all marks including user marks (a-z), special marks like last change (.), and previous position (\').'
+  },
+
+  ':jumps': {
+    command: ':jumps',
+    beforeState: {
+      text: ['Viewing jump history'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode with jump history'
+    },
+    afterState: {
+      text: [
+        ' jump line  col file/text',
+        '   3     1    0 Started here on line 1',
+        '   2    10    5 Searched to line 10',
+        '   1    25   15 Jumped to function',
+        '>  0    15    8 Current position',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Jump list displayed with > marking current'
+    },
+    explanation: 'Displays the jump list showing your navigation history. The > indicates current position in the list.'
+  },
+
+  ':changes': {
+    command: ':changes',
+    beforeState: {
+      text: ['Viewing change history'],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Normal mode with edit history'
+    },
+    afterState: {
+      text: [
+        'change line  col text',
+        '    3     5   10 Added new function',
+        '    2    12    0 Fixed typo in comment',
+        '>   1    20   15 Updated variable name',
+        'Press ENTER to continue'
+      ],
+      cursorRow: 0,
+      cursorCol: 0,
+      mode: 'normal',
+      description: 'Change list displayed'
+    },
+    explanation: 'Shows the change list with all positions where you made edits. Navigate with g; and g,'
   }
 }
