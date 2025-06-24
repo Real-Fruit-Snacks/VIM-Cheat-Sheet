@@ -1,14 +1,14 @@
-# VIM Cheatsheet
+# VIM Cheat Sheet
 
 <div align="center">
   <a href="https://real-fruit-snacks.github.io/VIM/">
-    <img src="public/favicon-detailed.svg" alt="VIM Cheatsheet" width="100" />
+    <img src="public/favicon-detailed.svg" alt="VIM Cheat Sheet" width="100" />
   </a>
   
   <p><strong>Interactive VIM reference with 315+ commands and 30 workflow demos</strong></p>
   
   <p>
-    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>🚀 Open VIM Cheatsheet →</strong></a>
+    <a href="https://real-fruit-snacks.github.io/VIM/"><strong>🚀 Open VIM Cheat Sheet →</strong></a>
   </p>
   
   <p>
@@ -110,13 +110,13 @@ Full CI/CD pipeline included for GitLab Pages deployment:
 
 1. **Push to GitLab:**
    ```bash
-   git remote add gitlab https://gitlab.com/your-username/vim-cheatsheet.git
+   git remote add gitlab https://gitlab.com/your-username/vim-cheat-Sheet.git
    git push gitlab main
    ```
 
 2. **Automatic Deployment:**
    - GitLab CI/CD automatically builds and deploys on push
-   - Available at: `https://your-username.gitlab.io/vim-cheatsheet`
+   - Available at: `https://your-username.gitlab.io/vim-cheat-Sheet`
 
 3. **Manual Build:**
    ```bash
