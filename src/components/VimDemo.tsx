@@ -73,7 +73,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
     setDemoState('idle')
   }
 
-  // PLAYBACK SYSTEM - Recursive scheduler to ensure final step shows
+  // PLAYBACK SYSTEM - Recursive chain to ensure final step renders before reset
   const playDemo = () => {
     clearAllTimeouts()
 
@@ -87,14 +87,13 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       setCurrentStep(index)
 
       if (index === totalSteps - 1) {
-        // Last step – mark completed then reset after a pause
+        // Show last step for full duration, then reset
         setDemoState('completed')
         const resetId = setTimeout(() => {
           reset()
         }, stepDuration)
         timeoutsRef.current.push(resetId)
       } else {
-        // Schedule next step
         const nextId = setTimeout(() => {
           playStep(index + 1)
         }, stepDuration)
@@ -102,7 +101,6 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
       }
     }
 
-    // Kick off from step 0
     playStep(0)
   }
 
@@ -253,6 +251,7 @@ const VimDemo: React.FC<VimDemoProps> = ({ demo, className = '' }) => {
           command={currentStepData.command}
           before={currentStepData.before}
           after={currentStepData.after}
+          autoPlay={isPlaying && demoState === 'playing'}
           className="mb-4"
         />
 

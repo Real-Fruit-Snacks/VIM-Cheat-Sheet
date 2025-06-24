@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Play, RotateCcw } from 'lucide-react'
 
 export interface ExampleState {
@@ -16,9 +16,10 @@ interface VimCommandExampleProps {
   before: ExampleState
   after: ExampleState
   className?: string
+  autoPlay?: boolean
 }
 
-const VimCommandExampleAnimated = React.memo(({ command, before, after, className = '' }: VimCommandExampleProps) => {
+const VimCommandExampleAnimated = React.memo(({ command, before, after, className = '', autoPlay = false }: VimCommandExampleProps) => {
   const [currentState, setCurrentState] = useState<ExampleState>(before)
   const [isAnimating, setIsAnimating] = useState(false)
   const [showBefore, setShowBefore] = useState(true)
@@ -30,7 +31,18 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
     setIsAnimating(false)
   }, [before, after, command])
 
-  const runExample = () => {
+  // Trigger animation when autoPlay prop is true
+  useEffect(() => {
+    if (autoPlay && !isAnimating) {
+      // Small delay to ensure the component renders the before state first
+      const timeoutId = setTimeout(() => {
+        runExample()
+      }, 100)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [autoPlay, before, after, command, isAnimating, runExample])
+
+  const runExample = useCallback(() => {
     if (isAnimating) return
     
     setIsAnimating(true)
@@ -43,7 +55,7 @@ const VimCommandExampleAnimated = React.memo(({ command, before, after, classNam
       setCurrentState(after)
       setIsAnimating(false)
     }, 150) // Brief pause to show the command execution
-  }
+  }, [isAnimating, before, after])
 
   const reset = () => {
     setIsAnimating(false)
